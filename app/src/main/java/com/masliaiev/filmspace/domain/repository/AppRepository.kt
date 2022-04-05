@@ -12,9 +12,9 @@ interface AppRepository {
 
     suspend fun createRequestToken(): CreateRequestTokenResponse
 
-    suspend fun createSession(createSessionRequest: CreateSessionRequest): CreateSessionRequest //POST
+    suspend fun createSession(createSessionRequest: CreateSessionRequest): CreateSessionResponse //POST
 
-    suspend fun deleteSession(deleteSessionRequest: DeleteSessionRequest): DeleteSessionRequest //DELETE
+    suspend fun deleteSession(deleteSessionRequest: DeleteSessionRequest): DeleteSessionResponse //DELETE
 
 
     //ACCOUNT

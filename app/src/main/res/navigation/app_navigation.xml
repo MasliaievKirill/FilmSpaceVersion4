@@ -10,6 +10,31 @@
         android:name="com.masliaiev.filmspace.presentation.fragments.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_main_fragment_to_authentication_fragment"
+            app:destination="@id/authentication_fragment"
+            app:popUpTo="@id/main_fragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/authentication_fragment"
+        android:name="com.masliaiev.filmspace.presentation.fragments.AuthenticationFragment"
+        android:label="fragment_authentication"
+        tools:layout="@layout/fragment_authentication">
+        <action
+            android:id="@+id/action_authentication_fragment_to_web_authentication_fragment"
+            app:destination="@id/web_authentication_fragment"
+            app:popUpTo="@id/authentication_fragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/web_authentication_fragment"
+        android:name="com.masliaiev.filmspace.presentation.fragments.WebAuthenticationFragment"
+        android:label="fragment_web_authentication"
+        tools:layout="@layout/fragment_web_authentication">
+
     </fragment>
 
 </navigation>

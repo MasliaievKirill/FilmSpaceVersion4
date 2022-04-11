@@ -3,4 +3,9 @@
     <string name="bottom_navigation_home">Home</string>
     <string name="bottom_navigation_explore">Explore</string>
     <string name="bottom_navigation_library">Library</string>
+    <string name="auth_info_approved">You are logged in, and can use the full functionality of the application.</string>
+    <string name="auth_info_not_confirmed">You have not confirmed your account login. The application will run in guest mode. You can connect your account in your profile settings.</string>
+    <string name="auth_info_guest">The application will run in guest mode. You can connect your account in your profile settings.</string>
+    <string name="auth_info_excellent">Excellent!</string>
+    <string name="button_continue">Continue</string>
 </resources>

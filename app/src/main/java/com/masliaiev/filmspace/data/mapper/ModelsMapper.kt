@@ -1,15 +1,14 @@
 package com.masliaiev.filmspace.data.mapper
 
-import com.masliaiev.filmspace.data.network.models.requests.CreateSessionRequestDto
+import com.masliaiev.filmspace.data.database.models.AccountDbModel
+import com.masliaiev.filmspace.data.network.models.account.AccountDto
+import com.masliaiev.filmspace.data.network.models.movies.MovieDto
 import com.masliaiev.filmspace.data.network.models.requests.DeleteSessionRequestDto
-import com.masliaiev.filmspace.data.network.models.responses.CreateRequestTokenResponseDto
-import com.masliaiev.filmspace.data.network.models.responses.CreateSessionResponseDto
-import com.masliaiev.filmspace.data.network.models.responses.DeleteSessionResponseDto
-import com.masliaiev.filmspace.domain.entity.requests.CreateSessionRequest
+import com.masliaiev.filmspace.data.network.models.responses.*
+import com.masliaiev.filmspace.domain.entity.Account
+import com.masliaiev.filmspace.domain.entity.Movie
 import com.masliaiev.filmspace.domain.entity.requests.DeleteSessionRequest
-import com.masliaiev.filmspace.domain.entity.responses.CreateRequestTokenResponse
-import com.masliaiev.filmspace.domain.entity.responses.CreateSessionResponse
-import com.masliaiev.filmspace.domain.entity.responses.DeleteSessionResponse
+import com.masliaiev.filmspace.domain.entity.responses.*
 import javax.inject.Inject
 
 class ModelsMapper @Inject constructor() {
@@ -24,17 +23,10 @@ class ModelsMapper @Inject constructor() {
         )
     }
 
-    fun mapCreateSessionRequestEntityToCreateSessionRequestDto(
-        createSessionRequest: CreateSessionRequest
-    ): CreateSessionRequestDto {
-        return CreateSessionRequestDto(
-            requestToken = createSessionRequest.requestToken
-        )
-    }
 
     fun mapCreateSessionResponseDtoToCreateSessionResponseEntity(
         createSessionResponseDto: CreateSessionResponseDto
-    ) : CreateSessionResponse {
+    ): CreateSessionResponse {
         return CreateSessionResponse(
             success = createSessionResponseDto.success,
             sessionId = createSessionResponseDto.sessionId
@@ -43,7 +35,7 @@ class ModelsMapper @Inject constructor() {
 
     fun mapDeleteSessionRequestEntityToDeleteSessionRequestDto(
         deleteSessionRequest: DeleteSessionRequest
-    ) : DeleteSessionRequestDto {
+    ): DeleteSessionRequestDto {
         return DeleteSessionRequestDto(
             sessionId = deleteSessionRequest.sessionId
         )
@@ -55,6 +47,77 @@ class ModelsMapper @Inject constructor() {
         return DeleteSessionResponse(
             success = deleteSessionResponseDto.success
         )
+    }
+
+    fun mapAccountDtoToAccountDbModel(accountDto: AccountDto): AccountDbModel {
+        return AccountDbModel(
+            avatarPath = GRAVATAR_URL + accountDto.avatar.gravatar.hash,
+            id = accountDto.id,
+            iso6391 = accountDto.iso6391,
+            iso31661 = accountDto.iso31661,
+            name = accountDto.name,
+            includeAdult = accountDto.includeAdult,
+            username = accountDto.username
+        )
+    }
+
+    fun mapAccountDbModelToAccountEntity(accountDbModel: AccountDbModel): Account {
+        return Account(
+            avatarPath = accountDbModel.avatarPath,
+            id = accountDbModel.id,
+            iso6391 = accountDbModel.iso6391,
+            iso31661 = accountDbModel.iso31661,
+            name = accountDbModel.name,
+            includeAdult = accountDbModel.includeAdult,
+            username = accountDbModel.username
+        )
+    }
+
+    fun mapMovieDtoToMovieEntity(movieDto: MovieDto): Movie {
+        return Movie(
+            adult = movieDto.adult,
+            backdropPath = BASE_IMAGE_URL + IMAGE_SIZE + movieDto.backdropPath,
+            genreIds = movieDto.genreIds,
+            id = movieDto.id,
+            originalLanguage = movieDto.originalLanguage,
+            originalTitle = movieDto.originalTitle,
+            overview = movieDto.overview,
+            popularity = movieDto.popularity,
+            posterPath = BASE_IMAGE_URL + IMAGE_SIZE + movieDto.posterPath,
+            releaseDate = movieDto.releaseDate,
+            title = movieDto.originalTitle,
+            video = movieDto.video,
+            voteAverage = movieDto.voteAverage,
+            voteCount = movieDto.voteCount
+        )
+    }
+
+    fun markAsFavouriteResponseDtoToMarkAsFavouriteResponseEntity(
+        markAsFavouriteResponseDto: MarkAsFavouriteResponseDto
+    ): MarkAsFavouriteResponse {
+        return MarkAsFavouriteResponse(
+            success = markAsFavouriteResponseDto.success,
+            statusCode = markAsFavouriteResponseDto.statusCode,
+            statusMassage = markAsFavouriteResponseDto.statusMassage
+        )
+    }
+
+    fun addToWatchlistResponseDtoToAddToWatchlistResponseEntity(
+        addToWatchlistResponseDto: AddToWatchlistResponseDto
+    ): AddToWatchlistResponse {
+        return AddToWatchlistResponse(
+            success = addToWatchlistResponseDto.success,
+            statusCode = addToWatchlistResponseDto.statusCode,
+            statusMassage = addToWatchlistResponseDto.statusMassage
+        )
+    }
+
+
+    companion object {
+        private const val BASE_IMAGE_URL = "https://image.tmdb.org/t/p/"
+        private const val GRAVATAR_URL = "https://secure.gravatar.com/avatar/"
+
+        private const val IMAGE_SIZE = "w500"
     }
 
 

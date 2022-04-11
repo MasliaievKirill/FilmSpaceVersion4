@@ -12,5 +12,5 @@ data class AddToWatchlistRequestDto(
     val mediaId: Int,
     @SerializedName("watchlist")
     @Expose
-    val favorite: Boolean
+    val watchlist: Boolean
 )

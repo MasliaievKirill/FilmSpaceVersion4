@@ -12,29 +12,50 @@
         tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_main_fragment_to_authentication_fragment"
-            app:destination="@id/authentication_fragment"
-            app:popUpTo="@id/main_fragment"
-            app:popUpToInclusive="true" />
+            app:destination="@id/authentication_fragment" />
     </fragment>
 
     <fragment
         android:id="@+id/authentication_fragment"
-        android:name="com.masliaiev.filmspace.presentation.fragments.AuthenticationFragment"
+        android:name="com.masliaiev.filmspace.presentation.fragments.AuthFragment"
         android:label="fragment_authentication"
         tools:layout="@layout/fragment_authentication">
         <action
             android:id="@+id/action_authentication_fragment_to_web_authentication_fragment"
-            app:destination="@id/web_authentication_fragment"
-            app:popUpTo="@id/authentication_fragment"
+            app:destination="@id/web_authentication_fragment" />
+        <action
+            android:id="@+id/action_authentication_fragment_to_auth_info_fragment"
+            app:destination="@id/auth_info_fragment"
+            app:popUpTo="@id/main_fragment"
             app:popUpToInclusive="false" />
     </fragment>
 
     <fragment
         android:id="@+id/web_authentication_fragment"
-        android:name="com.masliaiev.filmspace.presentation.fragments.WebAuthenticationFragment"
+        android:name="com.masliaiev.filmspace.presentation.fragments.WebAuthFragment"
         android:label="fragment_web_authentication"
         tools:layout="@layout/fragment_web_authentication">
 
+        <argument
+            android:name="requestToken"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_web_authentication_fragment_to_auth_info_fragment"
+            app:destination="@id/auth_info_fragment"
+            app:popUpTo="@id/main_fragment"
+            app:popUpToInclusive="false" />
     </fragment>
+
+    <fragment
+        android:id="@+id/auth_info_fragment"
+        android:name="com.masliaiev.filmspace.presentation.fragments.AuthInfoFragment"
+        android:label="fragment_auth_info"
+        tools:layout="@layout/fragment_auth_info">
+
+        <argument
+            android:name="mode"
+            app:argType="com.masliaiev.filmspace.domain.entity.AuthParams" />
+    </fragment>
+
 
 </navigation>

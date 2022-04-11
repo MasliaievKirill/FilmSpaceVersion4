@@ -3,33 +3,53 @@ package com.masliaiev.filmspace.domain.repository
 import androidx.lifecycle.LiveData
 import androidx.paging.PagingData
 import com.masliaiev.filmspace.domain.entity.*
-import com.masliaiev.filmspace.domain.entity.requests.*
+import com.masliaiev.filmspace.domain.entity.requests.DeleteSessionRequest
+import com.masliaiev.filmspace.domain.entity.requests.RateMovieRequest
 import com.masliaiev.filmspace.domain.entity.responses.*
+import com.masliaiev.filmspace.helpers.ResultParams
 
 interface AppRepository {
 
     //AUTHENTICATION
 
-    suspend fun createRequestToken(): CreateRequestTokenResponse
+    suspend fun createRequestToken(): Pair<ResultParams, CreateRequestTokenResponse?>
 
-    suspend fun createSession(createSessionRequest: CreateSessionRequest): CreateSessionResponse //POST
+    suspend fun createSession(requestToken: String): CreateSessionResponse //POST
 
     suspend fun deleteSession(deleteSessionRequest: DeleteSessionRequest): DeleteSessionResponse //DELETE
 
 
     //ACCOUNT
 
-    suspend fun getAccountDetails(sessionId: String): Account
+    suspend fun loadAccountDetails(sessionId: String): ResultParams
 
-    fun getFavouriteMoviesList(sessionId: String, accountId: Int): LiveData<List<Movie>>
+    suspend fun getAccountDetails(): Account
 
-    fun getRatedMoviesList(sessionId: String, accountId: Int): LiveData<List<Movie>>
+    suspend fun getFavouriteMovies(
+        sessionId: String,
+        accountId: Int
+    ): Pair<ResultParams, List<Movie>?>
 
-    fun getMoviesWatchlist(sessionId: String, accountId: Int): LiveData<List<Movie>>
+    suspend fun getRatedMovies(sessionId: String, accountId: Int): Pair<ResultParams, List<Movie>?>
 
-    suspend fun markAsFavourite(markAsFavouriteRequest: MarkAsFavouriteRequest): MarkAsFavouriteResponse //header "application/json;charset=utf-8"
+    suspend fun getMoviesWatchlist(
+        sessionId: String,
+        accountId: Int
+    ): Pair<ResultParams, List<Movie>?>
 
-    suspend fun addToWatchlist(addToWatchlistRequest: AddToWatchlistRequest): AddToWatchlistResponse  //header "application/json;charset=utf-8"
+    suspend fun markAsFavourite(
+        accountId: Int,
+        sessionId: String,
+        movieId: Int,
+        favourite: Boolean
+    ): Pair<ResultParams, MarkAsFavouriteResponse?>
+
+    suspend fun addToWatchlist(
+        accountId: Int,
+        sessionId: String,
+        movieId: Int,
+        watchlist: Boolean
+    ): Pair<ResultParams,AddToWatchlistResponse?>
 
     //GENRES
 
@@ -41,13 +61,13 @@ interface AppRepository {
 
     suspend fun getAccountStates(movieId: Int, sessionId: String): AccountStates
 
-    fun getPopularMovies(): LiveData<List<Movie>>
+    suspend fun getPopularMovies(): Pair<ResultParams, List<Movie>?>
 
-    fun getTopRatedMovies(): LiveData<List<Movie>>
+    suspend fun getTopRatedMovies(): Pair<ResultParams, List<Movie>?>
 
-    fun getNowPlayingMovies(): LiveData<List<Movie>>
+    suspend fun getNowPlayingMovies(): Pair<ResultParams, List<Movie>?>
 
-    fun getUpcomingMovies(): LiveData<List<Movie>>
+    suspend fun getUpcomingMovies(): Pair<ResultParams, List<Movie>?>
 
     fun getRecommendations(movieId: Int): LiveData<List<Movie>>
 

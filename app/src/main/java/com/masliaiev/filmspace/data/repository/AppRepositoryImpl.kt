@@ -5,38 +5,58 @@ import androidx.paging.PagingData
 import com.masliaiev.filmspace.data.database.AppDao
 import com.masliaiev.filmspace.data.mapper.ModelsMapper
 import com.masliaiev.filmspace.data.network.ApiService
+import com.masliaiev.filmspace.data.network.models.requests.AddToWatchlistRequestDto
+import com.masliaiev.filmspace.data.network.models.requests.CreateSessionRequestDto
+import com.masliaiev.filmspace.data.network.models.requests.MarkAsFavouriteRequestDto
 import com.masliaiev.filmspace.domain.entity.*
-import com.masliaiev.filmspace.domain.entity.requests.*
+import com.masliaiev.filmspace.domain.entity.requests.DeleteSessionRequest
+import com.masliaiev.filmspace.domain.entity.requests.RateMovieRequest
 import com.masliaiev.filmspace.domain.entity.responses.*
 import com.masliaiev.filmspace.domain.repository.AppRepository
-import java.lang.Exception
+import com.masliaiev.filmspace.helpers.ResultParams
+import java.util.*
 import javax.inject.Inject
 
 class AppRepositoryImpl @Inject constructor(
     private val appDao: AppDao,
     private val apiService: ApiService,
-    private val modelsMapper: ModelsMapper
+    private val mapper: ModelsMapper
 ) : AppRepository {
 
-    override suspend fun createRequestToken(): CreateRequestTokenResponse {
-        return modelsMapper.mapCreateRequestTokenResponseDtoToCreateRequestTokenResponseEntity(
-            apiService.createRequestToken()
-        )
+    override suspend fun createRequestToken(): Pair<ResultParams, CreateRequestTokenResponse?> {
+        return try {
+            val response = apiService.createRequestToken()
+            val requestToken = response.body()
+
+            when (response.code()) {
+                200 -> {
+                    Pair(
+                        ResultParams.SUCCESS,
+                        requestToken?.let {
+                            mapper.mapCreateRequestTokenResponseDtoToCreateRequestTokenResponseEntity(
+                                it
+                            )
+                        })
+                }
+                401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
+                else -> Pair(ResultParams.NOT_RESPONSE, null)
+            }
+
+        } catch (e: Exception) {
+            Pair(ResultParams.NO_CONNECTION, null)
+        }
     }
 
     override suspend fun createSession(
-        createSessionRequest: CreateSessionRequest
+        requestToken: String
     ): CreateSessionResponse {
         return try {
-            modelsMapper.mapCreateSessionResponseDtoToCreateSessionResponseEntity(
+            mapper.mapCreateSessionResponseDtoToCreateSessionResponseEntity(
                 apiService.createSession(
-                    createSessionRequestDto =
-                    modelsMapper.mapCreateSessionRequestEntityToCreateSessionRequestDto(
-                        createSessionRequest
-                    )
+                    createSessionRequestDto = CreateSessionRequestDto(requestToken)
                 )
             )
-        } catch (e: Exception){
+        } catch (e: Exception) {
             CreateSessionResponse(success = false, sessionId = "null")
         }
 
@@ -45,37 +65,174 @@ class AppRepositoryImpl @Inject constructor(
     override suspend fun deleteSession(
         deleteSessionRequest: DeleteSessionRequest
     ): DeleteSessionResponse {
-        return modelsMapper.mapDeleteSessionResponseDtoToDeleteSessionResponseEntity(
+        return mapper.mapDeleteSessionResponseDtoToDeleteSessionResponseEntity(
             apiService.deleteSessionRequest(
-                modelsMapper.mapDeleteSessionRequestEntityToDeleteSessionRequestDto(
+                deleteSessionRequestDto =
+                mapper.mapDeleteSessionRequestEntityToDeleteSessionRequestDto(
                     deleteSessionRequest
                 )
             )
         )
     }
 
-    override suspend fun getAccountDetails(sessionId: String): Account {
-        TODO("Not yet implemented")
+    override suspend fun loadAccountDetails(sessionId: String): ResultParams {
+        return try {
+            val accountResponse = apiService.getAccountDetails(sessionId = sessionId)
+            val account = accountResponse.body()
+
+            when (accountResponse.code()) {
+                200 -> {
+                    account?.let {
+                        appDao.addAccount(mapper.mapAccountDtoToAccountDbModel(it))
+                    }
+                    ResultParams.SUCCESS
+                }
+                401 -> ResultParams.ACCOUNT_ERROR
+                else -> ResultParams.NOT_RESPONSE
+            }
+
+        } catch (e: Exception) {
+            ResultParams.NO_CONNECTION
+        }
+
     }
 
-    override fun getFavouriteMoviesList(sessionId: String, accountId: Int): LiveData<List<Movie>> {
-        TODO("Not yet implemented")
+    override suspend fun getAccountDetails(): Account {
+        return mapper.mapAccountDbModelToAccountEntity(appDao.getAccount())
     }
 
-    override fun getRatedMoviesList(sessionId: String, accountId: Int): LiveData<List<Movie>> {
-        TODO("Not yet implemented")
+    override suspend fun getFavouriteMovies(
+        sessionId: String,
+        accountId: Int
+    ): Pair<ResultParams, List<Movie>?> {
+        return try {
+            val response = apiService.getFavouriteMovies(
+                accountId = accountId, sessionId = sessionId, language = getCurrentLanguage()
+            )
+            val moviesList = response.body()
+
+            when (response.code()) {
+                200 -> Pair(ResultParams.SUCCESS, moviesList?.results?.map {
+                    mapper.mapMovieDtoToMovieEntity(it)
+                })
+                401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
+                else -> Pair(ResultParams.NOT_RESPONSE, null)
+            }
+        } catch (e: Exception) {
+            Pair(ResultParams.NO_CONNECTION, null)
+        }
     }
 
-    override fun getMoviesWatchlist(sessionId: String, accountId: Int): LiveData<List<Movie>> {
-        TODO("Not yet implemented")
+    override suspend fun getRatedMovies(
+        sessionId: String,
+        accountId: Int
+    ): Pair<ResultParams, List<Movie>?> {
+        return try {
+            val response = apiService.getRatedMovies(
+                accountId = accountId, sessionId = sessionId, language = getCurrentLanguage()
+            )
+            val moviesList = response.body()
+
+            when (response.code()) {
+                200 -> Pair(ResultParams.SUCCESS, moviesList?.results?.map {
+                    mapper.mapMovieDtoToMovieEntity(it)
+                })
+                401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
+                else -> Pair(ResultParams.NOT_RESPONSE, null)
+            }
+        } catch (e: Exception) {
+            Pair(ResultParams.NO_CONNECTION, null)
+        }
     }
 
-    override suspend fun markAsFavourite(markAsFavouriteRequest: MarkAsFavouriteRequest): MarkAsFavouriteResponse {
-        TODO("Not yet implemented")
+    override suspend fun getMoviesWatchlist(
+        sessionId: String,
+        accountId: Int
+    ): Pair<ResultParams, List<Movie>?> {
+        return try {
+            val response = apiService.getMoviesWatchlist(
+                accountId = accountId, sessionId = sessionId, language = getCurrentLanguage()
+            )
+            val moviesList = response.body()
+
+            when (response.code()) {
+                200 -> Pair(ResultParams.SUCCESS, moviesList?.results?.map {
+                    mapper.mapMovieDtoToMovieEntity(it)
+                })
+                401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
+                else -> Pair(ResultParams.NOT_RESPONSE, null)
+            }
+        } catch (e: Exception) {
+            Pair(ResultParams.NO_CONNECTION, null)
+        }
     }
 
-    override suspend fun addToWatchlist(addToWatchlistRequest: AddToWatchlistRequest): AddToWatchlistResponse {
-        TODO("Not yet implemented")
+    override suspend fun markAsFavourite(
+        accountId: Int,
+        sessionId: String,
+        movieId: Int,
+        favourite: Boolean
+    ): Pair<ResultParams, MarkAsFavouriteResponse?> {
+        return try {
+            val response = apiService.markAsFavourite(
+                accountId = accountId,
+                sessionId = sessionId,
+                markAsFavouriteRequestDto = MarkAsFavouriteRequestDto(
+                    MEDIA_TYPE,
+                    movieId,
+                    favourite
+                )
+            )
+            val markAsFavouriteResponse = response.body()
+
+            when (response.code()) {
+                200 -> Pair(
+                    ResultParams.SUCCESS, markAsFavouriteResponse?.let {
+                        mapper.markAsFavouriteResponseDtoToMarkAsFavouriteResponseEntity(
+                            it
+                        )
+                    }
+                )
+                401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
+                else -> Pair(ResultParams.NOT_RESPONSE, null)
+            }
+        } catch (e: Exception) {
+            Pair(ResultParams.NO_CONNECTION, null)
+        }
+    }
+
+    override suspend fun addToWatchlist(
+        accountId: Int,
+        sessionId: String,
+        movieId: Int,
+        watchlist: Boolean
+    ): Pair<ResultParams, AddToWatchlistResponse?> {
+        return try {
+            val response = apiService.addToWatchlist(
+                accountId = accountId,
+                sessionId = sessionId,
+                addToWatchlistRequestDto = AddToWatchlistRequestDto(
+                    MEDIA_TYPE,
+                    movieId,
+                    watchlist
+                )
+            )
+            val addToWatchlistResponse = response.body()
+
+            when (response.code()) {
+                200 -> Pair(
+                    ResultParams.SUCCESS, addToWatchlistResponse?.let {
+                        mapper.addToWatchlistResponseDtoToAddToWatchlistResponseEntity(
+                            it
+                        )
+                    }
+                )
+                401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
+                else -> Pair(ResultParams.NOT_RESPONSE, null)
+            }
+        } catch (e: Exception) {
+            Pair(ResultParams.NO_CONNECTION, null)
+        }
     }
 
     override fun getGenresList(): LiveData<List<Genre>> {
@@ -90,20 +247,74 @@ class AppRepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override fun getPopularMovies(): LiveData<List<Movie>> {
-        TODO("Not yet implemented")
+    override suspend fun getPopularMovies(): Pair<ResultParams, List<Movie>?> {
+        return try {
+            val response = apiService.getPopularMovies(language = getCurrentLanguage())
+            val moviesList = response.body()
+
+            when (response.code()) {
+                200 -> Pair(ResultParams.SUCCESS, moviesList?.results?.map {
+                    mapper.mapMovieDtoToMovieEntity(it)
+                })
+                401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
+                else -> Pair(ResultParams.NOT_RESPONSE, null)
+            }
+        } catch (e: Exception) {
+            Pair(ResultParams.NO_CONNECTION, null)
+        }
     }
 
-    override fun getTopRatedMovies(): LiveData<List<Movie>> {
-        TODO("Not yet implemented")
+    override suspend fun getTopRatedMovies(): Pair<ResultParams, List<Movie>?> {
+        return try {
+            val response = apiService.getTopRatedMovies(language = getCurrentLanguage())
+            val moviesList = response.body()
+
+            when (response.code()) {
+                200 -> Pair(ResultParams.SUCCESS, moviesList?.results?.map {
+                    mapper.mapMovieDtoToMovieEntity(it)
+                })
+                401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
+                else -> Pair(ResultParams.NOT_RESPONSE, null)
+            }
+        } catch (e: Exception) {
+            Pair(ResultParams.NO_CONNECTION, null)
+        }
     }
 
-    override fun getNowPlayingMovies(): LiveData<List<Movie>> {
-        TODO("Not yet implemented")
+    override suspend fun getNowPlayingMovies(): Pair<ResultParams, List<Movie>?> {
+        return try {
+            val response = apiService.getNowPlayingMovies(language = getCurrentLanguage())
+            val moviesList = response.body()
+
+            when (response.code()) {
+                200 -> Pair(ResultParams.SUCCESS, moviesList?.results?.map {
+                    mapper.mapMovieDtoToMovieEntity(it)
+                })
+                401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
+                else -> Pair(ResultParams.NOT_RESPONSE, null)
+            }
+        } catch (e: Exception) {
+            Pair(ResultParams.NO_CONNECTION, null)
+        }
+
+
     }
 
-    override fun getUpcomingMovies(): LiveData<List<Movie>> {
-        TODO("Not yet implemented")
+    override suspend fun getUpcomingMovies(): Pair<ResultParams, List<Movie>?> {
+        return try {
+            val response = apiService.getUpcomingMovies(language = getCurrentLanguage())
+            val moviesList = response.body()
+
+            when (response.code()) {
+                200 -> Pair(ResultParams.SUCCESS, moviesList?.results?.map {
+                    mapper.mapMovieDtoToMovieEntity(it)
+                })
+                401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
+                else -> Pair(ResultParams.NOT_RESPONSE, null)
+            }
+        } catch (e: Exception) {
+            Pair(ResultParams.NO_CONNECTION, null)
+        }
     }
 
     override fun getRecommendations(movieId: Int): LiveData<List<Movie>> {
@@ -131,5 +342,13 @@ class AppRepositoryImpl @Inject constructor(
 
     override suspend fun searchMovies(lang: String, query: String): LiveData<PagingData<Movie>> {
         TODO("Not yet implemented")
+    }
+
+    private fun getCurrentLanguage(): String {
+        return Locale.getDefault().language
+    }
+
+    companion object {
+        private const val MEDIA_TYPE = "movie"
     }
 }

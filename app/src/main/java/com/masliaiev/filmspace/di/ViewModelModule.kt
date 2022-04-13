@@ -1,10 +1,7 @@
 package com.masliaiev.filmspace.di
 
 import androidx.lifecycle.ViewModel
-import com.masliaiev.filmspace.presentation.view_models.AuthenticationFragmentViewModel
-import com.masliaiev.filmspace.presentation.view_models.HomeFragmentViewModel
-import com.masliaiev.filmspace.presentation.view_models.MainFragmentViewModel
-import com.masliaiev.filmspace.presentation.view_models.WebAuthFragmentViewModel
+import com.masliaiev.filmspace.presentation.view_models.*
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -31,6 +28,11 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(HomeFragmentViewModel::class)
     fun bindHomeFragmentViewModel(impl: HomeFragmentViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(StartFragmentViewModel::class)
+    fun bindStartFragmentViewModel(impl: StartFragmentViewModel): ViewModel
 
 
 }

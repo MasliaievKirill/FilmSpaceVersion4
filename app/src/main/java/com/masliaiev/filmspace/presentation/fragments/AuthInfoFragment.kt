@@ -1,6 +1,5 @@
 package com.masliaiev.filmspace.presentation.fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,18 +13,11 @@ import com.masliaiev.filmspace.domain.entity.AuthParams
 
 class AuthInfoFragment : Fragment() {
 
-
     private var _binding: FragmentAuthInfoBinding? = null
     private val binding: FragmentAuthInfoBinding
         get() = _binding ?: throw RuntimeException("FragmentAuthInfoBinding is null")
 
-
     private val args by navArgs<AuthInfoFragmentArgs>()
-
-    override fun onAttach(context: Context) {
-
-        super.onAttach(context)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,7 +31,7 @@ class AuthInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        when (args.mode) {
+        when (args.authParam) {
             AuthParams.ALLOW -> {
                 binding.tvModeInfo.text = getString(R.string.auth_info_approved)
             }
@@ -52,12 +44,11 @@ class AuthInfoFragment : Fragment() {
         }
 
         binding.buttonContinue.setOnClickListener {
-            findNavController().popBackStack()
+            findNavController().navigate(
+                AuthInfoFragmentDirections.actionAuthInfoFragmentToMainFragment()
+            )
         }
-
-
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

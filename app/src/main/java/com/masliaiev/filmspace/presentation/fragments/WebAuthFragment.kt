@@ -4,17 +4,16 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.masliaiev.filmspace.AppConstants
 import com.masliaiev.filmspace.FilmSpaceApp
 import com.masliaiev.filmspace.databinding.FragmentWebAuthenticationBinding
 import com.masliaiev.filmspace.domain.entity.AuthParams
@@ -26,13 +25,6 @@ class WebAuthFragment : Fragment() {
 
     private val component by lazy {
         (requireActivity().application as FilmSpaceApp).component
-    }
-
-    private val sharedPreferences by lazy {
-        requireActivity().getSharedPreferences(
-            MainFragment.APP_PREFERENCES,
-            Context.MODE_PRIVATE
-        )
     }
 
     @Inject
@@ -65,14 +57,11 @@ class WebAuthFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel =
             ViewModelProvider(this, viewModelFactory)[WebAuthFragmentViewModel::class.java]
-        Log.d("Token", args.requestToken)
         binding.wvAuth.webViewClient = object : WebViewClient() {
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
-
                 binding.pbWebAuth.visibility = View.VISIBLE
-
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
@@ -85,29 +74,32 @@ class WebAuthFragment : Fragment() {
                         viewModel.createSessionResponse.observe(viewLifecycleOwner) {
                             if (it.success) {
                                 binding.pbWebAuth.visibility = View.INVISIBLE
-                                sharedPreferences.edit()
-                                    .putString(MainFragment.KEY_APP_MODE, MainFragment.ACCOUNT_MODE)
-                                    .putString(MainFragment.KEY_SESSION_ID, it.sessionId)
-                                    .apply()
+                                with(viewModel) {
+                                    setAppMode(AppConstants.SIGNED_IN_MODE)
+                                    setSessionId(it.sessionId)
+                                }
                                 findNavController().navigate(
-                                    WebAuthFragmentDirections.
-                                    actionWebAuthenticationFragmentToAuthInfoFragment(AuthParams.ALLOW)
+                                    WebAuthFragmentDirections.actionWebAuthenticationFragmentToAuthInfoFragment(
+                                        AuthParams.ALLOW
+                                    )
                                 )
-                                Log.d("Web", it.success.toString())
                             } else {
-                                Log.d("Web", it.success.toString())
-                                //Check connection
+                                findNavController().navigate(
+                                    WebAuthFragmentDirections.actionWebAuthenticationFragmentToAuthInfoFragment(
+                                        AuthParams.DENY
+                                    )
+                                )
                             }
                         }
                     } else if (url.contains(RESPONSE_DENY)) {
-                        sharedPreferences.edit()
-                            .putString(
-                                MainFragment.KEY_APP_MODE,
-                                MainFragment.GUEST_MODE
-                            )
-                            .putString(MainFragment.KEY_SESSION_ID, "null").apply()
+                        with(viewModel) {
+                            setAppMode(AppConstants.GUEST_MODE)
+                            setSessionId(AppConstants.EMPTY_SESSION_ID)
+                        }
                         findNavController().navigate(
-                            WebAuthFragmentDirections.actionWebAuthenticationFragmentToAuthInfoFragment(AuthParams.DENY)
+                            WebAuthFragmentDirections.actionWebAuthenticationFragmentToAuthInfoFragment(
+                                AuthParams.DENY
+                            )
                         )
                     }
                 }
@@ -116,7 +108,7 @@ class WebAuthFragment : Fragment() {
         }
         binding.wvAuth.settings.javaScriptEnabled = true
         binding.wvAuth.settings.javaScriptCanOpenWindowsAutomatically = true
-        binding.wvAuth.loadUrl("https://www.themoviedb.org/authenticate/${args.requestToken}")
+        binding.wvAuth.loadUrl(REQUEST_URL + args.requestToken)
     }
 
     override fun onDestroyView() {

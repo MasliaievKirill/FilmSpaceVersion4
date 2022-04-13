@@ -8,4 +8,9 @@
     <string name="auth_info_guest">The application will run in guest mode. You can connect your account in your profile settings.</string>
     <string name="auth_info_excellent">Excellent!</string>
     <string name="button_continue">Continue</string>
+    <string name="dialog_common_error_header">Something is wrong</string>
+    <string name="dialog_api_error_header">TMDB service error</string>
+    <string name="dialog_common_error_description">Check Internet connection and try again</string>
+    <string name="dialog_api_error_description">Something is wrong with TMDB service. Try again later.</string>
+    <string name="poster_of_the_movie">Poster of the movie</string>
 </resources>

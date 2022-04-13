@@ -1,6 +1,9 @@
 package com.masliaiev.filmspace.di
 
 import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
+import com.masliaiev.filmspace.AppConstants
 import com.masliaiev.filmspace.data.database.AppDao
 import com.masliaiev.filmspace.data.database.AppDatabase
 import com.masliaiev.filmspace.data.network.ApiFactory
@@ -30,6 +33,11 @@ interface DataModule {
         @ApplicationScope
         fun provideApiService(): ApiService {
             return ApiFactory.apiService
+        }
+
+        @Provides
+        fun provideSharedPreferences(application: Application): SharedPreferences {
+            return application.getSharedPreferences(AppConstants.APP_PREFERENCES, Context.MODE_PRIVATE)
         }
     }
 }

@@ -1,10 +1,7 @@
 package com.masliaiev.filmspace.di
 
 import android.app.Application
-import com.masliaiev.filmspace.presentation.fragments.AuthFragment
-import com.masliaiev.filmspace.presentation.fragments.HomeFragment
-import com.masliaiev.filmspace.presentation.fragments.MainFragment
-import com.masliaiev.filmspace.presentation.fragments.WebAuthFragment
+import com.masliaiev.filmspace.presentation.fragments.*
 import dagger.BindsInstance
 import dagger.Component
 
@@ -19,6 +16,8 @@ interface ApplicationComponent {
     fun inject(fragment: WebAuthFragment)
 
     fun inject(fragment: HomeFragment)
+
+    fun inject(fragment: StartFragment)
 
     @Component.Factory
     interface Factory{

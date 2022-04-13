@@ -76,14 +76,14 @@ class ModelsMapper @Inject constructor() {
     fun mapMovieDtoToMovieEntity(movieDto: MovieDto): Movie {
         return Movie(
             adult = movieDto.adult,
-            backdropPath = BASE_IMAGE_URL + IMAGE_SIZE + movieDto.backdropPath,
+            backdropPath = BASE_IMAGE_URL + IMAGE_SIZE_W500 + movieDto.backdropPath,
             genreIds = movieDto.genreIds,
             id = movieDto.id,
             originalLanguage = movieDto.originalLanguage,
             originalTitle = movieDto.originalTitle,
             overview = movieDto.overview,
             popularity = movieDto.popularity,
-            posterPath = BASE_IMAGE_URL + IMAGE_SIZE + movieDto.posterPath,
+            posterPath = BASE_IMAGE_URL + IMAGE_SIZE_W500 + movieDto.posterPath,
             releaseDate = movieDto.releaseDate,
             title = movieDto.originalTitle,
             video = movieDto.video,
@@ -117,7 +117,9 @@ class ModelsMapper @Inject constructor() {
         private const val BASE_IMAGE_URL = "https://image.tmdb.org/t/p/"
         private const val GRAVATAR_URL = "https://secure.gravatar.com/avatar/"
 
-        private const val IMAGE_SIZE = "w500"
+        private const val IMAGE_SIZE_W185 = "w185"
+        private const val IMAGE_SIZE_W342 = "w342"
+        private const val IMAGE_SIZE_W500 = "w500"
     }
 
 

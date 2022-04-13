@@ -21,6 +21,14 @@ interface AppRepository {
 
     //ACCOUNT
 
+    fun getAppMode(): String
+
+    fun setAppMode(appMode: String)
+
+    fun getSessionId(): String
+
+    fun setSessionId(sessionId: String)
+
     suspend fun loadAccountDetails(sessionId: String): ResultParams
 
     suspend fun getAccountDetails(): Account

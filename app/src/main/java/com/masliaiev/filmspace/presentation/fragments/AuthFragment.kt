@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.masliaiev.filmspace.AppConstants
 import com.masliaiev.filmspace.FilmSpaceApp
 import com.masliaiev.filmspace.databinding.FragmentAuthenticationBinding
 import com.masliaiev.filmspace.domain.entity.AuthParams
@@ -20,14 +21,6 @@ class AuthFragment : Fragment() {
     private val component by lazy {
         (requireActivity().application as FilmSpaceApp).component
     }
-
-    private val sharedPreferences by lazy {
-        requireActivity().getSharedPreferences(
-            MainFragment.APP_PREFERENCES,
-            Context.MODE_PRIVATE
-        )
-    }
-
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -58,48 +51,44 @@ class AuthFragment : Fragment() {
         viewModel =
             ViewModelProvider(this, viewModelFactory)[AuthenticationFragmentViewModel::class.java]
 
-        binding.buttonSignIn.setOnClickListener {
-            with(binding) {
-                tvSignInInfo.visibility = View.INVISIBLE
-                tvGuestInfo.visibility = View.INVISIBLE
-                buttonSignIn.visibility = View.INVISIBLE
-                buttonGuest.visibility = View.INVISIBLE
-                pbAuth.visibility = View.VISIBLE
-            }
-            viewModel.createRequestToken()
-            viewModel.error.observe(viewLifecycleOwner){
-
-            }
-            viewModel.apiError.observe(viewLifecycleOwner){
-
-            }
-            viewModel.requestTokenResponse.observe(viewLifecycleOwner) {
-                if (it.success) {
-                    findNavController().navigate(
-                        AuthFragmentDirections.actionAuthenticationFragmentToWebAuthenticationFragment(
-                            it.requestToken
-                        )
+        viewModel.error.observe(viewLifecycleOwner) {
+            changeVisibilityIfError()
+            DialogWarningFragment.newInstanceCommonError().show(
+                requireActivity().supportFragmentManager, AppConstants.WARNING_DIALOG_TAG
+            )
+        }
+        viewModel.apiError.observe(viewLifecycleOwner) {
+            changeVisibilityIfError()
+            DialogWarningFragment.newInstanceApiError().show(
+                requireActivity().supportFragmentManager, AppConstants.WARNING_DIALOG_TAG
+            )
+        }
+        viewModel.requestTokenResponse.observe(viewLifecycleOwner) {
+            if (it.success) {
+                findNavController().navigate(
+                    AuthFragmentDirections.actionAuthenticationFragmentToWebAuthenticationFragment(
+                        it.requestToken
                     )
+                )
 
-                } else {
-                    with(binding) {
-                        tvSignInInfo.visibility = View.VISIBLE
-                        tvGuestInfo.visibility = View.VISIBLE
-                        buttonSignIn.visibility = View.VISIBLE
-                        buttonGuest.visibility = View.VISIBLE
-                        pbAuth.visibility = View.INVISIBLE
-                    }
-                    TODO("something is wrong")
-                }
+            } else {
+                changeVisibilityIfError()
+                DialogWarningFragment.newInstanceApiError().show(
+                    requireActivity().supportFragmentManager, AppConstants.WARNING_DIALOG_TAG
+                )
             }
         }
+
+        binding.buttonSignIn.setOnClickListener {
+            changeVisibility()
+            viewModel.createRequestToken()
+
+        }
         binding.buttonGuest.setOnClickListener {
-            sharedPreferences.edit()
-                .putString(
-                    MainFragment.KEY_APP_MODE,
-                    MainFragment.GUEST_MODE
-                )
-                .putString(MainFragment.KEY_SESSION_ID, "null").apply()
+            with(viewModel) {
+                setAppMode(AppConstants.GUEST_MODE)
+                setSessionId(AppConstants.EMPTY_SESSION_ID)
+            }
             findNavController().navigate(
                 AuthFragmentDirections.actionAuthenticationFragmentToAuthInfoFragment(AuthParams.GUEST)
             )
@@ -110,6 +99,26 @@ class AuthFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun changeVisibility() {
+        with(binding) {
+            tvSignInInfo.visibility = View.INVISIBLE
+            tvGuestInfo.visibility = View.INVISIBLE
+            buttonSignIn.visibility = View.INVISIBLE
+            buttonGuest.visibility = View.INVISIBLE
+            pbAuth.visibility = View.VISIBLE
+        }
+    }
+
+    private fun changeVisibilityIfError() {
+        with(binding) {
+            tvSignInInfo.visibility = View.VISIBLE
+            tvGuestInfo.visibility = View.VISIBLE
+            buttonSignIn.visibility = View.VISIBLE
+            buttonGuest.visibility = View.VISIBLE
+            pbAuth.visibility = View.INVISIBLE
+        }
     }
 
 

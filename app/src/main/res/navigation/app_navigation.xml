@@ -3,17 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/app_navigation"
-    app:startDestination="@id/main_fragment">
+    app:startDestination="@id/start_fragment">
 
     <fragment
         android:id="@+id/main_fragment"
         android:name="com.masliaiev.filmspace.presentation.fragments.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main">
-        <action
-            android:id="@+id/action_main_fragment_to_authentication_fragment"
-            app:destination="@id/authentication_fragment" />
-    </fragment>
+        tools:layout="@layout/fragment_main" />
 
     <fragment
         android:id="@+id/authentication_fragment"
@@ -26,8 +22,8 @@
         <action
             android:id="@+id/action_authentication_fragment_to_auth_info_fragment"
             app:destination="@id/auth_info_fragment"
-            app:popUpTo="@id/main_fragment"
-            app:popUpToInclusive="false" />
+            app:popUpTo="@id/start_fragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -42,8 +38,8 @@
         <action
             android:id="@+id/action_web_authentication_fragment_to_auth_info_fragment"
             app:destination="@id/auth_info_fragment"
-            app:popUpTo="@id/main_fragment"
-            app:popUpToInclusive="false" />
+            app:popUpTo="@id/start_fragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -53,8 +49,27 @@
         tools:layout="@layout/fragment_auth_info">
 
         <argument
-            android:name="mode"
+            android:name="authParam"
             app:argType="com.masliaiev.filmspace.domain.entity.AuthParams" />
+        <action
+            android:id="@+id/action_auth_info_fragment_to_main_fragment"
+            app:destination="@id/main_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/start_fragment"
+        android:name="com.masliaiev.filmspace.presentation.fragments.StartFragment"
+        android:label="fragment_start"
+        tools:layout="@layout/fragment_start" >
+        <action
+            android:id="@+id/action_start_fragment_to_authentication_fragment"
+            app:destination="@id/authentication_fragment"
+            app:popUpTo="@id/start_fragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_start_fragment_to_main_fragment"
+            app:destination="@id/main_fragment"
+            app:popUpTo="@id/start_fragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
 

@@ -6,12 +6,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.masliaiev.filmspace.domain.entity.responses.CreateRequestTokenResponse
 import com.masliaiev.filmspace.domain.usecases.CreateRequestTokenUseCase
+import com.masliaiev.filmspace.domain.usecases.SetAppModeUseCase
+import com.masliaiev.filmspace.domain.usecases.SetSessionIdUseCase
 import com.masliaiev.filmspace.helpers.ResultParams
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AuthenticationFragmentViewModel @Inject constructor(
-    private val createRequestTokenUseCase: CreateRequestTokenUseCase
+    private val createRequestTokenUseCase: CreateRequestTokenUseCase,
+    private val setAppModeUseCase: SetAppModeUseCase,
+    private val setSessionIdUseCase: SetSessionIdUseCase
 ) : ViewModel() {
 
     private var _error = MutableLiveData<Boolean>()
@@ -41,6 +45,14 @@ class AuthenticationFragmentViewModel @Inject constructor(
                 ResultParams.NOT_RESPONSE -> _error.value = true
             }
         }
+    }
+
+    fun setAppMode(appMode: String){
+        setAppModeUseCase.setAppMode(appMode)
+    }
+
+    fun setSessionId(sessionId: String){
+        setSessionIdUseCase.setSessionId(sessionId)
     }
 
 

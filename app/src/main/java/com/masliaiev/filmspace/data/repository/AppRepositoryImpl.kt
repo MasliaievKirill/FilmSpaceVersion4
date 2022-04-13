@@ -1,7 +1,9 @@
 package com.masliaiev.filmspace.data.repository
 
+import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.paging.PagingData
+import com.masliaiev.filmspace.AppConstants
 import com.masliaiev.filmspace.data.database.AppDao
 import com.masliaiev.filmspace.data.mapper.ModelsMapper
 import com.masliaiev.filmspace.data.network.ApiService
@@ -20,7 +22,8 @@ import javax.inject.Inject
 class AppRepositoryImpl @Inject constructor(
     private val appDao: AppDao,
     private val apiService: ApiService,
-    private val mapper: ModelsMapper
+    private val mapper: ModelsMapper,
+    private val sharedPreferences: SharedPreferences
 ) : AppRepository {
 
     override suspend fun createRequestToken(): Pair<ResultParams, CreateRequestTokenResponse?> {
@@ -73,6 +76,22 @@ class AppRepositoryImpl @Inject constructor(
                 )
             )
         )
+    }
+
+    override fun getAppMode(): String {
+        return sharedPreferences.getString(AppConstants.KEY_APP_MODE, AppConstants.UNKNOWN_MODE) ?: AppConstants.UNKNOWN_MODE
+    }
+
+    override fun setAppMode(appMode: String) {
+        sharedPreferences.edit().putString(AppConstants.KEY_APP_MODE, appMode).apply()
+    }
+
+    override fun getSessionId(): String {
+        return sharedPreferences.getString(AppConstants.KEY_SESSION_ID, AppConstants.EMPTY_SESSION_ID) ?: AppConstants.EMPTY_SESSION_ID
+    }
+
+    override fun setSessionId(sessionId: String) {
+        sharedPreferences.edit().putString(AppConstants.KEY_SESSION_ID, sessionId).apply()
     }
 
     override suspend fun loadAccountDetails(sessionId: String): ResultParams {

@@ -34,5 +34,10 @@ interface ViewModelModule {
     @ViewModelKey(StartFragmentViewModel::class)
     fun bindStartFragmentViewModel(impl: StartFragmentViewModel): ViewModel
 
+    @Binds
+    @IntoMap
+    @ViewModelKey(ExploreFragmentViewModel::class)
+    fun bindExploreFragmentViewModel(impl: ExploreFragmentViewModel): ViewModel
+
 
 }

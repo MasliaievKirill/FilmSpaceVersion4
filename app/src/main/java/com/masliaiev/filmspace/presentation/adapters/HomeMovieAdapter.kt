@@ -10,6 +10,8 @@ import com.squareup.picasso.Picasso
 
 class HomeMovieAdapter : ListAdapter<Movie, MovieViewHolder>(MovieDiffCallback()) {
 
+    var onMovieClickListener: OnMovieClickListener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val binding = MovieItemBinding.inflate(
             LayoutInflater.from(
@@ -27,5 +29,9 @@ class HomeMovieAdapter : ListAdapter<Movie, MovieViewHolder>(MovieDiffCallback()
             .into(holder.binding.ivPoster)
         holder.binding.tvTitle.text = movie.title
         holder.binding.tvYear.text = movie.releaseDate
+        holder.binding.root.setOnClickListener {
+            onMovieClickListener?.onMovieClick(movie.id)
+        }
     }
+
 }

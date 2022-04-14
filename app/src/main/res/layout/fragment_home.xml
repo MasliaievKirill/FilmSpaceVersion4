@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".presentation.fragments.HomeFragment">
 
@@ -11,6 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp"
+        app:titleTextColor="@color/white"
+        android:background="@drawable/background_bars"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,6 +28,8 @@
         android:layout_height="match_parent"
         android:overScrollMode="never"
         android:clipToPadding="false"
+        android:paddingTop="90dp"
+        android:paddingBottom="90dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,8 +49,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="Now playing"
-                android:textColor="@color/black"
-                android:textSize="34sp"
+                android:textColor="@color/white"
+                android:textSize="28sp"
                 android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -63,13 +68,14 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="Popular"
-                android:textColor="@color/black"
-                android:textSize="34sp"
+                android:textColor="@color/white"
+                android:textSize="28sp"
                 android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_popular"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginTop="8dp"
@@ -80,12 +86,13 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="Top rated"
-                android:textColor="@color/black"
-                android:textSize="34sp"
+                android:textColor="@color/white"
+                android:textSize="28sp"
                 android:textStyle="bold" />
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_top_rated"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginTop="8dp"
@@ -97,12 +104,13 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="Upcoming"
-                android:textColor="@color/black"
-                android:textSize="34sp"
+                android:textColor="@color/white"
+                android:textSize="28sp"
                 android:textStyle="bold" />
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_upcoming"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginTop="8dp"

@@ -19,6 +19,8 @@ interface ApplicationComponent {
 
     fun inject(fragment: StartFragment)
 
+    fun inject(fragment: ExploreFragment)
+
     @Component.Factory
     interface Factory{
         fun create(@BindsInstance application: Application): ApplicationComponent

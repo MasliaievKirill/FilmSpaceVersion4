@@ -13,4 +13,6 @@
     <string name="dialog_common_error_description">Check Internet connection and try again</string>
     <string name="dialog_api_error_description">Something is wrong with TMDB service. Try again later.</string>
     <string name="poster_of_the_movie">Poster of the movie</string>
+    <string name="account_action">Account action</string>
+    <string name="information_action">Information action</string>
 </resources>

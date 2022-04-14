@@ -7,5 +7,5 @@ import com.masliaiev.filmspace.domain.entity.Genre
 data class GenresListDto(
     @SerializedName("genres")
     @Expose
-    val genresList: List<Genre>
+    val genresList: List<GenreDto>
 )

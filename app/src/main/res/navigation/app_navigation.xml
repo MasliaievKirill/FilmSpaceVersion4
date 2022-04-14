@@ -9,7 +9,17 @@
         android:id="@+id/main_fragment"
         android:name="com.masliaiev.filmspace.presentation.fragments.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_main_fragment_to_detailMovieFragment"
+            app:destination="@id/detail_movie_fragment" />
+        <action
+            android:id="@+id/action_main_fragment_to_information_fragment"
+            app:destination="@id/information_fragment" />
+        <action
+            android:id="@+id/action_main_fragment_to_account_fragment"
+            app:destination="@id/account_fragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/authentication_fragment"
@@ -71,6 +81,25 @@
             app:popUpTo="@id/start_fragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/detail_movie_fragment"
+        android:name="com.masliaiev.filmspace.presentation.fragments.DetailMovieFragment"
+        android:label="fragment_detail_movie"
+        tools:layout="@layout/fragment_detail_movie" >
+        <argument
+            android:name="movieId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/account_fragment"
+        android:name="com.masliaiev.filmspace.presentation.fragments.AccountFragment"
+        android:label="fragment_account"
+        tools:layout="@layout/fragment_account" />
+    <fragment
+        android:id="@+id/information_fragment"
+        android:name="com.masliaiev.filmspace.presentation.fragments.InformationFragment"
+        android:label="fragment_information"
+        tools:layout="@layout/fragment_information" />
 
 
 </navigation>

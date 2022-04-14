@@ -2,10 +2,12 @@ package com.masliaiev.filmspace.data.mapper
 
 import com.masliaiev.filmspace.data.database.models.AccountDbModel
 import com.masliaiev.filmspace.data.network.models.account.AccountDto
+import com.masliaiev.filmspace.data.network.models.genres.GenreDto
 import com.masliaiev.filmspace.data.network.models.movies.MovieDto
 import com.masliaiev.filmspace.data.network.models.requests.DeleteSessionRequestDto
 import com.masliaiev.filmspace.data.network.models.responses.*
 import com.masliaiev.filmspace.domain.entity.Account
+import com.masliaiev.filmspace.domain.entity.Genre
 import com.masliaiev.filmspace.domain.entity.Movie
 import com.masliaiev.filmspace.domain.entity.requests.DeleteSessionRequest
 import com.masliaiev.filmspace.domain.entity.responses.*
@@ -109,6 +111,13 @@ class ModelsMapper @Inject constructor() {
             success = addToWatchlistResponseDto.success,
             statusCode = addToWatchlistResponseDto.statusCode,
             statusMassage = addToWatchlistResponseDto.statusMassage
+        )
+    }
+
+    fun mapGenreDtoToGenreEntity(genreDto: GenreDto): Genre {
+        return Genre(
+            id = genreDto.id,
+            name = genreDto.name
         )
     }
 

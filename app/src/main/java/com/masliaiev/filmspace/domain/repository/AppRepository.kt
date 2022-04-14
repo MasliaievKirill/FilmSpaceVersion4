@@ -61,7 +61,7 @@ interface AppRepository {
 
     //GENRES
 
-    fun getGenresList(): LiveData<List<Genre>>
+    suspend fun getGenresList(): Pair<ResultParams,List<Genre>?>
 
     //MOVIES
 

@@ -1,6 +1,8 @@
 package com.masliaiev.filmspace.data.network
 
 import com.masliaiev.filmspace.data.network.models.account.AccountDto
+import com.masliaiev.filmspace.data.network.models.genres.GenreDto
+import com.masliaiev.filmspace.data.network.models.genres.GenresListDto
 import com.masliaiev.filmspace.data.network.models.movies.MoviesListDto
 import com.masliaiev.filmspace.data.network.models.requests.AddToWatchlistRequestDto
 import com.masliaiev.filmspace.data.network.models.requests.CreateSessionRequestDto
@@ -107,6 +109,12 @@ interface ApiService {
         @Query(QUERY_PARAM_SESSION_ID) sessionId: String,
         @Body addToWatchlistRequestDto: AddToWatchlistRequestDto
     ): Response<AddToWatchlistResponseDto>
+
+    @GET("genre/movie/list")
+    suspend fun getGenresList(
+        @Query(QUERY_PARAM_API_KEY) apiKey: String = API_KEY,
+        @Query(QUERY_PARAMS_LANGUAGE) language: String
+    ): Response<GenresListDto>
 
     companion object {
 

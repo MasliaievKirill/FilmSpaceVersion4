@@ -254,8 +254,21 @@ class AppRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getGenresList(): LiveData<List<Genre>> {
-        TODO("Not yet implemented")
+    override suspend fun getGenresList():  Pair<ResultParams,List<Genre>?> {
+        return try {
+            val response = apiService.getGenresList(language = getCurrentLanguage())
+            val genres = response.body()
+
+            when (response.code()) {
+                200 -> Pair(ResultParams.SUCCESS, genres?.genresList?.map {
+                    mapper.mapGenreDtoToGenreEntity(it)
+                })
+                401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
+                else -> Pair(ResultParams.NOT_RESPONSE, null)
+            }
+        } catch (e: Exception) {
+            Pair(ResultParams.NO_CONNECTION, null)
+        }
     }
 
     override suspend fun getDetailedMovie(movieId: Int): DetailedMovie {

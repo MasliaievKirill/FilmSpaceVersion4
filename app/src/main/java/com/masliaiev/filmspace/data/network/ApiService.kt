@@ -116,6 +116,14 @@ interface ApiService {
         @Query(QUERY_PARAMS_LANGUAGE) language: String
     ): Response<GenresListDto>
 
+    @GET("trending/{media_type}/{time_window}")
+    suspend fun getTrending(
+        @Path(QUERY_PARAM_MEDIA_TYPE) mediaType: String,
+        @Path(QUERY_PARAM_TIME_WINDOW) timeWindow: String,
+        @Query(QUERY_PARAM_API_KEY) apiKey: String = API_KEY,
+        @Query(QUERY_PARAMS_LANGUAGE) language: String
+    ): Response<MoviesListDto>
+
     companion object {
 
         private const val QUERY_PARAM_API_KEY = "api_key"
@@ -124,6 +132,8 @@ interface ApiService {
         private const val QUERY_PARAMS_PAGE = "page"
         private const val QUERY_ACCOUNT_ID = "account_id"
         private const val QUERY_HEADER_CONTENT_TYPE = "Content-Type"
+        private const val QUERY_PARAM_MEDIA_TYPE = "media_type"
+        private const val QUERY_PARAM_TIME_WINDOW = "time_window"
 
         private const val API_KEY = "9f9d136877ade7608f32a571c18756be"
         private const val DEFAULT_PAGE = 1

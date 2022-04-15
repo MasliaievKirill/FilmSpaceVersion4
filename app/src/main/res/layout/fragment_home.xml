@@ -67,13 +67,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="Popular"
+                android:text="Trending this week"
                 android:textColor="@color/white"
                 android:textSize="28sp"
                 android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_popular"
+                android:id="@+id/rv_trending_week"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -85,12 +85,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="Top rated"
+                android:text="Trending today"
                 android:textColor="@color/white"
                 android:textSize="28sp"
                 android:textStyle="bold" />
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_top_rated"
+                android:id="@+id/rv_trending_today"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"

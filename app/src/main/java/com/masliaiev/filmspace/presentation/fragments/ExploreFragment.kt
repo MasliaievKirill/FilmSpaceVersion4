@@ -55,7 +55,7 @@ class ExploreFragment : Fragment() {
 
         binding.rvGenres.adapter = adapter
         binding.rvGenres.layoutManager =
-            GridLayoutManager(requireContext(), 3, GridLayoutManager.HORIZONTAL, false)
+            GridLayoutManager(requireContext(), 4, GridLayoutManager.HORIZONTAL, false)
 
         viewModel.genres.observe(viewLifecycleOwner){
             adapter.submitList(it)

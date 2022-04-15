@@ -1,5 +1,6 @@
 package com.masliaiev.filmspace.data.mapper
 
+import android.graphics.Color
 import com.masliaiev.filmspace.data.database.models.AccountDbModel
 import com.masliaiev.filmspace.data.network.models.account.AccountDto
 import com.masliaiev.filmspace.data.network.models.genres.GenreDto
@@ -12,6 +13,7 @@ import com.masliaiev.filmspace.domain.entity.Movie
 import com.masliaiev.filmspace.domain.entity.requests.DeleteSessionRequest
 import com.masliaiev.filmspace.domain.entity.responses.*
 import javax.inject.Inject
+import kotlin.random.Random
 
 class ModelsMapper @Inject constructor() {
 
@@ -117,8 +119,23 @@ class ModelsMapper @Inject constructor() {
     fun mapGenreDtoToGenreEntity(genreDto: GenreDto): Genre {
         return Genre(
             id = genreDto.id,
-            name = genreDto.name
+            name = genreDto.name,
+            uniqueColor = getColour()
         )
+    }
+
+    private fun getColour(): Int {
+        val colors = listOf(
+            Color.YELLOW,
+            Color.BLUE,
+            Color.GRAY,
+            Color.RED,
+            Color.MAGENTA,
+            Color.DKGRAY,
+            Color.LTGRAY
+        )
+        val position = Random.nextInt(colors.size)
+        return colors[position]
     }
 
 

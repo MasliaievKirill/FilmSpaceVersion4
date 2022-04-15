@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.masliaiev.filmspace.domain.entity.Movie
 import com.masliaiev.filmspace.domain.usecases.GetNowPlayingMoviesUseCase
-import com.masliaiev.filmspace.domain.usecases.GetPopularMoviesUseCase
-import com.masliaiev.filmspace.domain.usecases.GetTopRatedMoviesUseCase
+import com.masliaiev.filmspace.domain.usecases.GetTrendingDayUseCase
+import com.masliaiev.filmspace.domain.usecases.GetTrendingWeekUseCase
 import com.masliaiev.filmspace.domain.usecases.GetUpcomingMoviesUseCase
 import com.masliaiev.filmspace.helpers.ResultParams
 import kotlinx.coroutines.launch
@@ -16,15 +16,15 @@ import javax.inject.Inject
 class HomeFragmentViewModel @Inject constructor(
     private val getNowPlayingMoviesUseCase: GetNowPlayingMoviesUseCase,
     private val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase,
-    private val getTopRatedMoviesUseCase: GetTopRatedMoviesUseCase,
-    private val getPopularMoviesUseCase: GetPopularMoviesUseCase
+    private val getTrendingDayUseCase: GetTrendingDayUseCase,
+    private val getTrendingWeekUseCase: GetTrendingWeekUseCase
 ) : ViewModel() {
 
     init {
         getNowPlaying()
         getUpcoming()
-        getTopRated()
-        getPopular()
+        getTrendingDay()
+        getTrendingWeek()
     }
 
     private var _nowPlayingMovies = MutableLiveData<List<Movie>>()
@@ -35,13 +35,21 @@ class HomeFragmentViewModel @Inject constructor(
     val upcomingMovies: LiveData<List<Movie>>
         get() = _upcomingMovies
 
-    private var _topRatedMovies = MutableLiveData<List<Movie>>()
-    val topRatedMovies: LiveData<List<Movie>>
-        get() = _topRatedMovies
+    private var _trendingDay = MutableLiveData<List<Movie>>()
+    val trendingDay: LiveData<List<Movie>>
+        get() = _trendingDay
 
-    private var _popularMovies = MutableLiveData<List<Movie>>()
-    val popularMovies: LiveData<List<Movie>>
-        get() = _popularMovies
+    private var _trendingWeek = MutableLiveData<List<Movie>>()
+    val trendingWeek: LiveData<List<Movie>>
+        get() = _trendingWeek
+
+//    private var _topRatedMovies = MutableLiveData<List<Movie>>()
+//    val topRatedMovies: LiveData<List<Movie>>
+//        get() = _topRatedMovies
+//
+//    private var _popularMovies = MutableLiveData<List<Movie>>()
+//    val popularMovies: LiveData<List<Movie>>
+//        get() = _popularMovies
 
     private var _error = MutableLiveData<Boolean>()
     val error: LiveData<Boolean>
@@ -84,13 +92,13 @@ class HomeFragmentViewModel @Inject constructor(
         }
     }
 
-    private fun getTopRated() {
+    private fun getTrendingDay() {
         viewModelScope.launch {
-            val topRatedResult = getTopRatedMoviesUseCase.getTopRatedMovies()
-            when (topRatedResult.first) {
+            val topTrendingDayResult = getTrendingDayUseCase.getTrendingDay()
+            when (topTrendingDayResult.first) {
                 ResultParams.SUCCESS -> {
-                    topRatedResult.second?.let {
-                        _topRatedMovies.value = it
+                    topTrendingDayResult.second?.let {
+                        _trendingDay.value = it
                     }
                 }
                 ResultParams.ACCOUNT_ERROR -> _apiError.value = true
@@ -100,13 +108,13 @@ class HomeFragmentViewModel @Inject constructor(
         }
     }
 
-    private fun getPopular() {
+    private fun getTrendingWeek() {
         viewModelScope.launch {
-            val popularResult = getPopularMoviesUseCase.getPopularMovies()
-            when (popularResult.first) {
+            val trendingWeekResult = getTrendingWeekUseCase.getTrendingWeek()
+            when (trendingWeekResult.first) {
                 ResultParams.SUCCESS -> {
-                    popularResult.second?.let {
-                        _popularMovies.value = it
+                    trendingWeekResult.second?.let {
+                        _trendingWeek.value = it
                     }
                 }
                 ResultParams.ACCOUNT_ERROR -> _apiError.value = true

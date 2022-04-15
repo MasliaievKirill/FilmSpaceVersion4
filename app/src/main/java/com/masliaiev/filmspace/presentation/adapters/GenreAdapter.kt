@@ -21,17 +21,8 @@ class GenreAdapter : ListAdapter<Genre, GenreViewHolder>(GenreDiffCallback()) {
 
     override fun onBindViewHolder(holder: GenreViewHolder, position: Int) {
         val genre = getItem(position)
-        val colors = listOf(
-            Color.YELLOW,
-            Color.BLUE,
-            Color.GRAY,
-            Color.RED,
-            Color.MAGENTA,
-            Color.DKGRAY,
-            Color.LTGRAY
-        )
-        val pos = Random.nextInt(colors.size)
-        holder.binding.clGenre.setBackgroundColor(colors[pos])
+
+        holder.binding.genreColourMarker.setBackgroundColor(genre.uniqueColor)
         holder.binding.tvGenreName.text = genre.name
     }
 }

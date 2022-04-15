@@ -197,7 +197,7 @@ class AppRepositoryImpl @Inject constructor(
                 accountId = accountId,
                 sessionId = sessionId,
                 markAsFavouriteRequestDto = MarkAsFavouriteRequestDto(
-                    MEDIA_TYPE,
+                    MEDIA_TYPE_MOVIE,
                     movieId,
                     favourite
                 )
@@ -231,7 +231,7 @@ class AppRepositoryImpl @Inject constructor(
                 accountId = accountId,
                 sessionId = sessionId,
                 addToWatchlistRequestDto = AddToWatchlistRequestDto(
-                    MEDIA_TYPE,
+                    MEDIA_TYPE_MOVIE,
                     movieId,
                     watchlist
                 )
@@ -349,6 +349,48 @@ class AppRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getTrendingDayMovies(): Pair<ResultParams, List<Movie>?> {
+        return try {
+            val response = apiService.getTrending(
+                mediaType = MEDIA_TYPE_MOVIE,
+                timeWindow = TIME_WINDOW_DAY,
+                language = getCurrentLanguage()
+            )
+            val moviesList = response.body()
+
+            when (response.code()) {
+                200 -> Pair(ResultParams.SUCCESS, moviesList?.results?.map {
+                    mapper.mapMovieDtoToMovieEntity(it)
+                })
+                401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
+                else -> Pair(ResultParams.NOT_RESPONSE, null)
+            }
+        } catch (e: Exception) {
+            Pair(ResultParams.NO_CONNECTION, null)
+        }
+    }
+
+    override suspend fun getTrendingWeekMovies(): Pair<ResultParams, List<Movie>?> {
+        return try {
+            val response = apiService.getTrending(
+                mediaType = MEDIA_TYPE_MOVIE,
+                timeWindow = TIME_WINDOW_WEEK,
+                language = getCurrentLanguage()
+            )
+            val moviesList = response.body()
+
+            when (response.code()) {
+                200 -> Pair(ResultParams.SUCCESS, moviesList?.results?.map {
+                    mapper.mapMovieDtoToMovieEntity(it)
+                })
+                401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
+                else -> Pair(ResultParams.NOT_RESPONSE, null)
+            }
+        } catch (e: Exception) {
+            Pair(ResultParams.NO_CONNECTION, null)
+        }
+    }
+
     override fun getRecommendations(movieId: Int): LiveData<List<Movie>> {
         TODO("Not yet implemented")
     }
@@ -381,6 +423,9 @@ class AppRepositoryImpl @Inject constructor(
     }
 
     companion object {
-        private const val MEDIA_TYPE = "movie"
+        private const val MEDIA_TYPE_MOVIE = "movie"
+        private const val MEDIA_TYPE_PERSON = "person"
+        private const val TIME_WINDOW_DAY = "day"
+        private const val TIME_WINDOW_WEEK = "week"
     }
 }

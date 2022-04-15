@@ -37,10 +37,10 @@ class HomeFragment : Fragment() {
         HomeMovieAdapter()
     }
 
-    private val adapterPopular by lazy {
+    private val adapterTrendingWeek by lazy {
         HomeMovieAdapter()
     }
-    private val adapterTopRated by lazy {
+    private val adapterTrendingDay by lazy {
         HomeMovieAdapter()
     }
     private val adapterUpcoming by lazy {
@@ -105,7 +105,7 @@ class HomeFragment : Fragment() {
             }
         }
 
-        adapterPopular.onMovieClickListener = object : OnMovieClickListener {
+        adapterTrendingWeek.onMovieClickListener = object : OnMovieClickListener {
             override fun onMovieClick(movieId: Int) {
                 findTopNavController().navigate(
                     MainFragmentDirections.actionMainFragmentToDetailMovieFragment(
@@ -115,7 +115,7 @@ class HomeFragment : Fragment() {
             }
         }
 
-        adapterTopRated.onMovieClickListener = object : OnMovieClickListener {
+        adapterTrendingDay.onMovieClickListener = object : OnMovieClickListener {
             override fun onMovieClick(movieId: Int) {
                 findTopNavController().navigate(
                     MainFragmentDirections.actionMainFragmentToDetailMovieFragment(
@@ -139,12 +139,12 @@ class HomeFragment : Fragment() {
         binding.rvNowPlaying.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        binding.rvPopular.adapter = adapterPopular
-        binding.rvPopular.layoutManager =
+        binding.rvTrendingWeek.adapter = adapterTrendingWeek
+        binding.rvTrendingWeek.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        binding.rvTopRated.adapter = adapterTopRated
-        binding.rvTopRated.layoutManager =
+        binding.rvTrendingToday.adapter = adapterTrendingDay
+        binding.rvTrendingToday.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
         binding.rvUpcoming.adapter = adapterUpcoming
@@ -156,12 +156,12 @@ class HomeFragment : Fragment() {
             adapterNowPlaying.submitList(it)
         }
 
-        viewModel.popularMovies.observe(viewLifecycleOwner) {
-            adapterPopular.submitList(it)
+        viewModel.trendingWeek.observe(viewLifecycleOwner) {
+            adapterTrendingWeek.submitList(it)
         }
 
-        viewModel.topRatedMovies.observe(viewLifecycleOwner) {
-            adapterTopRated.submitList(it)
+        viewModel.trendingDay.observe(viewLifecycleOwner) {
+            adapterTrendingDay.submitList(it)
         }
 
         viewModel.upcomingMovies.observe(viewLifecycleOwner) {

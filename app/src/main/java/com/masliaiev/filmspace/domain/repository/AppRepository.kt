@@ -77,6 +77,10 @@ interface AppRepository {
 
     suspend fun getUpcomingMovies(): Pair<ResultParams, List<Movie>?>
 
+    suspend fun getTrendingDayMovies(): Pair<ResultParams, List<Movie>?>
+
+    suspend fun getTrendingWeekMovies(): Pair<ResultParams, List<Movie>?>
+
     fun getRecommendations(movieId: Int): LiveData<List<Movie>>
 
     fun getSimilarMovies(movieId: Int): LiveData<List<Movie>>

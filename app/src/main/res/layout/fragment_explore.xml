@@ -5,6 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
+    android:clipToPadding="false"
+    android:overScrollMode="never"
+    android:paddingBottom="90dp"
     tools:context=".presentation.fragments.ExploreFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -12,45 +15,245 @@
         android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/tv_explore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Explore"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            android:layout_marginTop="18dp"
+            android:layout_marginStart="18dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
             android:id="@+id/tv_genres"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="45dp"
             android:text="Genres"
             android:textColor="@color/white"
             android:textSize="28sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_search" />
+            app:layout_constraintTop_toBottomOf="@id/tv_explore" />
 
         <ImageView
             android:id="@+id/iv_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
             android:layout_marginEnd="30dp"
             android:src="@drawable/ic_search"
+            app:layout_constraintBottom_toBottomOf="@id/tv_explore"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/tv_explore" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_genres"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/tv_genres"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/tv_genres" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_star"
+            app:layout_constraintBottom_toBottomOf="@id/tv_top_rated"
+            app:layout_constraintStart_toStartOf="@id/tv_top_rated"
+            app:layout_constraintTop_toTopOf="@id/tv_top_rated" />
+
+        <TextView
+            android:id="@+id/tv_top_rated"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:paddingStart="45dp"
+            android:paddingEnd="45dp"
+            android:text="Top rated"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_genres" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_right"
+            app:layout_constraintBottom_toBottomOf="@id/tv_top_rated"
+            app:layout_constraintEnd_toEndOf="@id/tv_top_rated"
+            app:layout_constraintTop_toTopOf="@id/tv_top_rated" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_line_chart"
+            app:layout_constraintBottom_toBottomOf="@id/tv_popular"
+            app:layout_constraintStart_toStartOf="@id/tv_popular"
+            app:layout_constraintTop_toTopOf="@id/tv_popular" />
+
+        <TextView
+            android:id="@+id/tv_popular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:paddingStart="45dp"
+            android:paddingEnd="45dp"
+            android:text="Popular"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_top_rated" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_right"
+            app:layout_constraintBottom_toBottomOf="@id/tv_popular"
+            app:layout_constraintEnd_toEndOf="@id/tv_popular"
+            app:layout_constraintTop_toTopOf="@id/tv_popular" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_play"
+            app:layout_constraintBottom_toBottomOf="@id/tv_now_playing"
+            app:layout_constraintStart_toStartOf="@id/tv_now_playing"
+            app:layout_constraintTop_toTopOf="@id/tv_now_playing" />
+
+        <TextView
+            android:id="@+id/tv_now_playing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:paddingStart="45dp"
+            android:paddingEnd="45dp"
+            android:text="Now playing"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_popular" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_right"
+            app:layout_constraintBottom_toBottomOf="@id/tv_now_playing"
+            app:layout_constraintEnd_toEndOf="@id/tv_now_playing"
+            app:layout_constraintTop_toTopOf="@id/tv_now_playing" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_plane"
+            app:layout_constraintBottom_toBottomOf="@id/tv_upcoming"
+            app:layout_constraintStart_toStartOf="@id/tv_upcoming"
+            app:layout_constraintTop_toTopOf="@id/tv_upcoming" />
+
+        <TextView
+            android:id="@+id/tv_upcoming"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:paddingStart="45dp"
+            android:paddingEnd="45dp"
+            android:text="Upcoming"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_now_playing" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_right"
+            app:layout_constraintBottom_toBottomOf="@id/tv_upcoming"
+            app:layout_constraintEnd_toEndOf="@id/tv_upcoming"
+            app:layout_constraintTop_toTopOf="@id/tv_upcoming" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_bar_chart_line"
+            app:layout_constraintBottom_toBottomOf="@id/tv_trending_today"
+            app:layout_constraintStart_toStartOf="@id/tv_trending_today"
+            app:layout_constraintTop_toTopOf="@id/tv_trending_today" />
+
+        <TextView
+            android:id="@+id/tv_trending_today"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:paddingStart="45dp"
+            android:paddingEnd="45dp"
+            android:text="Trending today"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_upcoming" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_right"
+            app:layout_constraintBottom_toBottomOf="@id/tv_trending_today"
+            app:layout_constraintEnd_toEndOf="@id/tv_trending_today"
+            app:layout_constraintTop_toTopOf="@id/tv_trending_today" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_bar_chart_fill"
+            app:layout_constraintBottom_toBottomOf="@id/tv_trending_week"
+            app:layout_constraintStart_toStartOf="@id/tv_trending_week"
+            app:layout_constraintTop_toTopOf="@id/tv_trending_week" />
+
+        <TextView
+            android:id="@+id/tv_trending_week"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:paddingStart="45dp"
+            android:paddingEnd="45dp"
+            android:text="Trending this week"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="60dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_trending_today"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_right"
+            app:layout_constraintBottom_toBottomOf="@id/tv_trending_week"
+            app:layout_constraintEnd_toEndOf="@id/tv_trending_week"
+            app:layout_constraintTop_toTopOf="@id/tv_trending_week" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
-
-
-
 
 
 </androidx.core.widget.NestedScrollView>

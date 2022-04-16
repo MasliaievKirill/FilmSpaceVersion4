@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.masliaiev.filmspace.FilmSpaceApp
 import com.masliaiev.filmspace.databinding.FragmentExploreBinding
+import com.masliaiev.filmspace.helpers.MovieListLaunchParams
 import com.masliaiev.filmspace.presentation.adapters.GenreAdapter
 import com.masliaiev.filmspace.presentation.view_models.ExploreFragmentViewModel
 import com.masliaiev.filmspace.presentation.view_models.ViewModelFactory
@@ -59,6 +61,42 @@ class ExploreFragment : Fragment() {
 
         viewModel.genres.observe(viewLifecycleOwner){
             adapter.submitList(it)
+        }
+
+        binding.tvTopRated.setOnClickListener {
+            findNavController().navigate(
+                ExploreFragmentDirections.actionExploreFragmentToMovieListFragmentExplore(null, MovieListLaunchParams.TOP_RATED)
+            )
+        }
+
+        binding.tvPopular.setOnClickListener {
+            findNavController().navigate(
+                ExploreFragmentDirections.actionExploreFragmentToMovieListFragmentExplore(null, MovieListLaunchParams.POPULAR)
+            )
+        }
+
+        binding.tvNowPlaying.setOnClickListener {
+            findNavController().navigate(
+                ExploreFragmentDirections.actionExploreFragmentToMovieListFragmentExplore(null, MovieListLaunchParams.NOW_PLAYING)
+            )
+        }
+
+        binding.tvUpcoming.setOnClickListener {
+            findNavController().navigate(
+                ExploreFragmentDirections.actionExploreFragmentToMovieListFragmentExplore(null, MovieListLaunchParams.UPCOMING)
+            )
+        }
+
+        binding.tvTrendingToday.setOnClickListener {
+            findNavController().navigate(
+                ExploreFragmentDirections.actionExploreFragmentToMovieListFragmentExplore(null, MovieListLaunchParams.TRENDING_TODAY)
+            )
+        }
+
+        binding.tvNowPlaying.setOnClickListener {
+            findNavController().navigate(
+                ExploreFragmentDirections.actionExploreFragmentToMovieListFragmentExplore(null, MovieListLaunchParams.TRENDING_WEEK)
+            )
         }
 
     }

@@ -12,6 +12,23 @@
         android:label="fragment_library"
         tools:layout="@layout/fragment_library">
 
+        <action
+            android:id="@+id/action_library_fragment_to_movie_List_fragment"
+            app:destination="@id/movie_list_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@id/movie_list_fragment"
+        android:name="com.masliaiev.filmspace.presentation.fragments.MovieListFragment"
+        android:label="fragment_movie_list"
+        tools:layout="@layout/fragment_movie_list" >
+        <argument
+            android:name="genre"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="launchParam"
+            app:argType="com.masliaiev.filmspace.helpers.MovieListLaunchParams" />
     </fragment>
 
 </navigation>

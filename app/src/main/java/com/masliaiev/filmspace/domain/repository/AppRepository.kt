@@ -38,12 +38,27 @@ interface AppRepository {
         accountId: Int
     ): Pair<ResultParams, List<Movie>?>
 
+    fun getAllFavouriteMovies(
+        sessionId: String,
+        accountId: Int
+    ): LiveData<PagingData<Movie>>
+
     suspend fun getRatedMovies(sessionId: String, accountId: Int): Pair<ResultParams, List<Movie>?>
+
+    fun getAllRatedMovies(
+        sessionId: String,
+        accountId: Int
+    ): LiveData<PagingData<Movie>>
 
     suspend fun getMoviesWatchlist(
         sessionId: String,
         accountId: Int
     ): Pair<ResultParams, List<Movie>?>
+
+    fun getAllMoviesWatchlist(
+        sessionId: String,
+        accountId: Int
+    ): LiveData<PagingData<Movie>>
 
     suspend fun markAsFavourite(
         accountId: Int,
@@ -57,11 +72,11 @@ interface AppRepository {
         sessionId: String,
         movieId: Int,
         watchlist: Boolean
-    ): Pair<ResultParams,AddToWatchlistResponse?>
+    ): Pair<ResultParams, AddToWatchlistResponse?>
 
     //GENRES
 
-    suspend fun getGenresList(): Pair<ResultParams,List<Genre>?>
+    suspend fun getGenresList(): Pair<ResultParams, List<Genre>?>
 
     //MOVIES
 
@@ -71,15 +86,29 @@ interface AppRepository {
 
     suspend fun getPopularMovies(): Pair<ResultParams, List<Movie>?>
 
+    fun getAllPopularMovies(): LiveData<PagingData<Movie>>
+
     suspend fun getTopRatedMovies(): Pair<ResultParams, List<Movie>?>
+
+    fun getAllTopRatedMovies(): LiveData<PagingData<Movie>>
 
     suspend fun getNowPlayingMovies(): Pair<ResultParams, List<Movie>?>
 
+    fun getAllNowPlayingMovies(): LiveData<PagingData<Movie>>
+
     suspend fun getUpcomingMovies(): Pair<ResultParams, List<Movie>?>
+
+    fun getAllUpcomingMovies(): LiveData<PagingData<Movie>>
 
     suspend fun getTrendingDayMovies(): Pair<ResultParams, List<Movie>?>
 
+    fun getAllTrendingDayMovies(): LiveData<PagingData<Movie>>
+
     suspend fun getTrendingWeekMovies(): Pair<ResultParams, List<Movie>?>
+
+    fun getAllTrendingWeekMovies(): LiveData<PagingData<Movie>>
+
+    fun getMoviesByGenre(genre: String): LiveData<PagingData<Movie>>
 
     fun getRecommendations(movieId: Int): LiveData<List<Movie>>
 

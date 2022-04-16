@@ -8,4 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="black_transparency">#E6000000</color>
+    <color name="base">#1F2023</color>
+    <color name="base_transparency">#F21F2023</color>
 </resources>

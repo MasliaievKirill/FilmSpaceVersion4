@@ -121,7 +121,19 @@ interface ApiService {
         @Path(QUERY_PARAM_MEDIA_TYPE) mediaType: String,
         @Path(QUERY_PARAM_TIME_WINDOW) timeWindow: String,
         @Query(QUERY_PARAM_API_KEY) apiKey: String = API_KEY,
-        @Query(QUERY_PARAMS_LANGUAGE) language: String
+        @Query(QUERY_PARAMS_LANGUAGE) language: String,
+        @Query(QUERY_PARAMS_PAGE) page: Int = DEFAULT_PAGE
+    ): Response<MoviesListDto>
+
+    @GET("discover/movie")
+    suspend fun getMoviesByGenre(
+        @Query(QUERY_PARAM_API_KEY) apiKey: String = API_KEY,
+        @Query(QUERY_PARAMS_LANGUAGE) language: String,
+        @Query(QUERY_PARAMS_SORT_BY) sorted: String = SORT_BY_POPULARITY,
+        @Query(QUERY_PARAMS_MIN_VOTE_COUNT) minVoteCount: String = MIN_VOTE_COUNT,
+        @Query(QUERY_PARAMS_WITH_GENRES) genre: String,
+        @Query(QUERY_PARAMS_PAGE) page: Int
+
     ): Response<MoviesListDto>
 
     companion object {
@@ -134,10 +146,15 @@ interface ApiService {
         private const val QUERY_HEADER_CONTENT_TYPE = "Content-Type"
         private const val QUERY_PARAM_MEDIA_TYPE = "media_type"
         private const val QUERY_PARAM_TIME_WINDOW = "time_window"
+        private const val QUERY_PARAMS_SORT_BY = "sort_by"
+        private const val QUERY_PARAMS_MIN_VOTE_COUNT = "vote_count.gte"
+        private const val QUERY_PARAMS_WITH_GENRES = "with_genres"
 
         private const val API_KEY = "9f9d136877ade7608f32a571c18756be"
         private const val DEFAULT_PAGE = 1
         private const val HEADER_CONTENT_TYPE = "application/json;charset=utf-8"
+        private const val SORT_BY_POPULARITY = "popularity.desc"
+        private const val MIN_VOTE_COUNT = "1000"
 
     }
 }

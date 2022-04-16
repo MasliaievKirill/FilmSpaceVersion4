@@ -2,7 +2,10 @@ package com.masliaiev.filmspace.data.repository
 
 import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.masliaiev.filmspace.AppConstants
 import com.masliaiev.filmspace.data.database.AppDao
 import com.masliaiev.filmspace.data.mapper.ModelsMapper
@@ -10,6 +13,7 @@ import com.masliaiev.filmspace.data.network.ApiService
 import com.masliaiev.filmspace.data.network.models.requests.AddToWatchlistRequestDto
 import com.masliaiev.filmspace.data.network.models.requests.CreateSessionRequestDto
 import com.masliaiev.filmspace.data.network.models.requests.MarkAsFavouriteRequestDto
+import com.masliaiev.filmspace.data.network.page_sources.*
 import com.masliaiev.filmspace.domain.entity.*
 import com.masliaiev.filmspace.domain.entity.requests.DeleteSessionRequest
 import com.masliaiev.filmspace.domain.entity.requests.RateMovieRequest
@@ -79,7 +83,8 @@ class AppRepositoryImpl @Inject constructor(
     }
 
     override fun getAppMode(): String {
-        return sharedPreferences.getString(AppConstants.KEY_APP_MODE, AppConstants.UNKNOWN_MODE) ?: AppConstants.UNKNOWN_MODE
+        return sharedPreferences.getString(AppConstants.KEY_APP_MODE, AppConstants.UNKNOWN_MODE)
+            ?: AppConstants.UNKNOWN_MODE
     }
 
     override fun setAppMode(appMode: String) {
@@ -87,7 +92,10 @@ class AppRepositoryImpl @Inject constructor(
     }
 
     override fun getSessionId(): String {
-        return sharedPreferences.getString(AppConstants.KEY_SESSION_ID, AppConstants.EMPTY_SESSION_ID) ?: AppConstants.EMPTY_SESSION_ID
+        return sharedPreferences.getString(
+            AppConstants.KEY_SESSION_ID,
+            AppConstants.EMPTY_SESSION_ID
+        ) ?: AppConstants.EMPTY_SESSION_ID
     }
 
     override fun setSessionId(sessionId: String) {
@@ -254,7 +262,7 @@ class AppRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getGenresList():  Pair<ResultParams,List<Genre>?> {
+    override suspend fun getGenresList(): Pair<ResultParams, List<Genre>?> {
         return try {
             val response = apiService.getGenresList(language = getCurrentLanguage())
             val genres = response.body()
@@ -391,6 +399,173 @@ class AppRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getAllFavouriteMovies(
+        sessionId: String,
+        accountId: Int
+    ) = Pager(
+        config = PagingConfig(
+            pageSize = MAX_NUMBER_OF_ITEMS_LOADED_AT_ONCE,
+            maxSize = MAX_NUMBER_OF_ITEMS,
+            enablePlaceholders = false,
+        ),
+        pagingSourceFactory = {
+            AllFavouriteMoviesPageSource(
+                apiService,
+                mapper,
+                getCurrentLanguage(),
+                sessionId,
+                accountId
+            )
+        }
+    ).liveData
+
+    override fun getAllRatedMovies(sessionId: String, accountId: Int) = Pager(
+        config = PagingConfig(
+            pageSize = MAX_NUMBER_OF_ITEMS_LOADED_AT_ONCE,
+            maxSize = MAX_NUMBER_OF_ITEMS,
+            enablePlaceholders = false,
+        ),
+        pagingSourceFactory = {
+            AllRatedMoviesPageSource(
+                apiService,
+                mapper,
+                getCurrentLanguage(),
+                sessionId,
+                accountId
+            )
+        }
+    ).liveData
+
+    override fun getAllMoviesWatchlist(
+        sessionId: String,
+        accountId: Int
+    ) = Pager(
+        config = PagingConfig(
+            pageSize = MAX_NUMBER_OF_ITEMS_LOADED_AT_ONCE,
+            maxSize = MAX_NUMBER_OF_ITEMS,
+            enablePlaceholders = false,
+        ),
+        pagingSourceFactory = {
+            AllMoviesWatchlistPageSource(
+                apiService,
+                mapper,
+                getCurrentLanguage(),
+                sessionId,
+                accountId
+            )
+        }
+    ).liveData
+
+    override fun getAllPopularMovies() = Pager(
+        config = PagingConfig(
+            pageSize = MAX_NUMBER_OF_ITEMS_LOADED_AT_ONCE,
+            maxSize = MAX_NUMBER_OF_ITEMS,
+            enablePlaceholders = false,
+        ),
+        pagingSourceFactory = {
+            AllPopularMoviesPageSource(
+                apiService,
+                mapper,
+                getCurrentLanguage()
+            )
+        }
+    ).liveData
+
+    override fun getAllTopRatedMovies() = Pager(
+        config = PagingConfig(
+            pageSize = MAX_NUMBER_OF_ITEMS_LOADED_AT_ONCE,
+            maxSize = MAX_NUMBER_OF_ITEMS,
+            enablePlaceholders = false,
+        ),
+        pagingSourceFactory = {
+            AllTopRatedMoviesPageSource(
+                apiService,
+                mapper,
+                getCurrentLanguage()
+            )
+        }
+    ).liveData
+
+    override fun getAllNowPlayingMovies() = Pager(
+        config = PagingConfig(
+            pageSize = MAX_NUMBER_OF_ITEMS_LOADED_AT_ONCE,
+            maxSize = MAX_NUMBER_OF_ITEMS,
+            enablePlaceholders = false,
+        ),
+        pagingSourceFactory = {
+            AllNowPlayingMoviesPageSource(
+                apiService,
+                mapper,
+                getCurrentLanguage()
+            )
+        }
+    ).liveData
+
+    override fun getAllUpcomingMovies() = Pager(
+        config = PagingConfig(
+            pageSize = MAX_NUMBER_OF_ITEMS_LOADED_AT_ONCE,
+            maxSize = MAX_NUMBER_OF_ITEMS,
+            enablePlaceholders = false,
+        ),
+        pagingSourceFactory = {
+            AllUpcomingMoviesPageSource(
+                apiService,
+                mapper,
+                getCurrentLanguage()
+            )
+        }
+    ).liveData
+
+    override fun getMoviesByGenre(genre: String) = Pager(
+        config = PagingConfig(
+            pageSize = MAX_NUMBER_OF_ITEMS_LOADED_AT_ONCE,
+            maxSize = MAX_NUMBER_OF_ITEMS,
+            enablePlaceholders = false,
+        ),
+        pagingSourceFactory = {
+            MoviesByGenrePageSource(
+                apiService,
+                mapper,
+                getCurrentLanguage(),
+                genre
+            )
+        }
+    ).liveData
+
+    override fun getAllTrendingDayMovies() = Pager(
+        config = PagingConfig(
+            pageSize = MAX_NUMBER_OF_ITEMS_LOADED_AT_ONCE,
+            maxSize = MAX_NUMBER_OF_ITEMS,
+            enablePlaceholders = false,
+        ),
+        pagingSourceFactory = {
+            AllTrendingMoviesPageSource(
+                apiService,
+                mapper,
+                MEDIA_TYPE_MOVIE,
+                TIME_WINDOW_DAY,
+                getCurrentLanguage()
+            )
+        }
+    ).liveData
+
+    override fun getAllTrendingWeekMovies() = Pager(
+        config = PagingConfig(
+            pageSize = MAX_NUMBER_OF_ITEMS_LOADED_AT_ONCE,
+            maxSize = MAX_NUMBER_OF_ITEMS,
+            enablePlaceholders = false,
+        ),
+        pagingSourceFactory = {
+            AllTrendingMoviesPageSource(
+                apiService,
+                mapper,
+                MEDIA_TYPE_MOVIE,
+                TIME_WINDOW_WEEK,
+                getCurrentLanguage()
+            )
+        }
+    ).liveData
+
     override fun getRecommendations(movieId: Int): LiveData<List<Movie>> {
         TODO("Not yet implemented")
     }
@@ -427,5 +602,8 @@ class AppRepositoryImpl @Inject constructor(
         private const val MEDIA_TYPE_PERSON = "person"
         private const val TIME_WINDOW_DAY = "day"
         private const val TIME_WINDOW_WEEK = "week"
+
+        private const val MAX_NUMBER_OF_ITEMS_LOADED_AT_ONCE = 20
+        private const val MAX_NUMBER_OF_ITEMS = 100
     }
 }

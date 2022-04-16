@@ -46,13 +46,14 @@
             android:layout_height="match_parent">
 
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_avatar"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_marginTop="18dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_account"
+                app:shapeAppearanceOverlay="@style/circle_image_view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

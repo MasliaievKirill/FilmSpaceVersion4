@@ -44,5 +44,10 @@ interface ViewModelModule {
     @ViewModelKey(AccountFragmentViewModel::class)
     fun bindAccountFragmentViewModel(impl: AccountFragmentViewModel): ViewModel
 
+    @Binds
+    @IntoMap
+    @ViewModelKey(MovieListFragmentViewModel::class)
+    fun bindMovieListFragmentViewModel(impl: MovieListFragmentViewModel): ViewModel
+
 
 }

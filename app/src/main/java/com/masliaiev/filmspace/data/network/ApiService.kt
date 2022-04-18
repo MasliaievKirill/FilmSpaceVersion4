@@ -4,6 +4,9 @@ import com.masliaiev.filmspace.data.network.models.account.AccountDto
 import com.masliaiev.filmspace.data.network.models.genres.GenreDto
 import com.masliaiev.filmspace.data.network.models.genres.GenresListDto
 import com.masliaiev.filmspace.data.network.models.movies.MoviesListDto
+import com.masliaiev.filmspace.data.network.models.movies.account_states.AccountStatesDto
+import com.masliaiev.filmspace.data.network.models.movies.details.DetailedMovieDto
+import com.masliaiev.filmspace.data.network.models.movies.videos.VideoListDto
 import com.masliaiev.filmspace.data.network.models.requests.AddToWatchlistRequestDto
 import com.masliaiev.filmspace.data.network.models.requests.CreateSessionRequestDto
 import com.masliaiev.filmspace.data.network.models.requests.DeleteSessionRequestDto
@@ -136,6 +139,57 @@ interface ApiService {
 
     ): Response<MoviesListDto>
 
+    @GET("search/movie")
+    suspend fun searchMovie(
+        @Query(QUERY_PARAM_API_KEY) apiKey: String = API_KEY,
+        @Query(QUERY_PARAMS_LANGUAGE) language: String,
+        @Query(QUERY_PARAMS_SEARCH) query: String,
+        @Query(QUERY_PARAMS_PAGE) page: Int
+
+    ): Response<MoviesListDto>
+
+    @GET("movie/{movie_id}")
+    suspend fun getDetails(
+        @Path(QUERY_PARAM_MOVIE_ID) movieId: Int,
+        @Query(QUERY_PARAM_API_KEY) apiKey: String = API_KEY,
+        @Query(QUERY_PARAMS_LANGUAGE) language: String
+
+    ): Response<DetailedMovieDto>
+
+    @GET("movie/{movie_id}/account_states")
+    suspend fun getAccountStates(
+        @Path(QUERY_PARAM_MOVIE_ID) movieId: Int,
+        @Query(QUERY_PARAM_API_KEY) apiKey: String = API_KEY,
+        @Query(QUERY_PARAM_SESSION_ID) sessionId: String
+
+    ): Response<AccountStatesDto>
+
+    @GET("movie/{movie_id}/recommendations")
+    suspend fun getRecommendations(
+        @Path(QUERY_PARAM_MOVIE_ID) movieId: Int,
+        @Query(QUERY_PARAM_API_KEY) apiKey: String = API_KEY,
+        @Query(QUERY_PARAMS_LANGUAGE) language: String
+
+    ): Response<MoviesListDto>
+
+    @GET("movie/{movie_id}/similar")
+    suspend fun getSimilarMovies(
+        @Path(QUERY_PARAM_MOVIE_ID) movieId: Int,
+        @Query(QUERY_PARAM_API_KEY) apiKey: String = API_KEY,
+        @Query(QUERY_PARAMS_LANGUAGE) language: String,
+        @Query(QUERY_PARAMS_PAGE) page: Int = DEFAULT_PAGE
+
+    ): Response<MoviesListDto>
+
+    @GET("movie/{movie_id}/videos")
+    suspend fun getVideos(
+        @Path(QUERY_PARAM_MOVIE_ID) movieId: Int,
+        @Query(QUERY_PARAM_API_KEY) apiKey: String = API_KEY
+
+    ): Response<VideoListDto>
+
+
+
     companion object {
 
         private const val QUERY_PARAM_API_KEY = "api_key"
@@ -149,6 +203,8 @@ interface ApiService {
         private const val QUERY_PARAMS_SORT_BY = "sort_by"
         private const val QUERY_PARAMS_MIN_VOTE_COUNT = "vote_count.gte"
         private const val QUERY_PARAMS_WITH_GENRES = "with_genres"
+        private const val QUERY_PARAMS_SEARCH = "query"
+        private const val QUERY_PARAM_MOVIE_ID = "movie_id"
 
         private const val API_KEY = "9f9d136877ade7608f32a571c18756be"
         private const val DEFAULT_PAGE = 1

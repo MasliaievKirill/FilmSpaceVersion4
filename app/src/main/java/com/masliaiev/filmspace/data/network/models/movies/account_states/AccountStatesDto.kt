@@ -12,7 +12,7 @@ data class AccountStatesDto(
     val favorite: Boolean,
     @SerializedName("rated")
     @Expose
-    val rated: RatedDto?,
+    val rated: Any?,
     @SerializedName("watchlist")
     @Expose
     val watchlist: Boolean

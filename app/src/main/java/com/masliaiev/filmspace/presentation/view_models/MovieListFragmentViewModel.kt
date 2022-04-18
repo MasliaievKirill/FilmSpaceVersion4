@@ -28,7 +28,6 @@ class MovieListFragmentViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-
     var movies: LiveData<PagingData<Movie>>? = null
 
 
@@ -96,21 +95,32 @@ class MovieListFragmentViewModel @Inject constructor(
 
     fun getAllRatedMovies() {
         viewModelScope.launch {
-            when (loadAccountUseCase.loadAccountDetails(getSessionIdUseCase.getSessionId())) {
-                ResultParams.SUCCESS -> {
-                    val account = getAccountDetailsUseCase.getAccountDetails()
-                    val moviesResult = getAllRatedMoviesUseCase.getAllRatedMovies(
-                        getSessionIdUseCase.getSessionId(),
-                        account.id
-                    )
-                    movies = moviesResult
-                }
-                ResultParams.ACCOUNT_ERROR -> _apiError.value = true
-                ResultParams.NO_CONNECTION -> _error.value = true
-                ResultParams.NOT_RESPONSE -> _error.value = true
-            }
+            val accountId = getAccountDetailsUseCase.getAccountDetails().id
+            val moviesResult = getAllRatedMoviesUseCase.getAllRatedMovies(
+                getSessionIdUseCase.getSessionId(),
+                accountId
+            )
+            movies = moviesResult
         }
     }
+
+//    fun getAllRatedMovies() {
+//        viewModelScope.launch {
+//            when (loadAccountUseCase.loadAccountDetails(getSessionIdUseCase.getSessionId())) {
+//                ResultParams.SUCCESS -> {
+//                    val account = getAccountDetailsUseCase.getAccountDetails()
+//                    val moviesResult = getAllRatedMoviesUseCase.getAllRatedMovies(
+//                        getSessionIdUseCase.getSessionId(),
+//                        account.id
+//                    )
+//                    movies = moviesResult
+//                }
+//                ResultParams.ACCOUNT_ERROR -> _apiError.value = true
+//                ResultParams.NO_CONNECTION -> _error.value = true
+//                ResultParams.NOT_RESPONSE -> _error.value = true
+//            }
+//        }
+//    }
 
     fun getAllMoviesWatchlist() {
         viewModelScope.launch {
@@ -129,8 +139,6 @@ class MovieListFragmentViewModel @Inject constructor(
             }
         }
     }
-
-
 
 
 }

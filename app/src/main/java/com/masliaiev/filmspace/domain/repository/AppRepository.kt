@@ -80,9 +80,9 @@ interface AppRepository {
 
     //MOVIES
 
-    suspend fun getDetailedMovie(movieId: Int): DetailedMovie
+    suspend fun getDetailedMovie(movieId: Int): Pair<ResultParams, DetailedMovie?>
 
-    suspend fun getAccountStates(movieId: Int, sessionId: String): AccountStates
+    suspend fun getAccountStates(movieId: Int, sessionId: String): Pair<ResultParams, AccountStates?>
 
     suspend fun getPopularMovies(): Pair<ResultParams, List<Movie>?>
 
@@ -110,11 +110,11 @@ interface AppRepository {
 
     fun getMoviesByGenre(genre: String): LiveData<PagingData<Movie>>
 
-    fun getRecommendations(movieId: Int): LiveData<List<Movie>>
+    suspend fun getRecommendations(movieId: Int): Pair<ResultParams, List<Movie>?>
 
-    fun getSimilarMovies(movieId: Int): LiveData<List<Movie>>
+    suspend fun getSimilarMovies(movieId: Int): Pair<ResultParams, List<Movie>?>
 
-    suspend fun getVideos(movieId: Int): List<Video>
+    suspend fun getVideos(movieId: Int): Pair<ResultParams, List<Video>?>
 
     suspend fun rateMovie(
         movieId: Int,
@@ -125,7 +125,7 @@ interface AppRepository {
 
     //SEARCH
 
-    suspend fun searchMovies(lang: String, query: String): LiveData<PagingData<Movie>>
+    fun searchMovies(query: String): LiveData<PagingData<Movie>>
 
 
 }

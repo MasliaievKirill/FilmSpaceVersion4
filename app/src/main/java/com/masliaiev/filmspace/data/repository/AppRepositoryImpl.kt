@@ -1,10 +1,8 @@
 package com.masliaiev.filmspace.data.repository
 
 import android.content.SharedPreferences
-import androidx.lifecycle.LiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import androidx.paging.PagingData
 import androidx.paging.liveData
 import com.masliaiev.filmspace.AppConstants
 import com.masliaiev.filmspace.data.database.AppDao
@@ -279,12 +277,41 @@ class AppRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getDetailedMovie(movieId: Int): DetailedMovie {
-        TODO("Not yet implemented")
+    override suspend fun getDetailedMovie(movieId: Int): Pair<ResultParams, DetailedMovie?> {
+        return try {
+            val response = apiService.getDetails(movieId = movieId, language = getCurrentLanguage())
+            val detailedMovie = response.body()
+
+            when (response.code()) {
+                200 -> Pair(ResultParams.SUCCESS, detailedMovie?.let {
+                    mapper.mapDetailedMovieDtoToDetailedMovieEntity(detailedMovie)
+                })
+                401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
+                else -> Pair(ResultParams.NOT_RESPONSE, null)
+            }
+        } catch (e: Exception) {
+            Pair(ResultParams.NO_CONNECTION, null)
+        }
     }
 
-    override suspend fun getAccountStates(movieId: Int, sessionId: String): AccountStates {
-        TODO("Not yet implemented")
+    override suspend fun getAccountStates(
+        movieId: Int,
+        sessionId: String
+    ): Pair<ResultParams, AccountStates?> {
+        return try {
+            val response = apiService.getAccountStates(movieId = movieId, sessionId = sessionId)
+            val accountState = response.body()
+
+            when (response.code()) {
+                200 -> Pair(ResultParams.SUCCESS, accountState?.let {
+                    mapper.mapAccountStatesDtoToAccountStatesEntity(accountState)
+                })
+                401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
+                else -> Pair(ResultParams.NOT_RESPONSE, null)
+            }
+        } catch (e: Exception) {
+            Pair(ResultParams.NO_CONNECTION, null)
+        }
     }
 
     override suspend fun getPopularMovies(): Pair<ResultParams, List<Movie>?> {
@@ -566,16 +593,63 @@ class AppRepositoryImpl @Inject constructor(
         }
     ).liveData
 
-    override fun getRecommendations(movieId: Int): LiveData<List<Movie>> {
-        TODO("Not yet implemented")
+    override suspend fun getRecommendations(movieId: Int): Pair<ResultParams, List<Movie>?> {
+        return try {
+            val response = apiService.getRecommendations(
+                movieId = movieId,
+                language = getCurrentLanguage()
+            )
+            val moviesList = response.body()
+
+            when (response.code()) {
+                200 -> Pair(ResultParams.SUCCESS, moviesList?.results?.map {
+                    mapper.mapMovieDtoToMovieEntity(it)
+                })
+                401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
+                else -> Pair(ResultParams.NOT_RESPONSE, null)
+            }
+        } catch (e: Exception) {
+            Pair(ResultParams.NO_CONNECTION, null)
+        }
     }
 
-    override fun getSimilarMovies(movieId: Int): LiveData<List<Movie>> {
-        TODO("Not yet implemented")
+    override suspend fun getSimilarMovies(movieId: Int): Pair<ResultParams, List<Movie>?> {
+        return try {
+            val response = apiService.getSimilarMovies(
+                movieId = movieId,
+                language = getCurrentLanguage()
+            )
+            val moviesList = response.body()
+
+            when (response.code()) {
+                200 -> Pair(ResultParams.SUCCESS, moviesList?.results?.map {
+                    mapper.mapMovieDtoToMovieEntity(it)
+                })
+                401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
+                else -> Pair(ResultParams.NOT_RESPONSE, null)
+            }
+        } catch (e: Exception) {
+            Pair(ResultParams.NO_CONNECTION, null)
+        }
     }
 
-    override suspend fun getVideos(movieId: Int): List<Video> {
-        TODO("Not yet implemented")
+    override suspend fun getVideos(movieId: Int): Pair<ResultParams, List<Video>?> {
+        return try {
+            val response = apiService.getVideos(
+                movieId
+            )
+            val videosList = response.body()
+
+            when (response.code()) {
+                200 -> Pair(ResultParams.SUCCESS, videosList?.results?.map {
+                    mapper.mapVideoDtoToVideoEntity(it)
+                })
+                401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
+                else -> Pair(ResultParams.NOT_RESPONSE, null)
+            }
+        } catch (e: Exception) {
+            Pair(ResultParams.NO_CONNECTION, null)
+        }
     }
 
     override suspend fun rateMovie(
@@ -589,9 +663,21 @@ class AppRepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override suspend fun searchMovies(lang: String, query: String): LiveData<PagingData<Movie>> {
-        TODO("Not yet implemented")
-    }
+    override fun searchMovies(query: String) = Pager(
+        config = PagingConfig(
+            pageSize = MAX_NUMBER_OF_ITEMS_LOADED_AT_ONCE,
+            maxSize = MAX_NUMBER_OF_ITEMS,
+            enablePlaceholders = false,
+        ),
+        pagingSourceFactory = {
+            SearchMoviesPageSource(
+                apiService,
+                mapper,
+                getCurrentLanguage(),
+                query
+            )
+        }
+    ).liveData
 
     private fun getCurrentLanguage(): String {
         return Locale.getDefault().language

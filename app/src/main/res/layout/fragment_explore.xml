@@ -46,9 +46,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="30dp"
             android:src="@drawable/ic_search"
+            android:layout_marginBottom="10dp"
             app:layout_constraintBottom_toBottomOf="@id/tv_explore"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_explore" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_genres"
@@ -202,7 +202,7 @@
             android:layout_marginTop="16dp"
             android:paddingStart="45dp"
             android:paddingEnd="45dp"
-            android:text="Trending today"
+            android:text="Trending.Today"
             android:textColor="@color/white"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -234,7 +234,7 @@
             android:layout_marginTop="16dp"
             android:paddingStart="45dp"
             android:paddingEnd="45dp"
-            android:text="Trending this week"
+            android:text="Trending.This week"
             android:textColor="@color/white"
             android:textSize="24sp"
             android:textStyle="bold"

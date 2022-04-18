@@ -49,5 +49,15 @@ interface ViewModelModule {
     @ViewModelKey(MovieListFragmentViewModel::class)
     fun bindMovieListFragmentViewModel(impl: MovieListFragmentViewModel): ViewModel
 
+    @Binds
+    @IntoMap
+    @ViewModelKey(SearchFragmentViewModel::class)
+    fun bindSearchFragmentViewModel(impl: SearchFragmentViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(DetailMovieFragmentViewModel::class)
+    fun bindDetailMovieFragmentViewModel(impl: DetailMovieFragmentViewModel): ViewModel
+
 
 }

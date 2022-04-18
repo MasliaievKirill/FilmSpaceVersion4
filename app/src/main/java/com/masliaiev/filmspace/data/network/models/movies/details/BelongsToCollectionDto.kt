@@ -12,8 +12,8 @@ data class BelongsToCollectionDto(
     val name: String,
     @SerializedName("poster_path")
     @Expose
-    val posterPath: String,
+    val posterPath: String?,
     @SerializedName("backdrop_path")
     @Expose
-    val backdropPath: String
+    val backdropPath: String?
 )

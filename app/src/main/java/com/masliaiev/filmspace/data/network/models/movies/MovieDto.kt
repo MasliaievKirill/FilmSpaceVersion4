@@ -9,7 +9,7 @@ data class MovieDto(
     val adult: Boolean,
     @SerializedName("backdrop_path")
     @Expose
-    val backdropPath: String,
+    val backdropPath: String?,
     @SerializedName("genre_ids")
     @Expose
     val genreIds: List<Int>?,
@@ -30,7 +30,7 @@ data class MovieDto(
     val popularity: Double,
     @SerializedName("poster_path")
     @Expose
-    val posterPath: String,
+    val posterPath: String?,
     @SerializedName("release_date")
     @Expose
     val releaseDate: String,

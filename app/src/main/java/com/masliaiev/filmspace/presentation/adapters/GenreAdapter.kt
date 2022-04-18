@@ -10,6 +10,8 @@ import kotlin.random.Random
 
 class GenreAdapter : ListAdapter<Genre, GenreViewHolder>(GenreDiffCallback()) {
 
+    var onGenreClickListener: OnGenreClickListener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GenreViewHolder {
         val binding = GenreItemBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -24,5 +26,8 @@ class GenreAdapter : ListAdapter<Genre, GenreViewHolder>(GenreDiffCallback()) {
 
         holder.binding.genreColourMarker.setBackgroundColor(genre.uniqueColor)
         holder.binding.tvGenreName.text = genre.name
+        holder.binding.root.setOnClickListener {
+            onGenreClickListener?.onGenreClick(genre.id.toString(), genre.name)
+        }
     }
 }

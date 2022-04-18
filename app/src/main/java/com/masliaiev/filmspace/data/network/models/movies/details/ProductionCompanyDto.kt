@@ -9,7 +9,7 @@ data class ProductionCompanyDto(
     val id: Int,
     @SerializedName("logo_path")
     @Expose
-    val logoPath: String,
+    val logoPath: String?,
     @SerializedName("name")
     @Expose
     val name: String,

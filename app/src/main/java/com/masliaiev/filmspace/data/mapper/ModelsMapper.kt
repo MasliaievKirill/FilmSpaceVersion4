@@ -5,11 +5,12 @@ import com.masliaiev.filmspace.data.database.models.AccountDbModel
 import com.masliaiev.filmspace.data.network.models.account.AccountDto
 import com.masliaiev.filmspace.data.network.models.genres.GenreDto
 import com.masliaiev.filmspace.data.network.models.movies.MovieDto
+import com.masliaiev.filmspace.data.network.models.movies.account_states.AccountStatesDto
+import com.masliaiev.filmspace.data.network.models.movies.details.DetailedMovieDto
+import com.masliaiev.filmspace.data.network.models.movies.videos.VideoDto
 import com.masliaiev.filmspace.data.network.models.requests.DeleteSessionRequestDto
 import com.masliaiev.filmspace.data.network.models.responses.*
-import com.masliaiev.filmspace.domain.entity.Account
-import com.masliaiev.filmspace.domain.entity.Genre
-import com.masliaiev.filmspace.domain.entity.Movie
+import com.masliaiev.filmspace.domain.entity.*
 import com.masliaiev.filmspace.domain.entity.requests.DeleteSessionRequest
 import com.masliaiev.filmspace.domain.entity.responses.*
 import javax.inject.Inject
@@ -121,6 +122,59 @@ class ModelsMapper @Inject constructor() {
             id = genreDto.id,
             name = genreDto.name,
             uniqueColor = getColour()
+        )
+    }
+
+    fun mapAccountStatesDtoToAccountStatesEntity(accountStatesDto: AccountStatesDto): AccountStates {
+        return AccountStates(
+            id = accountStatesDto.id,
+            favorite = accountStatesDto.favorite,
+            rated = accountStatesDto.rated,
+            watchlist = accountStatesDto.watchlist
+        )
+    }
+
+    fun mapDetailedMovieDtoToDetailedMovieEntity(detailedMovieDto: DetailedMovieDto): DetailedMovie{
+        return DetailedMovie(
+            adult = detailedMovieDto.adult,
+            backdropPath = BASE_IMAGE_URL + IMAGE_SIZE_W500 + detailedMovieDto.backdropPath,
+            budget = detailedMovieDto.budget,
+            genres = detailedMovieDto.genres?.map {
+                mapGenreDtoToGenreEntity(it)
+            },
+            homepage = detailedMovieDto.homepage,
+            id = detailedMovieDto.id,
+            imdbId = detailedMovieDto.imdbId,
+            originalLanguage = detailedMovieDto.originalLanguage,
+            originalTitle = detailedMovieDto.originalTitle,
+            overview = detailedMovieDto.overview,
+            popularity = detailedMovieDto.popularity,
+            posterPath = BASE_IMAGE_URL + IMAGE_SIZE_W500 + detailedMovieDto.posterPath,
+            releaseDate = detailedMovieDto.releaseDate,
+            revenue = detailedMovieDto.revenue,
+            runtime = detailedMovieDto.runtime,
+            status = detailedMovieDto.status,
+            tagline = detailedMovieDto.tagline,
+            title = detailedMovieDto.title,
+            video = detailedMovieDto.video,
+            voteCount = detailedMovieDto.voteCount,
+            voteAverage = detailedMovieDto.voteAverage
+        )
+
+    }
+
+    fun mapVideoDtoToVideoEntity(videoDto: VideoDto): Video {
+        return Video(
+            iso6391 = videoDto.iso6391,
+            iso31661 = videoDto.iso31661,
+            name = videoDto.name,
+            key = videoDto.key,
+            site = videoDto.site,
+            size = videoDto.size,
+            type = videoDto.type,
+            official = videoDto.official,
+            publishedAt = videoDto.publishedAt,
+            id = videoDto.id
         )
     }
 

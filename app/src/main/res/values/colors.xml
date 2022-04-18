@@ -10,4 +10,10 @@
     <color name="black_transparency">#E6000000</color>
     <color name="base">#1F2023</color>
     <color name="base_transparency">#F21F2023</color>
+
+    <color name="overlay_dark">#2D2F34</color>
+    <color name="overlay_dark_transparency">#F22D2F34</color>
+
+    <color name="surface">#27292D</color>
+    <color name="surface_transparency">#F227292D</color>
 </resources>

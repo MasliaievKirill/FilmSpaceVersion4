@@ -10,10 +10,10 @@ data class DetailedMovieDto(
     val adult: Boolean,
     @SerializedName("backdrop_path")
     @Expose
-    val backdropPath: String,
+    val backdropPath: String?,
     @SerializedName("belongs_to_collection")
     @Expose
-    val belongsToCollection: BelongsToCollectionDto,
+    val belongsToCollection: BelongsToCollectionDto?,
     @SerializedName("budget")
     @Expose
     val budget: Int,
@@ -22,13 +22,13 @@ data class DetailedMovieDto(
     val genres: List<GenreDto>?,
     @SerializedName("homepage")
     @Expose
-    val homepage: String,
+    val homepage: String?,
     @SerializedName("id")
     @Expose
     val id: Int,
     @SerializedName("imdb_id")
     @Expose
-    val imdbId: String,
+    val imdbId: String?,
     @SerializedName("original_language")
     @Expose
     val originalLanguage: String,
@@ -37,13 +37,13 @@ data class DetailedMovieDto(
     val originalTitle: String,
     @SerializedName("overview")
     @Expose
-    val overview: String,
+    val overview: String?,
     @SerializedName("popularity")
     @Expose
     val popularity: Double,
     @SerializedName("poster_path")
     @Expose
-    val posterPath: String,
+    val posterPath: String?,
     @SerializedName("production_companies")
     @Expose
     val productionCompanies: List<ProductionCompanyDto>?,
@@ -58,7 +58,7 @@ data class DetailedMovieDto(
     val revenue: Int,
     @SerializedName("runtime")
     @Expose
-    val runtime: Int,
+    val runtime: Int?,
     @SerializedName("spoken_languages")
     @Expose
     val spokenLanguages: List<SpokenLanguageDto>?,
@@ -67,7 +67,7 @@ data class DetailedMovieDto(
     val status: String,
     @SerializedName("tagline")
     @Expose
-    val tagline: String,
+    val tagline: String?,
     @SerializedName("title")
     @Expose
     val title: String,

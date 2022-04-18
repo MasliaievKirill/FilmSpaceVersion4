@@ -25,6 +25,10 @@ interface ApplicationComponent {
 
     fun inject(fragment: MovieListFragment)
 
+    fun inject(fragment: SearchFragment)
+
+    fun inject(fragment: DetailMovieFragment)
+
     @Component.Factory
     interface Factory{
         fun create(@BindsInstance application: Application): ApplicationComponent

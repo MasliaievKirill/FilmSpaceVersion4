@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    tools:context=".presentation.fragments.MovieListFragment">
+    tools:context=".presentation.fragments.SearchFragment">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/movie_list_toolbar"
+        android:id="@+id/search_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/background_bars"
@@ -19,10 +19,25 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_arrow_left"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="Search"
         app:titleTextColor="@color/white" />
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        android:theme="@style/search_view"
+        android:background="@drawable/background_bars"
+        app:iconifiedByDefault="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_toolbar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:queryHint="Enter the title of the movie" />
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_movie_list"
+        android:id="@+id/rv_search"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clipToPadding="false"

@@ -5,14 +5,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.masliaiev.filmspace.FilmSpaceApp
 import com.masliaiev.filmspace.databinding.FragmentMovieListBinding
 import com.masliaiev.filmspace.helpers.MovieListLaunchParams
+import com.masliaiev.filmspace.helpers.findTopNavController
 import com.masliaiev.filmspace.presentation.adapters.MoviePagerAdapter
+import com.masliaiev.filmspace.presentation.adapters.OnMovieClickListener
 import com.masliaiev.filmspace.presentation.view_models.MovieListFragmentViewModel
 import com.masliaiev.filmspace.presentation.view_models.ViewModelFactory
 import javax.inject.Inject
@@ -54,14 +60,26 @@ class MovieListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.movieListToolbar) { v, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.updatePadding(top = insets.top)
+            WindowInsetsCompat.CONSUMED
+        }
+
+        binding.movieListToolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
+
         viewModel =
             ViewModelProvider(this, viewModelFactory)[MovieListFragmentViewModel::class.java]
 
         binding.rvMovieList.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvMovieList.adapter = adapter
 
+        binding.movieListToolbar.title = args.title
 
-        when (args.launchParam){
+        when (args.launchParam) {
             MovieListLaunchParams.GENRE -> {
                 args.genre?.let {
                     viewModel.getMoviesByGenre(args.genre.toString())
@@ -106,6 +124,15 @@ class MovieListFragment : Fragment() {
             }
 
         }
+        adapter.onMovieClickListener = object : OnMovieClickListener {
+            override fun onMovieClick(movieId: Int) {
+                findTopNavController().navigate(
+                    MainFragmentDirections.actionMainFragmentToDetailMovieFragment(
+                        movieId
+                    )
+                )
+            }
+        }
 
 
     }
@@ -115,8 +142,8 @@ class MovieListFragment : Fragment() {
         _binding = null
     }
 
-    private fun observeViewModel(){
-        viewModel.movies?.observe(viewLifecycleOwner){
+    private fun observeViewModel() {
+        viewModel.movies?.observe(viewLifecycleOwner) {
             adapter.submitData(viewLifecycleOwner.lifecycle, it)
         }
     }

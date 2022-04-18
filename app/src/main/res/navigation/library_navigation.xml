@@ -29,6 +29,8 @@
         <argument
             android:name="launchParam"
             app:argType="com.masliaiev.filmspace.helpers.MovieListLaunchParams" />
+        <argument android:name="title"
+            app:argType="string" />
     </fragment>
 
 </navigation>

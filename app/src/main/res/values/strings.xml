@@ -3,17 +3,79 @@
     <string name="bottom_navigation_home">Home</string>
     <string name="bottom_navigation_explore">Explore</string>
     <string name="bottom_navigation_library">Library</string>
-    <string name="auth_info_approved">You are logged in, and can use the full functionality of the application.</string>
-    <string name="auth_info_not_confirmed">You have not confirmed your account login. The application will run in guest mode. You can connect your account in your profile settings.</string>
-    <string name="auth_info_guest">The application will run in guest mode. You can connect your account in your profile settings.</string>
+    <string name="auth_info_approved">You are logged in, and can use the full functionality of the
+        application.</string>
+    <string name="auth_info_not_confirmed">You have not confirmed your account login.
+        The application will run in guest mode. You can connect your account in your
+        profile settings.</string>
+    <string name="auth_info_guest">The application will run in guest mode. You can connect your
+        account in your profile settings.</string>
     <string name="auth_info_excellent">Excellent!</string>
     <string name="button_continue">Continue</string>
     <string name="dialog_common_error_header">Something is wrong</string>
     <string name="dialog_api_error_header">TMDB service error</string>
     <string name="dialog_common_error_description">Check Internet connection and try again</string>
-    <string name="dialog_api_error_description">Something is wrong with TMDB service. Try again later.</string>
+    <string name="dialog_api_error_description">Something is wrong with TMDB service.
+        Try again later.</string>
     <string name="poster_of_the_movie">Poster of the movie</string>
     <string name="account_action">Account action</string>
     <string name="information_action">Information action</string>
-    <string name="check">Давно выяснено, что при оценке дизайна и композиции читаемый текст мешает сосредоточиться. Lorem Ipsum используют потому, что тот обеспечивает более или менее стандартное заполнение шаблона, а также реальное распределение букв и пробелов в абзацах, которое не получается при простой дубликации "Здесь ваш текст.. Здесь ваш текст.. Здесь ваш текст.." Многие программы электронной вёрстки и редакторы HTML используют Lorem Ipsum в качестве текста по умолчанию, так что поиск по ключевым словам "lorem ipsum" сразу показывает, как много веб-страниц всё ещё дожидаются своего настоящего рождения. За прошедшие годы текст Lorem Ipsum получил много версий. Некоторые версии появились по ошибке, некоторые - намеренно (например, юмористические варианты).Давно выяснено, что при оценке дизайна и композиции читаемый текст мешает сосредоточиться. Lorem Ipsum используют потому, что тот обеспечивает более или менее стандартное заполнение шаблона, а также реальное распределение букв и пробелов в абзацах, которое не получается при простой дубликации "Здесь ваш текст.. Здесь ваш текст.. Здесь ваш текст.." Многие программы электронной вёрстки и редакторы HTML используют Lorem Ipsum в качестве текста по умолчанию, так что поиск по ключевым словам "lorem ipsum" сразу показывает, как много веб-страниц всё ещё дожидаются своего настоящего рождения. За прошедшие годы текст Lorem Ipsum получил много версий. Некоторые версии появились по ошибке, некоторые - намеренно (например, юмористические варианты).Давно выяснено, что при оценке дизайна и композиции читаемый текст мешает сосредоточиться. Lorem Ipsum используют потому, что тот обеспечивает более или менее стандартное заполнение шаблона, а также реальное распределение букв и пробелов в абзацах, которое не получается при простой дубликации "Здесь ваш текст.. Здесь ваш текст.. Здесь ваш текст.." Многие программы электронной вёрстки и редакторы HTML используют Lorem Ipsum в качестве текста по умолчанию, так что поиск по ключевым словам "lorem ipsum" сразу показывает, как много веб-страниц всё ещё дожидаются своего настоящего рождения. За прошедшие годы текст Lorem Ipsum получил много версий. Некоторые версии появились по ошибке, некоторые - намеренно (например, юмористические варианты).Давно выяснено, что при оценке дизайна и композиции читаемый текст мешает сосредоточиться. Lorem Ipsum используют потому, что тот обеспечивает более или менее стандартное заполнение шаблона, а также реальное распределение букв и пробелов в абзацах, которое не получается при простой дубликации "Здесь ваш текст.. Здесь ваш текст.. Здесь ваш текст.." Многие программы электронной вёрстки и редакторы HTML используют Lorem Ipsum в качестве текста по умолчанию, так что поиск по ключевым словам "lorem ipsum" сразу показывает, как много веб-страниц всё ещё дожидаются своего настоящего рождения. За прошедшие годы текст Lorem Ipsum получил много версий. Некоторые версии появились по ошибке, некоторые - намеренно (например, юмористические варианты).Давно выяснено, что при оценке дизайна и композиции читаемый текст мешает сосредоточиться. Lorem Ipsum используют потому, что тот обеспечивает более или менее стандартное заполнение шаблона, а также реальное распределение букв и пробелов в абзацах, которое не получается при простой дубликации "Здесь ваш текст.. Здесь ваш текст.. Здесь ваш текст.." Многие программы электронной вёрстки и редакторы HTML используют Lorem Ipsum в качестве текста по умолчанию, так что поиск по ключевым словам "lorem ipsum" сразу показывает, как много веб-страниц всё ещё дожидаются своего настоящего рождения. За прошедшие годы текст Lorem Ipsum получил много версий. Некоторые версии появились по ошибке, некоторые - намеренно (например, юмористические варианты).Давно выяснено, что при оценке дизайна и композиции читаемый текст мешает сосредоточиться. Lorem Ipsum используют потому, что тот обеспечивает более или менее стандартное заполнение шаблона, а также реальное распределение букв и пробелов в абзацах, которое не получается при простой дубликации "Здесь ваш текст.. Здесь ваш текст.. Здесь ваш текст.." Многие программы электронной вёрстки и редакторы HTML используют Lorem Ipsum в качестве текста по умолчанию, так что поиск по ключевым словам "lorem ipsum" сразу показывает, как много веб-страниц всё ещё дожидаются своего настоящего рождения. За прошедшие годы текст Lorem Ipsum получил много версий. Некоторые версии появились по ошибке, некоторые - намеренно (например, юмористические варианты).</string>
+    <string name="rate_action">Rate!</string>
+    <string name="is_rated_action">"You rated: %1$s"</string>
+    <string name="in_favourite_description">In favourite</string>
+    <string name="add_to_favourite_description">Add to favourite</string>
+    <string name="in_watchlist_description">In watchlist</string>
+    <string name="add_to_watchlist_description">Add to watchlist</string>
+    <string name="welcome_to_filmspace">Welcome to\nFilmSpace!</string>
+    <string name="sign_in_sign_up_information">Sign in or create a TMDB account to use the full
+        functionality of the application.</string>
+    <string name="continue_as_guest_information">You can continue to use the app in guest mode
+        and sign in or create an account later.</string>
+    <string name="powered_by">Powered by</string>
+    <string name="tmdb_logo_description">TMDB logo</string>
+    <string name="button_sign_in_sign_up">Sign in / sign up</string>
+    <string name="button_continue_as_guest">Continue as guest</string>
+    <string name="now_playing">Now playing</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="trending_today">Trending.Today</string>
+    <string name="trending_this_week">Trending.This week</string>
+    <string name="warning_something_is_wrong">Something is wrong.\nTry again.</string>
+    <string name="content_description_warning_image">Warning image</string>
+    <string name="button_try_again">Try again</string>
+    <string name="button_to_search">Button to search</string>
+    <string name="explore">Explore</string>
+    <string name="genres">Genres</string>
+    <string name="top_rated">Top rated</string>
+    <string name="item_icon">Item icon</string>
+    <string name="enter_icon">Enter icon</string>
+    <string name="popular">Popular</string>
+    <string name="library">Library</string>
+    <string name="watchlist">Watchlist</string>
+    <string name="rated_movies">Rated movies</string>
+    <string name="favourite_movies">Favourite movies</string>
+    <string name="logged_out_info">Sign in or create a TMDB account to use the full functionality
+        of the application. With account, you car add movies to watchlist, mark favourite movies,
+        rate movies.\nExit guest mode and sign in with your TMDB account.</string>
+    <string name="button_account_settings">Account settings</string>
+    <string name="authentication">Exit guest mode</string>
+    <string name="logout">Logout</string>
+    <string name="account">Account</string>
+    <string name="tmdb_account_details">*Your TMDB account</string>
+    <string name="tmdb_avatar">TMDB avatar</string>
+    <string name="you_are_in_guest_mode">You are in guest mode</string>
+    <string name="search_welcome">Thousands of films in the TMDB collection.</string>
+    <string name="search_find_yours">Find yours.</string>
+    <string name="information">Information</string>
+    <string name="app_version">App version</string>
+    <string name="current_version">3.0.0</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="click_here_to_open">Click here to open</string>
+    <string name="api">API</string>
+    <string name="tmdb_api_info">This product uses the TMDB API but is not endorsed or certified by TMDB.\nClick here to open www.themoviedb.org</string>
+    <string name="graphic_resources">Graphic resources</string>
+    <string name="remix_icon_information">This product uses the Remix Icon graphic resources.\nClick here to open https://remixicon.com/</string>
+    <string name="tmdb_name">TMDB</string>
+    <string name="remix_icon_name">REMIX ICON</string>
+    <string name="tmdb_small_logo">TMDB small logo</string>
+    <string name="remix_icon_logo">Remix icon logo</string>
 </resources>

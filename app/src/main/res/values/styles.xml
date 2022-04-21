@@ -12,5 +12,34 @@
         <item name="android:textColorHint">@color/white</item>
     </style>
 
+    <style name="detailed_fragment_buttons" parent="Widget.AppCompat.Button">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+    </style>
+
+    <style name="auth_fragment_buttons" parent="Widget.AppCompat.Button">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:backgroundTint">@android:color/holo_blue_light</item>
+    </style>
+
+    <style name="dialog_style" parent="Theme.MaterialComponents.Dialog.Alert">
+        <item name="android:buttonBarNeutralButtonStyle">@style/dialog_buttons</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/dialog_buttons</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColorSecondary">@color/black</item>
+        <item name="android:colorAccent">@android:color/holo_blue_light</item>
+    </style>
+
+    <style name="dialog_buttons" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@android:color/holo_blue_light</item>
+    </style>
+
+    <style name="rounded_image_view" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4dp</item>
+    </style>
+
 
 </resources>

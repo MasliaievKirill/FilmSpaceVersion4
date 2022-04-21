@@ -92,7 +92,7 @@ class ModelsMapper @Inject constructor() {
             releaseDate = movieDto.releaseDate,
             title = movieDto.originalTitle,
             video = movieDto.video,
-            voteAverage = movieDto.voteAverage,
+            voteAverage = String.format("%.1f", movieDto.voteAverage),
             voteCount = movieDto.voteCount
         )
     }
@@ -137,11 +137,9 @@ class ModelsMapper @Inject constructor() {
     fun mapDetailedMovieDtoToDetailedMovieEntity(detailedMovieDto: DetailedMovieDto): DetailedMovie{
         return DetailedMovie(
             adult = detailedMovieDto.adult,
-            backdropPath = BASE_IMAGE_URL + IMAGE_SIZE_W500 + detailedMovieDto.backdropPath,
+            backdropPath = BASE_IMAGE_URL + IMAGE_SIZE_W780 + detailedMovieDto.backdropPath,
             budget = detailedMovieDto.budget,
-            genres = detailedMovieDto.genres?.map {
-                mapGenreDtoToGenreEntity(it)
-            },
+            genres = parseGenresList(detailedMovieDto.genres),
             homepage = detailedMovieDto.homepage,
             id = detailedMovieDto.id,
             imdbId = detailedMovieDto.imdbId,
@@ -158,7 +156,7 @@ class ModelsMapper @Inject constructor() {
             title = detailedMovieDto.title,
             video = detailedMovieDto.video,
             voteCount = detailedMovieDto.voteCount,
-            voteAverage = detailedMovieDto.voteAverage
+            voteAverage = detailedMovieDto.voteAverage.toString()
         )
 
     }
@@ -182,14 +180,27 @@ class ModelsMapper @Inject constructor() {
         val colors = listOf(
             Color.YELLOW,
             Color.BLUE,
-            Color.GRAY,
             Color.RED,
             Color.MAGENTA,
-            Color.DKGRAY,
-            Color.LTGRAY
+            Color.CYAN,
+            Color.GREEN
         )
         val position = Random.nextInt(colors.size)
         return colors[position]
+    }
+
+    private fun parseGenresList(genres: List<GenreDto>?): String {
+        var genresList = ""
+        genres?.let {
+            for (position in genres.indices) {
+                if (position == genres.size - 1){
+                    genresList += genres[position].name
+                } else {
+                    genresList += genres[position].name + ", "
+                }
+            }
+        }
+        return genresList
     }
 
 
@@ -200,6 +211,7 @@ class ModelsMapper @Inject constructor() {
         private const val IMAGE_SIZE_W185 = "w185"
         private const val IMAGE_SIZE_W342 = "w342"
         private const val IMAGE_SIZE_W500 = "w500"
+        private const val IMAGE_SIZE_W780 = "w780"
     }
 
 

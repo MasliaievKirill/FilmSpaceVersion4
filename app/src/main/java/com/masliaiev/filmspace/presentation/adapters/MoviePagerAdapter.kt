@@ -31,10 +31,10 @@ class MoviePagerAdapter: PagingDataAdapter<Movie, MovieInListViewHolder>(MovieDi
                 .into(holder.binding.ivPoster)
             holder.binding.tvTitle.text = movie.title
             holder.binding.tvYear.text = movie.releaseDate
+            holder.binding.tvRating.text = movie.voteAverage
             holder.binding.root.setOnClickListener {
                 onMovieClickListener?.onMovieClick(movie.id)
             }
         }
-
     }
 }

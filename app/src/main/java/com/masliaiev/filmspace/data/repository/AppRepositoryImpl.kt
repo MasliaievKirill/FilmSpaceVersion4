@@ -8,16 +8,14 @@ import com.masliaiev.filmspace.AppConstants
 import com.masliaiev.filmspace.data.database.AppDao
 import com.masliaiev.filmspace.data.mapper.ModelsMapper
 import com.masliaiev.filmspace.data.network.ApiService
-import com.masliaiev.filmspace.data.network.models.requests.AddToWatchlistRequestDto
-import com.masliaiev.filmspace.data.network.models.requests.CreateSessionRequestDto
-import com.masliaiev.filmspace.data.network.models.requests.MarkAsFavouriteRequestDto
+import com.masliaiev.filmspace.data.network.models.requests.*
 import com.masliaiev.filmspace.data.network.page_sources.*
 import com.masliaiev.filmspace.domain.entity.*
-import com.masliaiev.filmspace.domain.entity.requests.DeleteSessionRequest
-import com.masliaiev.filmspace.domain.entity.requests.RateMovieRequest
-import com.masliaiev.filmspace.domain.entity.responses.*
+import com.masliaiev.filmspace.domain.entity.responses.CreateRequestTokenResponse
+import com.masliaiev.filmspace.domain.entity.responses.CreateSessionResponse
 import com.masliaiev.filmspace.domain.repository.AppRepository
 import com.masliaiev.filmspace.helpers.ResultParams
+import kotlinx.coroutines.delay
 import java.util.*
 import javax.inject.Inject
 
@@ -46,7 +44,6 @@ class AppRepositoryImpl @Inject constructor(
                 401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
                 else -> Pair(ResultParams.NOT_RESPONSE, null)
             }
-
         } catch (e: Exception) {
             Pair(ResultParams.NO_CONNECTION, null)
         }
@@ -54,30 +51,46 @@ class AppRepositoryImpl @Inject constructor(
 
     override suspend fun createSession(
         requestToken: String
-    ): CreateSessionResponse {
+    ): Pair<ResultParams, CreateSessionResponse?> {
         return try {
-            mapper.mapCreateSessionResponseDtoToCreateSessionResponseEntity(
-                apiService.createSession(
-                    createSessionRequestDto = CreateSessionRequestDto(requestToken)
-                )
+            val response = apiService.createSession(
+                createSessionRequestDto = CreateSessionRequestDto(requestToken)
             )
-        } catch (e: Exception) {
-            CreateSessionResponse(success = false, sessionId = "null")
-        }
+            val session = response.body()
 
+            when (response.code()) {
+                200 -> {
+                    Pair(
+                        ResultParams.SUCCESS,
+                        session?.let {
+                            mapper.mapCreateSessionResponseDtoToCreateSessionResponseEntity(
+                                it
+                            )
+                        })
+                }
+                401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
+                else -> Pair(ResultParams.NOT_RESPONSE, null)
+            }
+        } catch (e: Exception) {
+            Pair(ResultParams.NO_CONNECTION, null)
+        }
     }
 
     override suspend fun deleteSession(
-        deleteSessionRequest: DeleteSessionRequest
-    ): DeleteSessionResponse {
-        return mapper.mapDeleteSessionResponseDtoToDeleteSessionResponseEntity(
-            apiService.deleteSessionRequest(
-                deleteSessionRequestDto =
-                mapper.mapDeleteSessionRequestEntityToDeleteSessionRequestDto(
-                    deleteSessionRequest
-                )
+        sessionId: String
+    ): Pair<ResultParams, Boolean?> {
+        return try {
+            val response = apiService.deleteSessionRequest(
+                deleteSessionRequestDto = DeleteSessionRequestDto(sessionId)
             )
-        )
+            when (response.code()) {
+                200 -> Pair(ResultParams.SUCCESS, true)
+                401 -> Pair(ResultParams.ACCOUNT_ERROR, false)
+                else -> Pair(ResultParams.NOT_RESPONSE, false)
+            }
+        } catch (e: Exception) {
+            Pair(ResultParams.NO_CONNECTION, false)
+        }
     }
 
     override fun getAppMode(): String {
@@ -197,7 +210,7 @@ class AppRepositoryImpl @Inject constructor(
         sessionId: String,
         movieId: Int,
         favourite: Boolean
-    ): Pair<ResultParams, MarkAsFavouriteResponse?> {
+    ): Pair<ResultParams, Boolean?> {
         return try {
             val response = apiService.markAsFavourite(
                 accountId = accountId,
@@ -208,15 +221,9 @@ class AppRepositoryImpl @Inject constructor(
                     favourite
                 )
             )
-            val markAsFavouriteResponse = response.body()
-
             when (response.code()) {
-                200 -> Pair(
-                    ResultParams.SUCCESS, markAsFavouriteResponse?.let {
-                        mapper.markAsFavouriteResponseDtoToMarkAsFavouriteResponseEntity(
-                            it
-                        )
-                    }
+                200, 201 -> Pair(
+                    ResultParams.SUCCESS, true
                 )
                 401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
                 else -> Pair(ResultParams.NOT_RESPONSE, null)
@@ -231,7 +238,7 @@ class AppRepositoryImpl @Inject constructor(
         sessionId: String,
         movieId: Int,
         watchlist: Boolean
-    ): Pair<ResultParams, AddToWatchlistResponse?> {
+    ): Pair<ResultParams, Boolean?> {
         return try {
             val response = apiService.addToWatchlist(
                 accountId = accountId,
@@ -242,15 +249,9 @@ class AppRepositoryImpl @Inject constructor(
                     watchlist
                 )
             )
-            val addToWatchlistResponse = response.body()
-
             when (response.code()) {
-                200 -> Pair(
-                    ResultParams.SUCCESS, addToWatchlistResponse?.let {
-                        mapper.addToWatchlistResponseDtoToAddToWatchlistResponseEntity(
-                            it
-                        )
-                    }
+                200, 201 -> Pair(
+                    ResultParams.SUCCESS, true
                 )
                 401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
                 else -> Pair(ResultParams.NOT_RESPONSE, null)
@@ -653,14 +654,51 @@ class AppRepositoryImpl @Inject constructor(
     }
 
     override suspend fun rateMovie(
+        rateValue: Double,
         movieId: Int,
-        rateMovieRequest: RateMovieRequest
-    ): RateMovieResponse {
-        TODO("Not yet implemented")
+        sessionId: String
+    ): Pair<ResultParams, Boolean?> {
+        return try {
+            val response = apiService.rateMovie(
+                movieId = movieId,
+                sessionId = sessionId,
+                rateMovieRequestDto = RateMovieRequestDto(
+                    rateValue
+                )
+            )
+            delay(2000)
+            when (response.code()) {
+                200, 201 -> Pair(
+                    ResultParams.SUCCESS, true
+                )
+                401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
+                else -> Pair(ResultParams.NOT_RESPONSE, null)
+            }
+        } catch (e: Exception) {
+            Pair(ResultParams.NO_CONNECTION, null)
+        }
     }
 
-    override suspend fun deleteRating(movieId: Int, sessionId: String): DeleteRatingResponse {
-        TODO("Not yet implemented")
+    override suspend fun deleteRating(
+        movieId: Int,
+        sessionId: String
+    ): Pair<ResultParams, Boolean?> {
+        return try {
+            val response = apiService.deleteRatingMovie(
+                movieId = movieId,
+                sessionId = sessionId
+            )
+            delay(2000)
+            when (response.code()) {
+                200, 201 -> Pair(
+                    ResultParams.SUCCESS, true
+                )
+                401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
+                else -> Pair(ResultParams.NOT_RESPONSE, null)
+            }
+        } catch (e: Exception) {
+            Pair(ResultParams.NO_CONNECTION, null)
+        }
     }
 
     override fun searchMovies(query: String) = Pager(

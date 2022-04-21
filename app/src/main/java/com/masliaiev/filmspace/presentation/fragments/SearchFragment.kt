@@ -5,13 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.masliaiev.filmspace.FilmSpaceApp
 import com.masliaiev.filmspace.databinding.FragmentSearchBinding
@@ -58,11 +59,7 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.searchToolbar) { v, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.updatePadding(top = insets.top)
-            WindowInsetsCompat.CONSUMED
-        }
+        updateLayout()
 
         binding.searchToolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
@@ -71,7 +68,21 @@ class SearchFragment : Fragment() {
         viewModel =
             ViewModelProvider(this, viewModelFactory)[SearchFragmentViewModel::class.java]
 
-        binding.rvSearch.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.rvSearch.layoutManager = GridLayoutManager(requireContext(), SPAN_COUNT)
+
+        adapter.addLoadStateListener {
+            val refreshState = it.refresh
+            with(binding) {
+                pbSearch.isVisible = refreshState is LoadState.Loading
+                rvSearch.isVisible = refreshState !is LoadState.Error
+                if (refreshState is LoadState.Error){
+                    DialogWarningFragment.showCommonErrorDialogFragment(parentFragmentManager)
+                    binding.tvWelcomeSearch.visibility = View.VISIBLE
+                    binding.tvWelcomeSearchExtension.visibility = View.VISIBLE
+                }
+            }
+        }
+
         binding.rvSearch.adapter = adapter
 
         binding.searchView.setOnQueryTextListener(object :
@@ -86,7 +97,8 @@ class SearchFragment : Fragment() {
                         }
                     }
                     viewModel.movies?.observe(viewLifecycleOwner) { movies ->
-                        binding.rvSearch.visibility = View.VISIBLE
+                        binding.tvWelcomeSearch.visibility = View.INVISIBLE
+                        binding.tvWelcomeSearchExtension.visibility = View.INVISIBLE
                         adapter.submitData(viewLifecycleOwner.lifecycle, movies)
                     }
                 }
@@ -94,8 +106,10 @@ class SearchFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText?.length == 0){
+                if (newText?.length == 0) {
                     binding.rvSearch.visibility = View.INVISIBLE
+                    binding.tvWelcomeSearch.visibility = View.VISIBLE
+                    binding.tvWelcomeSearchExtension.visibility = View.VISIBLE
                 }
                 return true
             }
@@ -109,13 +123,23 @@ class SearchFragment : Fragment() {
                 )
             }
         }
-
-
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun updateLayout() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.searchToolbar) { v, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.updatePadding(top = insets.top)
+            WindowInsetsCompat.CONSUMED
+        }
+    }
+
+    companion object {
+        private const val SPAN_COUNT = 2
     }
 
 

@@ -4,8 +4,8 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import com.masliaiev.filmspace.R
-import com.masliaiev.filmspace.databinding.FragmentDialogWarningBinding
 
 class DialogWarningFragment : DialogFragment() {
 
@@ -13,17 +13,15 @@ class DialogWarningFragment : DialogFragment() {
     private lateinit var dialogHeader: String
     private lateinit var dialogMessage: String
 
-    private var _binding: FragmentDialogWarningBinding? = null
-    private val binding: FragmentDialogWarningBinding
-        get() = _binding ?: throw RuntimeException("FragmentDialogWarningBinding is null")
-
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         parseParams()
         return AlertDialog.Builder(requireActivity())
-            .setTitle(dialogHeader).setMessage(dialogMessage).setPositiveButton("OK", null).create()
+            .setTitle(dialogHeader)
+            .setMessage(dialogMessage)
+            .setPositiveButton("OK", null)
+            .create()
     }
-
 
     private fun parseParams() {
         val args = requireArguments()
@@ -46,28 +44,29 @@ class DialogWarningFragment : DialogFragment() {
     }
 
     companion object {
+
+        private const val TAG = "warning_dialog"
+
         private const val DIALOG_MODE = "dialog_mode"
 
         private const val API_ERROR = "api_error"
         private const val COMMON_ERROR = "common_error"
 
-        fun newInstanceApiError(): DialogWarningFragment {
-            return DialogWarningFragment().apply {
+        fun showApiErrorDialogFragment(fragmentManager: FragmentManager) {
+            DialogWarningFragment().apply {
                 arguments = Bundle().apply {
                     putString(DIALOG_MODE, API_ERROR)
                 }
-            }
+            }.show(fragmentManager, TAG)
         }
 
-
-        fun newInstanceCommonError(): DialogWarningFragment {
-            return DialogWarningFragment().apply {
+        fun showCommonErrorDialogFragment(fragmentManager: FragmentManager) {
+            DialogWarningFragment().apply {
                 arguments = Bundle().apply {
                     putString(DIALOG_MODE, COMMON_ERROR)
                 }
-            }
+            }.show(fragmentManager, TAG)
         }
-
 
     }
 

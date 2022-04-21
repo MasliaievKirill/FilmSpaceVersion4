@@ -1,11 +1,9 @@
 package com.masliaiev.filmspace.presentation.view_models
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
 import com.masliaiev.filmspace.domain.entity.AccountStates
 import com.masliaiev.filmspace.domain.entity.DetailedMovie
 import com.masliaiev.filmspace.domain.entity.Movie
@@ -20,6 +18,11 @@ class DetailMovieFragmentViewModel @Inject constructor(
     private val getRecommendationsUseCase: GetRecommendationsUseCase,
     private val getSimilarMoviesUseCase: GetSimilarMoviesUseCase,
     private val getSessionIdUseCase: GetSessionIdUseCase,
+    private val addRemoveToWatchlistUseCase: AddRemoveToWatchlistUseCase,
+    private val markAsFavouriteUseCase: MarkAsFavouriteUseCase,
+    private val getAccountDetailsUseCase: GetAccountDetailsUseCase,
+    private val rateMovieUseCase: RateMovieUseCase,
+    private val deleteRatingUseCase: DeleteRatingUseCase
 ) : ViewModel() {
 
 
@@ -39,6 +42,22 @@ class DetailMovieFragmentViewModel @Inject constructor(
     val detailedMovie: LiveData<DetailedMovie>
         get() = _detailedMovie
 
+    private var _markAsFavourite = MutableLiveData<Boolean>()
+    val markAsFavourite: LiveData<Boolean>
+        get() = _markAsFavourite
+
+    private var _addToWatchlist = MutableLiveData<Boolean>()
+    val addToWatchlist: LiveData<Boolean>
+        get() = _addToWatchlist
+
+    private var _rateMovie = MutableLiveData<Boolean>()
+    val rateMovie: LiveData<Boolean>
+        get() = _rateMovie
+
+    private var _deleteRating = MutableLiveData<Boolean>()
+    val deleteRating: LiveData<Boolean>
+        get() = _deleteRating
+
     private var _error = MutableLiveData<Boolean>()
     val error: LiveData<Boolean>
         get() = _error
@@ -50,8 +69,8 @@ class DetailMovieFragmentViewModel @Inject constructor(
 
     fun getAccountState(movieId: Int) {
         viewModelScope.launch {
-            Log.d("Session", getSessionIdUseCase.getSessionId())
-            val result = getAccountStateUseCase.getAccountStates(movieId, getSessionIdUseCase.getSessionId())
+            val result =
+                getAccountStateUseCase.getAccountStates(movieId, getSessionIdUseCase.getSessionId())
             when (result.first) {
                 ResultParams.SUCCESS -> {
                     result.second?.let {
@@ -114,9 +133,87 @@ class DetailMovieFragmentViewModel @Inject constructor(
         }
     }
 
+    fun markAsFavourite(movieId: Int, favourite: Boolean) {
+        viewModelScope.launch {
+            val result = markAsFavouriteUseCase.markAsFavourite(
+                accountId = getAccountDetailsUseCase.getAccountDetails().id,
+                sessionId = getSessionIdUseCase.getSessionId(),
+                movieId = movieId,
+                favourite = favourite
+            )
+            when (result.first) {
+                ResultParams.SUCCESS -> {
+                    result.second?.let {
+                        _markAsFavourite.value = it
+                    }
+                }
+                ResultParams.ACCOUNT_ERROR -> _apiError.value = true
+                ResultParams.NO_CONNECTION -> _error.value = true
+                ResultParams.NOT_RESPONSE -> _error.value = true
+            }
+        }
+    }
 
+    fun addRemoveToWatchlist(movieId: Int, watchlist: Boolean) {
+        viewModelScope.launch {
+            val result = addRemoveToWatchlistUseCase.addToWatchlist(
+                accountId = getAccountDetailsUseCase.getAccountDetails().id,
+                sessionId = getSessionIdUseCase.getSessionId(),
+                movieId = movieId,
+                watchlist = watchlist
+            )
+            when (result.first) {
+                ResultParams.SUCCESS -> {
+                    result.second?.let {
+                        _addToWatchlist.value = it
+                    }
+                }
+                ResultParams.ACCOUNT_ERROR -> _apiError.value = true
+                ResultParams.NO_CONNECTION -> _error.value = true
+                ResultParams.NOT_RESPONSE -> _error.value = true
+            }
+        }
+    }
 
+    fun rateMovie(rateValue: Double, movieId: Int) {
+        viewModelScope.launch {
 
+            val result = rateMovieUseCase.rateMovie(
+                rateValue = rateValue,
+                movieId = movieId,
+                sessionId = getSessionIdUseCase.getSessionId()
+            )
+            when (result.first) {
+                ResultParams.SUCCESS -> {
+                    result.second?.let {
+                        _rateMovie.value = it
+                    }
+                }
+                ResultParams.ACCOUNT_ERROR -> _apiError.value = true
+                ResultParams.NO_CONNECTION -> _error.value = true
+                ResultParams.NOT_RESPONSE -> _error.value = true
+            }
+        }
+    }
+
+    fun deleteRating(movieId: Int) {
+        viewModelScope.launch {
+            val result = deleteRatingUseCase.deleteRating(
+                movieId = movieId,
+                sessionId = getSessionIdUseCase.getSessionId()
+            )
+            when (result.first) {
+                ResultParams.SUCCESS -> {
+                    result.second?.let {
+                        _deleteRating.value = it
+                    }
+                }
+                ResultParams.ACCOUNT_ERROR -> _apiError.value = true
+                ResultParams.NO_CONNECTION -> _error.value = true
+                ResultParams.NOT_RESPONSE -> _error.value = true
+            }
+        }
+    }
 
 
 }

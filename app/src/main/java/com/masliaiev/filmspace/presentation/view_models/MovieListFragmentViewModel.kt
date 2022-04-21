@@ -5,10 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.masliaiev.filmspace.domain.entity.Movie
 import com.masliaiev.filmspace.domain.usecases.*
-import com.masliaiev.filmspace.helpers.ResultParams
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MovieListFragmentViewModel @Inject constructor(
@@ -23,7 +22,6 @@ class MovieListFragmentViewModel @Inject constructor(
     private val getAllTrendingDayUseCase: GetAllTrendingDayUseCase,
     private val getAllTrendingWeekUseCase: GetAllTrendingWeekUseCase,
     private val getSessionIdUseCase: GetSessionIdUseCase,
-    private val loadAccountUseCase: LoadAccountUseCase,
     private val getAccountDetailsUseCase: GetAccountDetailsUseCase
 ) : ViewModel() {
 
@@ -41,104 +39,64 @@ class MovieListFragmentViewModel @Inject constructor(
 
 
     fun getAllTopRatedMovies() {
-        val moviesResult = getAllTopRatedMoviesUseCase.getAllTopRatedMovies()
+        val moviesResult =
+            getAllTopRatedMoviesUseCase.getAllTopRatedMovies().cachedIn(viewModelScope)
         movies = moviesResult
     }
 
     fun getAllNowPlayingMovies() {
-        val moviesResult = getAllNowPlayingMoviesUseCase.getAllNowPlayingMovies()
+        val moviesResult =
+            getAllNowPlayingMoviesUseCase.getAllNowPlayingMovies().cachedIn(viewModelScope)
         movies = moviesResult
     }
 
     fun getAllPopularMovies() {
-        val moviesResult = getAllPopularMoviesUseCase.getAllPopularMovies()
+        val moviesResult = getAllPopularMoviesUseCase.getAllPopularMovies().cachedIn(viewModelScope)
         movies = moviesResult
     }
 
     fun getAllUpcomingMovies() {
-        val moviesResult = getAllUpcomingMoviesUseCase.getAllUpcomingMovies()
+        val moviesResult =
+            getAllUpcomingMoviesUseCase.getAllUpcomingMovies().cachedIn(viewModelScope)
         movies = moviesResult
     }
 
     fun getMoviesByGenre(genre: String) {
-        val moviesResult = getMoviesByGenreUseCase.getMoviesByGenre(genre)
+        val moviesResult = getMoviesByGenreUseCase.getMoviesByGenre(genre).cachedIn(viewModelScope)
         movies = moviesResult
     }
 
     fun getTrendingDayMovies() {
-        val moviesResult = getAllTrendingDayUseCase.getAllTrendingDayMovies()
+        val moviesResult =
+            getAllTrendingDayUseCase.getAllTrendingDayMovies().cachedIn(viewModelScope)
         movies = moviesResult
     }
 
     fun getTrendingWeekMovies() {
-        val moviesResult = getAllTrendingWeekUseCase.getAllTrendingWeekMovies()
+        val moviesResult =
+            getAllTrendingWeekUseCase.getAllTrendingWeekMovies().cachedIn(viewModelScope)
         movies = moviesResult
     }
 
-    fun getAllFavouriteMovies() {
-        viewModelScope.launch {
-            when (loadAccountUseCase.loadAccountDetails(getSessionIdUseCase.getSessionId())) {
-                ResultParams.SUCCESS -> {
-                    val account = getAccountDetailsUseCase.getAccountDetails()
-                    val moviesResult = getAllFavouriteMoviesUseCase.getAllFavouriteMovies(
-                        getSessionIdUseCase.getSessionId(),
-                        account.id
-                    )
-                    movies = moviesResult
-                }
-                ResultParams.ACCOUNT_ERROR -> _apiError.value = true
-                ResultParams.NO_CONNECTION -> _error.value = true
-                ResultParams.NOT_RESPONSE -> _error.value = true
-            }
-        }
+    suspend fun getAllFavouriteMovies() {
+        movies = getAllFavouriteMoviesUseCase.getAllFavouriteMovies(
+            getSessionIdUseCase.getSessionId(),
+            getAccountDetailsUseCase.getAccountDetails().id
+        ).cachedIn(viewModelScope)
     }
 
-    fun getAllRatedMovies() {
-        viewModelScope.launch {
-            val accountId = getAccountDetailsUseCase.getAccountDetails().id
-            val moviesResult = getAllRatedMoviesUseCase.getAllRatedMovies(
-                getSessionIdUseCase.getSessionId(),
-                accountId
-            )
-            movies = moviesResult
-        }
+    suspend fun getAllRatedMovies() {
+        movies = getAllRatedMoviesUseCase.getAllRatedMovies(
+            getSessionIdUseCase.getSessionId(),
+            getAccountDetailsUseCase.getAccountDetails().id
+        ).cachedIn(viewModelScope)
     }
 
-//    fun getAllRatedMovies() {
-//        viewModelScope.launch {
-//            when (loadAccountUseCase.loadAccountDetails(getSessionIdUseCase.getSessionId())) {
-//                ResultParams.SUCCESS -> {
-//                    val account = getAccountDetailsUseCase.getAccountDetails()
-//                    val moviesResult = getAllRatedMoviesUseCase.getAllRatedMovies(
-//                        getSessionIdUseCase.getSessionId(),
-//                        account.id
-//                    )
-//                    movies = moviesResult
-//                }
-//                ResultParams.ACCOUNT_ERROR -> _apiError.value = true
-//                ResultParams.NO_CONNECTION -> _error.value = true
-//                ResultParams.NOT_RESPONSE -> _error.value = true
-//            }
-//        }
-//    }
-
-    fun getAllMoviesWatchlist() {
-        viewModelScope.launch {
-            when (loadAccountUseCase.loadAccountDetails(getSessionIdUseCase.getSessionId())) {
-                ResultParams.SUCCESS -> {
-                    val account = getAccountDetailsUseCase.getAccountDetails()
-                    val moviesResult = getAllMoviesWatchlistUseCase.getAllMoviesWatchlist(
-                        getSessionIdUseCase.getSessionId(),
-                        account.id
-                    )
-                    movies = moviesResult
-                }
-                ResultParams.ACCOUNT_ERROR -> _apiError.value = true
-                ResultParams.NO_CONNECTION -> _error.value = true
-                ResultParams.NOT_RESPONSE -> _error.value = true
-            }
-        }
+    suspend fun getAllMoviesWatchlist() {
+        movies = getAllMoviesWatchlistUseCase.getAllMoviesWatchlist(
+            getSessionIdUseCase.getSessionId(),
+            getAccountDetailsUseCase.getAccountDetails().id
+        ).cachedIn(viewModelScope)
     }
-
 
 }

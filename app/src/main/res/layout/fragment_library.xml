@@ -1,119 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.fragments.LibraryFragment">
 
     <TextView
         android:id="@+id/tv_library"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Library"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="18dp"
+        android:text="@string/library"
         android:textColor="@color/white"
         android:textSize="36sp"
         android:textStyle="bold"
-        android:layout_marginTop="18dp"
-        android:layout_marginStart="18dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_bookmark"
-        app:layout_constraintBottom_toBottomOf="@id/tv_watchlist"
-        app:layout_constraintStart_toStartOf="@id/tv_watchlist"
-        app:layout_constraintTop_toTopOf="@id/tv_watchlist" />
-
-    <TextView
-        android:id="@+id/tv_watchlist"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/logged_in_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="45dp"
-        android:paddingStart="45dp"
-        android:paddingEnd="45dp"
-        android:text="Watchlist"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        android:textStyle="bold"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_library" />
+        app:layout_constraintTop_toBottomOf="@id/tv_library">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow_right"
-        app:layout_constraintBottom_toBottomOf="@id/tv_watchlist"
-        app:layout_constraintEnd_toEndOf="@id/tv_watchlist"
-        app:layout_constraintTop_toTopOf="@id/tv_watchlist" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_star"
-        app:layout_constraintBottom_toBottomOf="@id/tv_rated_movies"
-        app:layout_constraintStart_toStartOf="@id/tv_rated_movies"
-        app:layout_constraintTop_toTopOf="@id/tv_rated_movies" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/item_icon"
+            android:src="@drawable/ic_bookmark"
+            app:layout_constraintBottom_toBottomOf="@id/tv_watchlist"
+            app:layout_constraintStart_toStartOf="@id/tv_watchlist"
+            app:layout_constraintTop_toTopOf="@id/tv_watchlist" />
+
+        <TextView
+            android:id="@+id/tv_watchlist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="45dp"
+            android:paddingStart="45dp"
+            android:paddingEnd="45dp"
+            android:text="@string/watchlist"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/enter_icon"
+            android:src="@drawable/ic_arrow_right"
+            app:layout_constraintBottom_toBottomOf="@id/tv_watchlist"
+            app:layout_constraintEnd_toEndOf="@id/tv_watchlist"
+            app:layout_constraintTop_toTopOf="@id/tv_watchlist" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/item_icon"
+            android:src="@drawable/ic_star"
+            app:layout_constraintBottom_toBottomOf="@id/tv_rated_movies"
+            app:layout_constraintStart_toStartOf="@id/tv_rated_movies"
+            app:layout_constraintTop_toTopOf="@id/tv_rated_movies" />
+
+        <TextView
+            android:id="@+id/tv_rated_movies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:paddingStart="45dp"
+            android:paddingEnd="45dp"
+            android:text="@string/rated_movies"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_watchlist" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/enter_icon"
+            android:src="@drawable/ic_arrow_right"
+            app:layout_constraintBottom_toBottomOf="@id/tv_rated_movies"
+            app:layout_constraintEnd_toEndOf="@id/tv_rated_movies"
+            app:layout_constraintTop_toTopOf="@id/tv_rated_movies" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/item_icon"
+            android:src="@drawable/ic_heart"
+            app:layout_constraintBottom_toBottomOf="@id/tv_favourite_movies"
+            app:layout_constraintStart_toStartOf="@id/tv_favourite_movies"
+            app:layout_constraintTop_toTopOf="@id/tv_favourite_movies" />
+
+        <TextView
+            android:id="@+id/tv_favourite_movies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:paddingStart="45dp"
+            android:paddingEnd="45dp"
+            android:text="@string/favourite_movies"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_rated_movies" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/enter_icon"
+            android:src="@drawable/ic_arrow_right"
+            app:layout_constraintBottom_toBottomOf="@id/tv_favourite_movies"
+            app:layout_constraintEnd_toEndOf="@id/tv_favourite_movies"
+            app:layout_constraintTop_toTopOf="@id/tv_favourite_movies" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/tv_rated_movies"
-        android:layout_width="match_parent"
+        android:id="@+id/tv_logged_out_massage"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:paddingStart="45dp"
-        android:paddingEnd="45dp"
-        android:text="Rated movies"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="18dp"
+        android:text="@string/logged_out_info"
         android:textColor="@color/white"
-        android:textSize="24sp"
-        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_watchlist" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
+    <Button
+        android:id="@+id/button_to_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow_right"
-        app:layout_constraintBottom_toBottomOf="@id/tv_rated_movies"
-        app:layout_constraintEnd_toEndOf="@id/tv_rated_movies"
-        app:layout_constraintTop_toTopOf="@id/tv_rated_movies" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_heart"
-        app:layout_constraintBottom_toBottomOf="@id/tv_favourite_movies"
-        app:layout_constraintStart_toStartOf="@id/tv_favourite_movies"
-        app:layout_constraintTop_toTopOf="@id/tv_favourite_movies" />
-
-    <TextView
-        android:id="@+id/tv_favourite_movies"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:paddingStart="45dp"
-        android:paddingEnd="45dp"
-        android:text="Favourite movies"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        android:textStyle="bold"
+        android:layout_marginTop="18dp"
+        android:text="@string/button_account_settings"
+        android:theme="@style/auth_fragment_buttons"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_rated_movies" />
+        app:layout_constraintTop_toBottomOf="@id/tv_logged_out_massage" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow_right"
-        app:layout_constraintBottom_toBottomOf="@id/tv_favourite_movies"
-        app:layout_constraintEnd_toEndOf="@id/tv_favourite_movies"
-        app:layout_constraintTop_toTopOf="@id/tv_favourite_movies" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

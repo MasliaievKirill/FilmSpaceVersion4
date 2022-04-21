@@ -5,10 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.marginBottom
-import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -57,15 +53,11 @@ class AuthFragment : Fragment() {
 
         viewModel.error.observe(viewLifecycleOwner) {
             changeVisibilityIfError()
-            DialogWarningFragment.newInstanceCommonError().show(
-                requireActivity().supportFragmentManager, AppConstants.WARNING_DIALOG_TAG
-            )
+            DialogWarningFragment.showCommonErrorDialogFragment(parentFragmentManager)
         }
         viewModel.apiError.observe(viewLifecycleOwner) {
             changeVisibilityIfError()
-            DialogWarningFragment.newInstanceApiError().show(
-                requireActivity().supportFragmentManager, AppConstants.WARNING_DIALOG_TAG
-            )
+            DialogWarningFragment.showApiErrorDialogFragment(parentFragmentManager)
         }
         viewModel.requestTokenResponse.observe(viewLifecycleOwner) {
             if (it.success) {
@@ -77,9 +69,7 @@ class AuthFragment : Fragment() {
 
             } else {
                 changeVisibilityIfError()
-                DialogWarningFragment.newInstanceApiError().show(
-                    requireActivity().supportFragmentManager, AppConstants.WARNING_DIALOG_TAG
-                )
+                DialogWarningFragment.showApiErrorDialogFragment(parentFragmentManager)
             }
         }
 

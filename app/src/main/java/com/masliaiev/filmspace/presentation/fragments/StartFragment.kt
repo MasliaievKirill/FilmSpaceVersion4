@@ -50,7 +50,6 @@ class StartFragment : Fragment() {
         viewModel =
             ViewModelProvider(this, viewModelFactory)[StartFragmentViewModel::class.java]
 
-
         when (viewModel.appMode) {
             AppConstants.SIGNED_IN_MODE -> {
                 findNavController().navigate(
@@ -74,6 +73,5 @@ class StartFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 
 }

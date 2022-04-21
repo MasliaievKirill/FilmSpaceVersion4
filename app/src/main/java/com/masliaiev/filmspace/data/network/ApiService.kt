@@ -7,10 +7,7 @@ import com.masliaiev.filmspace.data.network.models.movies.MoviesListDto
 import com.masliaiev.filmspace.data.network.models.movies.account_states.AccountStatesDto
 import com.masliaiev.filmspace.data.network.models.movies.details.DetailedMovieDto
 import com.masliaiev.filmspace.data.network.models.movies.videos.VideoListDto
-import com.masliaiev.filmspace.data.network.models.requests.AddToWatchlistRequestDto
-import com.masliaiev.filmspace.data.network.models.requests.CreateSessionRequestDto
-import com.masliaiev.filmspace.data.network.models.requests.DeleteSessionRequestDto
-import com.masliaiev.filmspace.data.network.models.requests.MarkAsFavouriteRequestDto
+import com.masliaiev.filmspace.data.network.models.requests.*
 import com.masliaiev.filmspace.data.network.models.responses.*
 import retrofit2.Response
 import retrofit2.http.*
@@ -26,13 +23,13 @@ interface ApiService {
     suspend fun createSession(
         @Query(QUERY_PARAM_API_KEY) apiKey: String = API_KEY,
         @Body createSessionRequestDto: CreateSessionRequestDto
-    ): CreateSessionResponseDto
+    ): Response<CreateSessionResponseDto>
 
-    @DELETE("authentication/session")
+    @HTTP(method = "DELETE", path = "authentication/session", hasBody = true)
     suspend fun deleteSessionRequest(
         @Query(QUERY_PARAM_API_KEY) apiKey: String = API_KEY,
         @Body deleteSessionRequestDto: DeleteSessionRequestDto
-    ): DeleteSessionResponseDto
+    ): Response<DeleteSessionResponseDto>
 
     @GET("account")
     suspend fun getAccountDetails(
@@ -188,6 +185,23 @@ interface ApiService {
 
     ): Response<VideoListDto>
 
+    @POST("movie/{movie_id}/rating")
+    suspend fun rateMovie(
+        @Header(QUERY_HEADER_CONTENT_TYPE) headerContentType: String = HEADER_CONTENT_TYPE,
+        @Path(QUERY_PARAM_MOVIE_ID) movieId: Int,
+        @Query(QUERY_PARAM_API_KEY) apiKey: String = API_KEY,
+        @Query(QUERY_PARAM_SESSION_ID) sessionId: String,
+        @Body rateMovieRequestDto: RateMovieRequestDto
+    ): Response<RateMovieResponseDto>
+
+    @DELETE("movie/{movie_id}/rating")
+    suspend fun deleteRatingMovie(
+        @Header(QUERY_HEADER_CONTENT_TYPE) headerContentType: String = HEADER_CONTENT_TYPE,
+        @Path(QUERY_PARAM_MOVIE_ID) movieId: Int,
+        @Query(QUERY_PARAM_API_KEY) apiKey: String = API_KEY,
+        @Query(QUERY_PARAM_SESSION_ID) sessionId: String
+    ): Response<DeleteRatingResponseDto>
+
 
 
     companion object {
@@ -208,7 +222,7 @@ interface ApiService {
 
         private const val API_KEY = "9f9d136877ade7608f32a571c18756be"
         private const val DEFAULT_PAGE = 1
-        private const val HEADER_CONTENT_TYPE = "application/json;charset=utf-8"
+        private const val HEADER_CONTENT_TYPE = "application/json"
         private const val SORT_BY_POPULARITY = "popularity.desc"
         private const val MIN_VOTE_COUNT = "1000"
 

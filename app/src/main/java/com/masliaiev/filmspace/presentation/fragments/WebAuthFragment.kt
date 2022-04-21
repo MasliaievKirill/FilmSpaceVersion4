@@ -11,7 +11,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -59,14 +58,28 @@ class WebAuthFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.wvAuth) { v, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.updatePadding(top = insets.top, bottom = insets.bottom)
-            WindowInsetsCompat.CONSUMED
-        }
+        updateLayout()
 
         viewModel =
             ViewModelProvider(this, viewModelFactory)[WebAuthFragmentViewModel::class.java]
+
+        viewModel.loadAccountSuccess.observe(viewLifecycleOwner) {
+            findNavController().navigate(
+                WebAuthFragmentDirections
+                    .actionWebAuthenticationFragmentToAuthInfoFragment(
+                        AuthParams.ALLOW
+                    )
+            )
+        }
+
+        viewModel.error.observe(viewLifecycleOwner) {
+            DialogWarningFragment.showCommonErrorDialogFragment(parentFragmentManager)
+        }
+
+        viewModel.apiError.observe(viewLifecycleOwner) {
+            DialogWarningFragment.showApiErrorDialogFragment(parentFragmentManager)
+        }
+
         binding.wvAuth.webViewClient = object : WebViewClient() {
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
@@ -87,17 +100,14 @@ class WebAuthFragment : Fragment() {
                                 with(viewModel) {
                                     setAppMode(AppConstants.SIGNED_IN_MODE)
                                     setSessionId(it.sessionId)
+                                    loadAccount(it.sessionId)
                                 }
-                                findNavController().navigate(
-                                    WebAuthFragmentDirections.actionWebAuthenticationFragmentToAuthInfoFragment(
-                                        AuthParams.ALLOW
-                                    )
-                                )
                             } else {
                                 findNavController().navigate(
-                                    WebAuthFragmentDirections.actionWebAuthenticationFragmentToAuthInfoFragment(
-                                        AuthParams.DENY
-                                    )
+                                    WebAuthFragmentDirections
+                                        .actionWebAuthenticationFragmentToAuthInfoFragment(
+                                            AuthParams.DENY
+                                        )
                                 )
                             }
                         }
@@ -107,14 +117,14 @@ class WebAuthFragment : Fragment() {
                             setSessionId(AppConstants.EMPTY_SESSION_ID)
                         }
                         findNavController().navigate(
-                            WebAuthFragmentDirections.actionWebAuthenticationFragmentToAuthInfoFragment(
-                                AuthParams.DENY
-                            )
+                            WebAuthFragmentDirections
+                                .actionWebAuthenticationFragmentToAuthInfoFragment(
+                                    AuthParams.DENY
+                                )
                         )
                     }
                 }
             }
-
         }
         binding.wvAuth.settings.javaScriptEnabled = true
         binding.wvAuth.settings.javaScriptCanOpenWindowsAutomatically = true
@@ -124,6 +134,17 @@ class WebAuthFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun updateLayout() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.wvAuth) { _, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val params = binding.wvAuth.layoutParams as ViewGroup.MarginLayoutParams
+            params.topMargin = insets.top
+            params.bottomMargin = insets.bottom
+            binding.wvAuth.layoutParams = params
+            WindowInsetsCompat.CONSUMED
+        }
     }
 
     companion object {

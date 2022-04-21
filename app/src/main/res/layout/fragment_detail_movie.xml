@@ -26,8 +26,8 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/background_bars"
                 android:scaleType="centerCrop"
-                android:src="@drawable/poster_placeholder"
-                app:layout_collapseMode="parallax" />
+                app:layout_collapseMode="parallax"
+                tools:src="@drawable/poster_placeholder" />
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/detail_movie_toolbar"
@@ -44,8 +44,11 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scroll_detailed"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:clipToPadding="false"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -61,9 +64,9 @@
                 android:layout_marginBottom="18dp"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/poster_placeholder"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/poster_placeholder" />
 
             <TextView
                 android:id="@+id/tv_original_title_label"
@@ -192,34 +195,34 @@
                 app:layout_constraintStart_toEndOf="@id/tv_play_trailer"
                 app:layout_constraintTop_toTopOf="@id/tv_play_trailer" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/iv_rate_star"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="24dp"
-                android:src="@drawable/ic_star_big"
+                android:background="@drawable/ic_star_rate_not_active"
                 app:layout_constraintEnd_toStartOf="@id/iv_favourite"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/iv_poster_detailed" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/iv_favourite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:src="@drawable/ic_heart_big"
+                android:background="@drawable/ic_heart_favourite_not_active"
                 app:layout_constraintBottom_toBottomOf="@id/iv_rate_star"
                 app:layout_constraintEnd_toStartOf="@id/iv_watchlist"
                 app:layout_constraintStart_toEndOf="@id/iv_rate_star"
                 app:layout_constraintTop_toTopOf="@id/iv_rate_star" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/iv_watchlist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:src="@drawable/ic_bookmark_big"
+                android:background="@drawable/ic_bookmark_watchlist_not_active"
                 app:layout_constraintBottom_toBottomOf="@id/iv_rate_star"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/iv_favourite"
@@ -266,9 +269,9 @@
                 android:layout_marginEnd="18dp"
                 android:text="Overview"
                 android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/iv_poster_detailed"
-                app:layout_constraintTop_toBottomOf="@id/tv_rate_description"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/tv_rate_description" />
 
             <TextView
                 android:id="@+id/tv_overview"
@@ -276,36 +279,62 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@id/tv_overview_label"
                 app:layout_constraintStart_toStartOf="@id/tv_overview_label"
                 app:layout_constraintTop_toBottomOf="@id/tv_overview_label"
-                app:layout_constraintEnd_toEndOf="@id/tv_overview_label"
                 tools:text="Something" />
+
+            <TextView
+                android:id="@+id/tv_similar_movies"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:text="Similar movies"
+                android:textColor="@color/white"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_overview" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_similar_movies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_similar_movies" />
 
             <TextView
                 android:id="@+id/tv_recommendations"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:text="Recommendations"
                 android:layout_marginStart="18dp"
                 android:layout_marginEnd="18dp"
+                android:text="Recommendations"
+                android:textColor="@color/white"
                 android:textSize="28sp"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/tv_overview"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/rv_similar_movies" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_recommendations"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/tv_recommendations"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/tv_recommendations" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

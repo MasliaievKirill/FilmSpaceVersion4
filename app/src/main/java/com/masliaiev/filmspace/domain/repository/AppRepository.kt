@@ -14,9 +14,9 @@ interface AppRepository {
 
     suspend fun createRequestToken(): Pair<ResultParams, CreateRequestTokenResponse?>
 
-    suspend fun createSession(requestToken: String): CreateSessionResponse //POST
+    suspend fun createSession(requestToken: String): Pair<ResultParams, CreateSessionResponse?>  //POST
 
-    suspend fun deleteSession(deleteSessionRequest: DeleteSessionRequest): DeleteSessionResponse //DELETE
+    suspend fun deleteSession(sessionId: String): Pair<ResultParams, Boolean?> //DELETE
 
 
     //ACCOUNT
@@ -65,14 +65,14 @@ interface AppRepository {
         sessionId: String,
         movieId: Int,
         favourite: Boolean
-    ): Pair<ResultParams, MarkAsFavouriteResponse?>
+    ): Pair<ResultParams, Boolean?>
 
     suspend fun addToWatchlist(
         accountId: Int,
         sessionId: String,
         movieId: Int,
         watchlist: Boolean
-    ): Pair<ResultParams, AddToWatchlistResponse?>
+    ): Pair<ResultParams, Boolean?>
 
     //GENRES
 
@@ -117,11 +117,12 @@ interface AppRepository {
     suspend fun getVideos(movieId: Int): Pair<ResultParams, List<Video>?>
 
     suspend fun rateMovie(
+        rateValue: Double,
         movieId: Int,
-        rateMovieRequest: RateMovieRequest
-    ): RateMovieResponse //header "application/json;charset=utf-8"
+        sessionId: String
+    ): Pair<ResultParams, Boolean?>
 
-    suspend fun deleteRating(movieId: Int, sessionId: String): DeleteRatingResponse
+    suspend fun deleteRating(movieId: Int, sessionId: String): Pair<ResultParams, Boolean?>
 
     //SEARCH
 

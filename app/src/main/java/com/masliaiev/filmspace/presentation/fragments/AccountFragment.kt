@@ -10,6 +10,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.masliaiev.filmspace.AppConstants
 import com.masliaiev.filmspace.FilmSpaceApp
 import com.masliaiev.filmspace.databinding.FragmentAccountBinding
 import com.masliaiev.filmspace.helpers.findTopNavController
@@ -50,29 +51,95 @@ class AccountFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel =
-            ViewModelProvider(this, viewModelFactory)[AccountFragmentViewModel::class.java]
-
-        ViewCompat.setOnApplyWindowInsetsListener(binding.accountToolbar) { v, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.updatePadding(top = insets.top)
-            WindowInsetsCompat.CONSUMED
-        }
-
-        viewModel.account.observe(viewLifecycleOwner) {
-            Picasso.get().load(it.avatarPath).into(binding.ivAvatar)
-            binding.tvName.text = it.name
-            binding.tvLogin.text = it.username
-        }
+        updateLayout()
 
         binding.accountToolbar.setNavigationOnClickListener {
             findTopNavController().popBackStack()
         }
 
+        viewModel =
+            ViewModelProvider(this, viewModelFactory)[AccountFragmentViewModel::class.java]
+
+        when (viewModel.appMode) {
+
+            AppConstants.SIGNED_IN_MODE -> {
+                showAccountModeLayout()
+                viewModel.account.observe(viewLifecycleOwner) {
+                    Picasso.get().load(it.avatarPath).into(binding.ivAvatar)
+                    binding.tvName.text = it.name
+                    binding.tvLogin.text = it.username
+                }
+                viewModel.deleteSessionSuccess.observe(viewLifecycleOwner) {
+                    with(viewModel) {
+                        setAppMode(AppConstants.UNKNOWN_MODE)
+                        setSessionId(AppConstants.EMPTY_SESSION_ID)
+                    }
+                    findTopNavController().navigate(
+                        AccountFragmentDirections.actionAccountFragmentToAuthenticationFragment()
+                    )
+                }
+                viewModel.error.observe(viewLifecycleOwner) {
+                    hideProgressbar()
+                    showAccountModeLayout()
+                    DialogWarningFragment.showCommonErrorDialogFragment(parentFragmentManager)
+                }
+                viewModel.apiError.observe(viewLifecycleOwner) {
+                    with(viewModel) {
+                        setAppMode(AppConstants.UNKNOWN_MODE)
+                        setSessionId(AppConstants.EMPTY_SESSION_ID)
+                    }
+                    findTopNavController().navigate(
+                        AccountFragmentDirections.actionAccountFragmentToAuthenticationFragment()
+                    )
+                }
+                binding.buttonLogout.setOnClickListener {
+                    hideAccountModeLayout()
+                    showProgressbar()
+                    viewModel.deleteSession()
+                }
+            }
+            AppConstants.GUEST_MODE -> {
+                binding.tvGuestMode.visibility = View.VISIBLE
+                binding.tvGuestModeInfo.visibility = View.VISIBLE
+                binding.buttonToAuthentication.visibility = View.VISIBLE
+                binding.buttonToAuthentication.setOnClickListener {
+                    with(viewModel) {
+                        setAppMode(AppConstants.UNKNOWN_MODE)
+                    }
+                    findTopNavController().navigate(
+                        AccountFragmentDirections.actionAccountFragmentToAuthenticationFragment()
+                    )
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun updateLayout() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.accountToolbar) { v, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.updatePadding(top = insets.top)
+            WindowInsetsCompat.CONSUMED
+        }
+    }
+
+    private fun showAccountModeLayout() {
+        binding.svAccountMode.visibility = View.VISIBLE
+    }
+
+    private fun hideAccountModeLayout() {
+        binding.svAccountMode.visibility = View.INVISIBLE
+    }
+
+    private fun showProgressbar() {
+        binding.pbAccount.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressbar() {
+        binding.pbAccount.visibility = View.INVISIBLE
     }
 }

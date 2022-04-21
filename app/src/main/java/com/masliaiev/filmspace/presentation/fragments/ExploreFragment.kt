@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.marginTop
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -58,24 +57,21 @@ class ExploreFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.tvExplore) { v, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.updatePadding(top = insets.top)
-            WindowInsetsCompat.CONSUMED
-        }
-
-
+        updateLayout()
+        hideMainView()
+        showProgressbar()
 
         viewModel =
             ViewModelProvider(this, viewModelFactory)[ExploreFragmentViewModel::class.java]
 
         binding.rvGenres.adapter = adapter
         binding.rvGenres.layoutManager =
-            GridLayoutManager(requireContext(), 4, GridLayoutManager.HORIZONTAL, false)
-
-        viewModel.genres.observe(viewLifecycleOwner){
-            adapter.submitList(it)
-        }
+            GridLayoutManager(
+                requireContext(),
+                SPAN_COUNT,
+                GridLayoutManager.HORIZONTAL,
+                false
+            )
 
         binding.tvTopRated.setOnClickListener {
             findNavController().navigate(
@@ -137,7 +133,7 @@ class ExploreFragment : Fragment() {
             )
         }
 
-        adapter.onGenreClickListener = object : OnGenreClickListener{
+        adapter.onGenreClickListener = object : OnGenreClickListener {
             override fun onGenreClick(genreId: String, genreName: String) {
                 findNavController().navigate(
                     ExploreFragmentDirections.actionExploreFragmentToMovieListFragmentExplore(
@@ -155,10 +151,76 @@ class ExploreFragment : Fragment() {
             )
         }
 
+        binding.buttonTryAgainExplore.setOnClickListener {
+            viewModel.tryAgain()
+            hideWarning()
+            showProgressbar()
+        }
+
+        observeViewModel()
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun updateLayout() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.tvExplore) { v, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.updatePadding(top = insets.top)
+            WindowInsetsCompat.CONSUMED
+        }
+    }
+
+    private fun observeViewModel() {
+        viewModel.genres.observe(viewLifecycleOwner) {
+            hideProgressbar()
+            showMainView()
+            adapter.submitList(it)
+        }
+        viewModel.error.observe(viewLifecycleOwner) {
+            hideProgressbar()
+            showWarning()
+        }
+        viewModel.apiError.observe(viewLifecycleOwner) {
+            hideProgressbar()
+            showWarning()
+        }
+    }
+
+    private fun showProgressbar() {
+        binding.pbExplore.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressbar() {
+        binding.pbExplore.visibility = View.INVISIBLE
+    }
+
+    private fun showWarning() {
+        hideMainView()
+        binding.ivWarningExplore.visibility = View.VISIBLE
+        binding.tvWarningExplore.visibility = View.VISIBLE
+        binding.buttonTryAgainExplore.visibility = View.VISIBLE
+    }
+
+    private fun hideWarning() {
+        showMainView()
+        binding.ivWarningExplore.visibility = View.INVISIBLE
+        binding.tvWarningExplore.visibility = View.INVISIBLE
+        binding.buttonTryAgainExplore.visibility = View.INVISIBLE
+    }
+
+    private fun showMainView() {
+        binding.nestedScrollExplore.visibility = View.VISIBLE
+    }
+
+    private fun hideMainView() {
+        binding.nestedScrollExplore.visibility = View.INVISIBLE
+    }
+
+    companion object {
+        private const val SPAN_COUNT = 4
     }
 }

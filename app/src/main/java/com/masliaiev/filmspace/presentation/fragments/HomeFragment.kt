@@ -2,7 +2,6 @@ package com.masliaiev.filmspace.presentation.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,10 +55,6 @@ class HomeFragment : Fragment() {
         super.onAttach(context)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -72,8 +67,121 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.homeToolbar.inflateMenu(R.menu.toolbar_menu)
+        updateLayout()
+        setupToolbar()
+        hideMainView()
+        showProgressbar()
 
+        binding.rvNowPlaying.adapter = adapterNowPlaying
+        binding.rvNowPlaying.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        adapterNowPlaying.onMovieClickListener = object : OnMovieClickListener {
+            override fun onMovieClick(movieId: Int) {
+                findTopNavController().navigate(
+                    MainFragmentDirections.actionMainFragmentToDetailMovieFragment(
+                        movieId
+                    )
+                )
+            }
+        }
+
+        binding.rvTrendingWeek.adapter = adapterTrendingWeek
+        binding.rvTrendingWeek.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        adapterTrendingWeek.onMovieClickListener = object : OnMovieClickListener {
+            override fun onMovieClick(movieId: Int) {
+                findTopNavController().navigate(
+                    MainFragmentDirections.actionMainFragmentToDetailMovieFragment(
+                        movieId
+                    )
+                )
+            }
+        }
+
+        binding.rvTrendingToday.adapter = adapterTrendingDay
+        binding.rvTrendingToday.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        adapterTrendingDay.onMovieClickListener = object : OnMovieClickListener {
+            override fun onMovieClick(movieId: Int) {
+                findTopNavController().navigate(
+                    MainFragmentDirections.actionMainFragmentToDetailMovieFragment(
+                        movieId
+                    )
+                )
+            }
+        }
+
+        binding.rvUpcoming.adapter = adapterUpcoming
+        binding.rvUpcoming.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        adapterUpcoming.onMovieClickListener = object : OnMovieClickListener {
+            override fun onMovieClick(movieId: Int) {
+                findTopNavController().navigate(
+                    MainFragmentDirections.actionMainFragmentToDetailMovieFragment(
+                        movieId
+                    )
+                )
+            }
+        }
+
+        viewModel =
+            ViewModelProvider(this, viewModelFactory)[HomeFragmentViewModel::class.java]
+
+        observeViewModel()
+
+        binding.buttonTryAgain.setOnClickListener {
+            viewModel.tryAgain()
+            hideWarning()
+            showProgressbar()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun observeViewModel() {
+        viewModel.nowPlayingMovies.observe(viewLifecycleOwner) {
+            adapterNowPlaying.submitList(it)
+            hideProgressbar()
+            showMainView()
+        }
+
+        viewModel.trendingWeek.observe(viewLifecycleOwner) {
+            adapterTrendingWeek.submitList(it)
+        }
+
+        viewModel.trendingDay.observe(viewLifecycleOwner) {
+            adapterTrendingDay.submitList(it)
+        }
+
+        viewModel.upcomingMovies.observe(viewLifecycleOwner) {
+            adapterUpcoming.submitList(it)
+        }
+
+        viewModel.error.observe(viewLifecycleOwner) {
+            hideProgressbar()
+            showWarning()
+        }
+
+        viewModel.apiError.observe(viewLifecycleOwner) {
+            hideProgressbar()
+            showWarning()
+        }
+    }
+
+    private fun updateLayout() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.homeToolbar) { v, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.updatePadding(top = insets.top)
+            WindowInsetsCompat.CONSUMED
+        }
+    }
+
+    private fun setupToolbar() {
+        binding.homeToolbar.setLogo(R.drawable.astronaut_logo)
+        binding.homeToolbar.inflateMenu(R.menu.toolbar_menu)
         binding.homeToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.action_account -> {
@@ -89,102 +197,35 @@ class HomeFragment : Fragment() {
             }
             true
         }
-
-        Log.d("HomeFragment", "onViewCreated")
-
-        viewModel =
-            ViewModelProvider(this, viewModelFactory)[HomeFragmentViewModel::class.java]
-
-        adapterNowPlaying.onMovieClickListener = object : OnMovieClickListener {
-            override fun onMovieClick(movieId: Int) {
-                findTopNavController().navigate(
-                    MainFragmentDirections.actionMainFragmentToDetailMovieFragment(
-                        movieId
-                    )
-                )
-            }
-        }
-
-        adapterTrendingWeek.onMovieClickListener = object : OnMovieClickListener {
-            override fun onMovieClick(movieId: Int) {
-                findTopNavController().navigate(
-                    MainFragmentDirections.actionMainFragmentToDetailMovieFragment(
-                        movieId
-                    )
-                )
-            }
-        }
-
-        adapterTrendingDay.onMovieClickListener = object : OnMovieClickListener {
-            override fun onMovieClick(movieId: Int) {
-                findTopNavController().navigate(
-                    MainFragmentDirections.actionMainFragmentToDetailMovieFragment(
-                        movieId
-                    )
-                )
-            }
-        }
-
-        adapterUpcoming.onMovieClickListener = object : OnMovieClickListener {
-            override fun onMovieClick(movieId: Int) {
-                findTopNavController().navigate(
-                    MainFragmentDirections.actionMainFragmentToDetailMovieFragment(
-                        movieId
-                    )
-                )
-            }
-        }
-
-        binding.rvNowPlaying.adapter = adapterNowPlaying
-        binding.rvNowPlaying.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-
-        binding.rvTrendingWeek.adapter = adapterTrendingWeek
-        binding.rvTrendingWeek.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-
-        binding.rvTrendingToday.adapter = adapterTrendingDay
-        binding.rvTrendingToday.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-
-        binding.rvUpcoming.adapter = adapterUpcoming
-        binding.rvUpcoming.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-
-        viewModel.nowPlayingMovies.observe(viewLifecycleOwner) {
-            Log.d("HomeFragment", "nowPlaying: ${it.toString()}")
-            adapterNowPlaying.submitList(it)
-        }
-
-        viewModel.trendingWeek.observe(viewLifecycleOwner) {
-            adapterTrendingWeek.submitList(it)
-        }
-
-        viewModel.trendingDay.observe(viewLifecycleOwner) {
-            adapterTrendingDay.submitList(it)
-        }
-
-        viewModel.upcomingMovies.observe(viewLifecycleOwner) {
-            adapterUpcoming.submitList(it)
-        }
-
-
-//        viewModel.error.observe(viewLifecycleOwner) {
-//            Log.d("HomeFragment",  "error: ${it.toString()}")
-//        }
-
-        ViewCompat.setOnApplyWindowInsetsListener(binding.homeToolbar) { v, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.updatePadding(top = insets.top)
-            WindowInsetsCompat.CONSUMED
-        }
-
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-        viewModel.nowPlayingMovies.removeObservers(viewLifecycleOwner)
-        Log.d("HomeFragment", "onDestroyView")
+    private fun showProgressbar() {
+        binding.pbHome.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressbar() {
+        binding.pbHome.visibility = View.INVISIBLE
+    }
+
+    private fun showWarning() {
+        hideMainView()
+        binding.ivWarning.visibility = View.VISIBLE
+        binding.tvWarningHome.visibility = View.VISIBLE
+        binding.buttonTryAgain.visibility = View.VISIBLE
+    }
+
+    private fun hideWarning() {
+        showMainView()
+        binding.ivWarning.visibility = View.INVISIBLE
+        binding.tvWarningHome.visibility = View.INVISIBLE
+        binding.buttonTryAgain.visibility = View.INVISIBLE
+    }
+
+    private fun showMainView() {
+        binding.homeNestedScrollView.visibility = View.VISIBLE
+    }
+
+    private fun hideMainView() {
+        binding.homeNestedScrollView.visibility = View.INVISIBLE
     }
 }

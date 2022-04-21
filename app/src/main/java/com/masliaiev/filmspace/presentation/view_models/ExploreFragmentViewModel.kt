@@ -49,7 +49,8 @@ class ExploreFragmentViewModel @Inject constructor(
         }
     }
 
-
-
+    fun tryAgain(){
+        getGenres()
+    }
 
 }

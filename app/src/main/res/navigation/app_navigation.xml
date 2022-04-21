@@ -28,11 +28,13 @@
         tools:layout="@layout/fragment_authentication">
         <action
             android:id="@+id/action_authentication_fragment_to_web_authentication_fragment"
-            app:destination="@id/web_authentication_fragment" />
+            app:destination="@id/web_authentication_fragment"
+            app:popUpTo="@id/web_authentication_fragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_authentication_fragment_to_auth_info_fragment"
             app:destination="@id/auth_info_fragment"
-            app:popUpTo="@id/start_fragment"
+            app:popUpTo="@id/app_navigation"
             app:popUpToInclusive="true" />
     </fragment>
 
@@ -63,7 +65,9 @@
             app:argType="com.masliaiev.filmspace.domain.entity.AuthParams" />
         <action
             android:id="@+id/action_auth_info_fragment_to_main_fragment"
-            app:destination="@id/main_fragment" />
+            app:destination="@id/main_fragment"
+            app:popUpTo="@id/app_navigation"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/start_fragment"
@@ -78,7 +82,7 @@
         <action
             android:id="@+id/action_start_fragment_to_main_fragment"
             app:destination="@id/main_fragment"
-            app:popUpTo="@id/start_fragment"
+            app:popUpTo="@id/app_navigation"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
@@ -89,12 +93,21 @@
         <argument
             android:name="movieId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_detail_movie_fragment_self"
+            app:destination="@id/detail_movie_fragment" />
     </fragment>
     <fragment
         android:id="@+id/account_fragment"
         android:name="com.masliaiev.filmspace.presentation.fragments.AccountFragment"
         android:label="fragment_account"
-        tools:layout="@layout/fragment_account" />
+        tools:layout="@layout/fragment_account" >
+        <action
+            android:id="@+id/action_account_fragment_to_authentication_fragment"
+            app:destination="@id/authentication_fragment"
+            app:popUpTo="@id/app_navigation"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/information_fragment"
         android:name="com.masliaiev.filmspace.presentation.fragments.InformationFragment"

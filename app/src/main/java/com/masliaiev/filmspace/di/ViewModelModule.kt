@@ -21,11 +21,6 @@ interface ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(MainFragmentViewModel::class)
-    fun bindMainFragmentViewModel(impl: MainFragmentViewModel): ViewModel
-
-    @Binds
-    @IntoMap
     @ViewModelKey(HomeFragmentViewModel::class)
     fun bindHomeFragmentViewModel(impl: HomeFragmentViewModel): ViewModel
 
@@ -58,6 +53,11 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(DetailMovieFragmentViewModel::class)
     fun bindDetailMovieFragmentViewModel(impl: DetailMovieFragmentViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(LibraryFragmentViewModel::class)
+    fun bindLibraryFragmentViewModel(impl: LibraryFragmentViewModel): ViewModel
 
 
 }

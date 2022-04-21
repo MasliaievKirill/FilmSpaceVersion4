@@ -9,8 +9,6 @@ import dagger.Component
 @Component(modules = [DataModule::class, ViewModelModule::class])
 interface ApplicationComponent {
 
-    fun inject(fragment: MainFragment)
-
     fun inject(fragment: AuthFragment)
 
     fun inject(fragment: WebAuthFragment)
@@ -28,6 +26,8 @@ interface ApplicationComponent {
     fun inject(fragment: SearchFragment)
 
     fun inject(fragment: DetailMovieFragment)
+
+    fun inject(fragment: LibraryFragment)
 
     @Component.Factory
     interface Factory{

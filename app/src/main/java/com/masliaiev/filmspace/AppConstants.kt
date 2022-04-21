@@ -10,6 +10,4 @@ object AppConstants {
     const val SIGNED_IN_MODE = "account"
     const val GUEST_MODE = "guest"
     const val EMPTY_SESSION_ID = "null"
-
-    const val WARNING_DIALOG_TAG = "warning_dialog"
 }

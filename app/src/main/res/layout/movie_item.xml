@@ -3,29 +3,48 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="320dp"
-    android:layout_margin="8dp"
+    android:layout_height="300dp"
+    android:layout_marginStart="18dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
     android:elevation="4dp">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_poster"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:adjustViewBounds="true"
         android:contentDescription="@string/poster_of_the_movie"
         android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@id/tv_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tv_title"
+        app:shapeAppearanceOverlay="@style/rounded_image_view"
         tools:srcCompat="@drawable/poster_placeholder" />
+
+    <TextView
+        android:id="@+id/tv_rating"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/background_rating"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/iv_poster"
+        app:layout_constraintEnd_toEndOf="@id/iv_poster"
+        tools:text="10.0" />
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="@color/white"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/iv_poster"
         app:layout_constraintStart_toStartOf="@+id/iv_poster"
         app:layout_constraintTop_toBottomOf="@+id/iv_poster"
@@ -35,6 +54,7 @@
         android:id="@+id/tv_year"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/tv_title"
         app:layout_constraintStart_toStartOf="@+id/tv_title"

@@ -4,7 +4,7 @@ data class DetailedMovie(
     val adult: Boolean,
     val backdropPath: String?,
     val budget: Int,
-    val genres: List<Genre>?,
+    val genres: String,
     val homepage: String?,
     val id: Int,
     val imdbId: String?,
@@ -20,6 +20,6 @@ data class DetailedMovie(
     val tagline: String?,
     val title: String,
     val video: Boolean,
-    val voteAverage: Double,
+    val voteAverage: String,
     val voteCount: Int
 )

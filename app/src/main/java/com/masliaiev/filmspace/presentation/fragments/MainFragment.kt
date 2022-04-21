@@ -1,7 +1,6 @@
 package com.masliaiev.filmspace.presentation.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,15 +46,10 @@ class MainFragment : Fragment() {
             v.updatePadding(bottom = insets.bottom)
             WindowInsetsCompat.CONSUMED
         }
-
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        Log.d("Main", "onDestroyView")
     }
-
-
 }

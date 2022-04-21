@@ -43,14 +43,6 @@ class HomeFragmentViewModel @Inject constructor(
     val trendingWeek: LiveData<List<Movie>>
         get() = _trendingWeek
 
-//    private var _topRatedMovies = MutableLiveData<List<Movie>>()
-//    val topRatedMovies: LiveData<List<Movie>>
-//        get() = _topRatedMovies
-//
-//    private var _popularMovies = MutableLiveData<List<Movie>>()
-//    val popularMovies: LiveData<List<Movie>>
-//        get() = _popularMovies
-
     private var _error = MutableLiveData<Boolean>()
     val error: LiveData<Boolean>
         get() = _error
@@ -124,5 +116,11 @@ class HomeFragmentViewModel @Inject constructor(
         }
     }
 
+    fun tryAgain() {
+        getNowPlaying()
+        getUpcoming()
+        getTrendingDay()
+        getTrendingWeek()
+    }
 
 }

@@ -14,7 +14,11 @@
 
         <action
             android:id="@+id/action_library_fragment_to_movie_List_fragment"
-            app:destination="@id/movie_list_fragment" />
+            app:destination="@id/movie_list_fragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <fragment

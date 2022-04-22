@@ -1,8 +1,9 @@
 package com.masliaiev.filmspace.presentation.fragments
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.masliaiev.filmspace.AppConstants
 import com.masliaiev.filmspace.FilmSpaceApp
 import com.masliaiev.filmspace.R
 import com.masliaiev.filmspace.databinding.FragmentDetailMovieBinding
@@ -106,7 +108,17 @@ class DetailMovieFragment : Fragment() {
             ViewModelProvider(this, viewModelFactory)[DetailMovieFragmentViewModel::class.java]
 
         loadData()
-        observeViewModel()
+
+        when (viewModel.appMode) {
+            AppConstants.SIGNED_IN_MODE -> {
+                viewModel.getAccountState(args.movieId)
+                commonObserveViewModel()
+                accountObserveViewModel()
+            }
+            AppConstants.GUEST_MODE -> {
+                commonObserveViewModel()
+            }
+        }
 
         binding.ivWatchlist.setOnClickListener {
             if (watchlistMarker) {
@@ -130,6 +142,16 @@ class DetailMovieFragment : Fragment() {
             DialogRateFragment.show(parentFragmentManager, rateMarker)
         }
 
+        binding.tvShareDescription.setOnClickListener {
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, "https://www.themoviedb.org/movie/${args.movieId}")
+                type = "text/plain"
+            }
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            startActivity(shareIntent)
+        }
+
         setDialogRateFragmentListener()
     }
 
@@ -151,10 +173,10 @@ class DetailMovieFragment : Fragment() {
     }
 
     private fun loadData() {
-        viewModel.getAccountState(args.movieId)
         viewModel.getDetailedMovie(args.movieId)
         viewModel.getRecommendations(args.movieId)
         viewModel.getSimilarMovies(args.movieId)
+        viewModel.getVideo(args.movieId)
     }
 
     private fun updateLayout() {
@@ -168,7 +190,7 @@ class DetailMovieFragment : Fragment() {
         }
     }
 
-    private fun observeViewModel() {
+    private fun commonObserveViewModel() {
         viewModel.detailedMovie.observe(viewLifecycleOwner) {
 
             Picasso.get().load(it.backdropPath).placeholder(R.drawable.backdrop_placeholder)
@@ -182,16 +204,50 @@ class DetailMovieFragment : Fragment() {
                 tvStatus.text = it.status
                 tvOverview.text = it.overview
                 tvReleaseDate.text = it.releaseDate
-                tvVoteAverage.text = it.voteAverage
+                tvRuntime.text = it.runtime.toString()
+                tvRating.text = it.voteAverage
                 tvGenresDetail.text = it.genres
             }
         }
         viewModel.recommendations.observe(viewLifecycleOwner) {
-            adapterRecommendations.submitList(it)
+            if (it.isNotEmpty()) {
+                adapterRecommendations.submitList(it)
+            } else {
+                with(binding) {
+                    tvRecommendations.visibility = View.INVISIBLE
+                    rvRecommendations.visibility = View.INVISIBLE
+                }
+            }
         }
         viewModel.similarMovies.observe(viewLifecycleOwner) {
-            adapterSimilarMovies.submitList(it)
+            if (it.isNotEmpty()) {
+                adapterSimilarMovies.submitList(it)
+            } else {
+                with(binding) {
+                    tvSimilarMovies.visibility = View.INVISIBLE
+                    rvSimilarMovies.visibility = View.INVISIBLE
+                }
+            }
         }
+        viewModel.video.observe(viewLifecycleOwner) { video ->
+            binding.ivPlayTrailer.background = ContextCompat.getDrawable(
+                requireContext(),
+                R.drawable.ic_play_circle_active
+            )
+            binding.tvPlayTrailerDescription.setOnClickListener {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(video.key)))
+            }
+        }
+        viewModel.apiError.observe(viewLifecycleOwner) {
+            DialogWarningFragment.showApiErrorDialogFragment(parentFragmentManager)
+        }
+        viewModel.error.observe(viewLifecycleOwner) {
+            DialogWarningFragment.showCommonErrorDialogFragment(parentFragmentManager)
+        }
+    }
+
+    private fun accountObserveViewModel() {
+
         viewModel.accountState.observe(viewLifecycleOwner) {
             if (it.rated is Boolean) {
                 binding.tvRateDescription.text = getString(R.string.rate_action)
@@ -207,7 +263,8 @@ class DetailMovieFragment : Fragment() {
                 } else {
                     rateMarker = userRating.subSequence(7, 11).toString().toDouble()
                 }
-                binding.tvRateDescription.text = String.format(getString(R.string.is_rated_action), rateMarker)
+                binding.tvRateDescription.text =
+                    String.format(getString(R.string.is_rated_action), rateMarker)
 
             }
             if (it.favorite) {
@@ -255,12 +312,6 @@ class DetailMovieFragment : Fragment() {
         }
         viewModel.deleteRating.observe(viewLifecycleOwner) {
             viewModel.getAccountState(args.movieId)
-        }
-        viewModel.apiError.observe(viewLifecycleOwner) {
-            Log.d("Detail", "API error")
-        }
-        viewModel.error.observe(viewLifecycleOwner) {
-            Log.d("Detail", "error")
         }
     }
 

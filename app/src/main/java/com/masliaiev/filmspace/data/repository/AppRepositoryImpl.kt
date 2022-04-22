@@ -634,7 +634,7 @@ class AppRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getVideos(movieId: Int): Pair<ResultParams, List<Video>?> {
+    override suspend fun getVideos(movieId: Int): Pair<ResultParams, Video?> {
         return try {
             val response = apiService.getVideos(
                 movieId
@@ -642,9 +642,19 @@ class AppRepositoryImpl @Inject constructor(
             val videosList = response.body()
 
             when (response.code()) {
-                200 -> Pair(ResultParams.SUCCESS, videosList?.results?.map {
-                    mapper.mapVideoDtoToVideoEntity(it)
-                })
+                200 -> {
+                    videosList?.results?.let {
+                        for (video in it) {
+                            if (video.official) {
+                                return Pair(
+                                    ResultParams.SUCCESS,
+                                    mapper.mapVideoDtoToVideoEntity(video)
+                                )
+                            }
+                        }
+                    }
+                    Pair(ResultParams.SUCCESS, null)
+                }
                 401 -> Pair(ResultParams.ACCOUNT_ERROR, null)
                 else -> Pair(ResultParams.NOT_RESPONSE, null)
             }

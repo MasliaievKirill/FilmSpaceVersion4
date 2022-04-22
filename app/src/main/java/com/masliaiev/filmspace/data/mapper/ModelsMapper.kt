@@ -156,7 +156,7 @@ class ModelsMapper @Inject constructor() {
             title = detailedMovieDto.title,
             video = detailedMovieDto.video,
             voteCount = detailedMovieDto.voteCount,
-            voteAverage = detailedMovieDto.voteAverage.toString()
+            voteAverage = String.format("%.1f", detailedMovieDto.voteAverage)
         )
 
     }
@@ -166,7 +166,7 @@ class ModelsMapper @Inject constructor() {
             iso6391 = videoDto.iso6391,
             iso31661 = videoDto.iso31661,
             name = videoDto.name,
-            key = videoDto.key,
+            key = BASE_YOUTUBE_URL + videoDto.key,
             site = videoDto.site,
             size = videoDto.size,
             type = videoDto.type,
@@ -207,6 +207,7 @@ class ModelsMapper @Inject constructor() {
     companion object {
         private const val BASE_IMAGE_URL = "https://image.tmdb.org/t/p/"
         private const val GRAVATAR_URL = "https://secure.gravatar.com/avatar/"
+        private const val BASE_YOUTUBE_URL = "https://www.youtube.com/watch?v="
 
         private const val IMAGE_SIZE_W185 = "w185"
         private const val IMAGE_SIZE_W342 = "w342"

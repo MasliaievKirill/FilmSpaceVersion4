@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.masliaiev.filmspace.domain.entity.AccountStates
 import com.masliaiev.filmspace.domain.entity.DetailedMovie
 import com.masliaiev.filmspace.domain.entity.Movie
+import com.masliaiev.filmspace.domain.entity.Video
 import com.masliaiev.filmspace.domain.usecases.*
 import com.masliaiev.filmspace.helpers.ResultParams
 import kotlinx.coroutines.launch
@@ -22,9 +23,12 @@ class DetailMovieFragmentViewModel @Inject constructor(
     private val markAsFavouriteUseCase: MarkAsFavouriteUseCase,
     private val getAccountDetailsUseCase: GetAccountDetailsUseCase,
     private val rateMovieUseCase: RateMovieUseCase,
-    private val deleteRatingUseCase: DeleteRatingUseCase
+    private val deleteRatingUseCase: DeleteRatingUseCase,
+    private val getVideosUseCase: GetVideosUseCase,
+    private val getAppModeUseCase: GetAppModeUseCase
 ) : ViewModel() {
 
+    val appMode = getAppModeUseCase.getAppMode()
 
     private var _recommendations = MutableLiveData<List<Movie>>()
     val recommendations: LiveData<List<Movie>>
@@ -57,6 +61,10 @@ class DetailMovieFragmentViewModel @Inject constructor(
     private var _deleteRating = MutableLiveData<Boolean>()
     val deleteRating: LiveData<Boolean>
         get() = _deleteRating
+
+    private var _video = MutableLiveData<Video>()
+    val video: LiveData<Video>
+        get() = _video
 
     private var _error = MutableLiveData<Boolean>()
     val error: LiveData<Boolean>
@@ -206,6 +214,22 @@ class DetailMovieFragmentViewModel @Inject constructor(
                 ResultParams.SUCCESS -> {
                     result.second?.let {
                         _deleteRating.value = it
+                    }
+                }
+                ResultParams.ACCOUNT_ERROR -> _apiError.value = true
+                ResultParams.NO_CONNECTION -> _error.value = true
+                ResultParams.NOT_RESPONSE -> _error.value = true
+            }
+        }
+    }
+
+    fun getVideo(movieId: Int) {
+        viewModelScope.launch {
+            val result = getVideosUseCase.getVideos(movieId)
+            when (result.first) {
+                ResultParams.SUCCESS -> {
+                    result.second?.let {
+                        _video.value = it
                     }
                 }
                 ResultParams.ACCOUNT_ERROR -> _apiError.value = true

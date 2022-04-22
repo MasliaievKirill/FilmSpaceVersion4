@@ -10,7 +10,7 @@ import javax.inject.Inject
 class GetVideosUseCase @Inject constructor(
     private val repository: AppRepository
 ) {
-    suspend fun getVideos(movieId: Int): Pair<ResultParams, List<Video>?> {
+    suspend fun getVideos(movieId: Int): Pair<ResultParams, Video?> {
         return repository.getVideos(movieId)
     }
 }

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FilmSpace</string>
+    <string name="bottom_navigation_home">Главная</string>
+    <string name="bottom_navigation_explore">Навигатор</string>
+    <string name="bottom_navigation_library">Библиотека</string>
+    <string name="auth_info_approved">Вы вошли и можете пользоваться всеми функциями приложения</string>
+    <string name="auth_info_not_confirmed">Вы не подтвердили аккаунт. Приложение будет
+        запушенно в гостевом режиме. Войти в аккаунт можно в настройках профиля.</string>
+    <string name="auth_info_guest">Приложение будет запушенно в гостевом режиме.
+        Войти в аккаунт можно в настройках профиля.</string>
+    <string name="auth_info_excellent">Отлично!</string>
+    <string name="button_continue">Продолжить</string>
+    <string name="dialog_common_error_header">Что-то не так</string>
+    <string name="dialog_api_error_header">Ошибка сервиса TMDB</string>
+    <string name="dialog_common_error_description">Проверьте Интернет соединение.</string>
+    <string name="dialog_api_error_description">Что-то не так с севисом TMDB. Попробуйте позже.</string>
+    <string name="poster_of_the_movie">Постер фильма</string>
+    <string name="account_action">Профиль</string>
+    <string name="information_action">Информация</string>
+    <string name="rate_action">Оценить!</string>
+    <string name="is_rated_action">"Ваша оценка: %1$s"</string>
+    <string name="in_favourite_description">В избранное</string>
+    <string name="add_to_favourite_description">Добавить в избранное</string>
+    <string name="in_watchlist_description">В список для отслеживания</string>
+    <string name="add_to_watchlist_description">Добавить в список для отслеживания</string>
+    <string name="welcome_to_filmspace">"Добро пожаловать в\nFilmSpace!"</string>
+    <string name="sign_in_sign_up_information">Войдите или создайте аккаунт сервиса TMDB для
+        использования всех функций приложения.</string>
+    <string name="continue_as_guest_information">Вы можете продолжить как гость, и войти или
+        создать аккаунт позже.</string>
+    <string name="powered_by">Powered by</string>
+    <string name="tmdb_logo_description">Логотип TMDB</string>
+    <string name="button_sign_in_sign_up">Войти/регистрация</string>
+    <string name="button_continue_as_guest">Продолжить как гость</string>
+    <string name="now_playing">Смотрят сейчас</string>
+    <string name="upcoming">Ожидаемые</string>
+    <string name="trending_today">В тренде.Сегодня</string>
+    <string name="trending_this_week">В тренде.Эта неделя</string>
+    <string name="warning_something_is_wrong">Что-то не так.\\nПопробуйте снова.</string>
+    <string name="content_description_warning_image">Изображение предупреждения</string>
+    <string name="button_try_again">Попробуйте снова</string>
+    <string name="button_to_search">Кнопка поиска</string>
+    <string name="explore">Навигатор</string>
+    <string name="genres">Жанры</string>
+    <string name="top_rated">Лучшие</string>
+    <string name="item_icon">Изображение пункта</string>
+    <string name="enter_icon">Изображение ввода</string>
+    <string name="popular">Популярные</string>
+    <string name="library">Библиотека</string>
+    <string name="watchlist">Список для отслеживания</string>
+    <string name="rated_movies">Оценённые фильмы</string>
+    <string name="favourite_movies">Избранные фильмы</string>
+    <string name="logged_out_info">Войдите или создайте учетную запись TMDB, чтобы использовать все
+        функции приложения. С учетной записью вы можете добавлять фильмы в список просмотра,
+        отмечать любимые фильмы, оценивать фильмы.\\nВыйдите из гостевого режима и войдите
+        в свою учетную запись TMDB.</string>
+    <string name="button_account_settings">Настройки аккаунта</string>
+    <string name="authentication">Выйти из гостевого режима</string>
+    <string name="logout">Выйти</string>
+    <string name="account">Аккаунт</string>
+    <string name="tmdb_account_details">"*Ваш аккаунт сервиса TMDB "</string>
+    <string name="tmdb_avatar">Аватар TMDB</string>
+    <string name="you_are_in_guest_mode">Вы в гостевом режиме</string>
+    <string name="search_welcome">Тысячи фильмов в коллекции TMDB.</string>
+    <string name="search_find_yours">Найди свой.</string>
+    <string name="information">Информация</string>
+    <string name="app_version">Версия приложения</string>
+    <string name="current_version">3.0.0</string>
+    <string name="privacy_policy">Политика конфиденциальности</string>
+    <string name="click_here_to_open">Нажмите, чтобы открыть</string>
+    <string name="api">API</string>
+    <string name="tmdb_api_info">Этот продукт использует API TMDB, но не одобрен и не
+        сертифицирован сервисом TMDB.\nНажмите, чтобы открыть www.themoviedb.org</string>
+    <string name="graphic_resources">Графические ресурсы</string>
+    <string name="remix_icon_information">Этот продукт использует графические ресурсы
+        Remix Icon.\nНажмите здесь, чтобы открыть https://remixicon.com/</string>
+    <string name="tmdb_name">TMDB</string>
+    <string name="remix_icon_name">REMIX ICON</string>
+    <string name="tmdb_small_logo">TMDB маленький логотип</string>
+    <string name="remix_icon_logo">Логотип Remix icon</string>
+    <string name="play_trailer_on_youtube">Воспроизвести трейлер на YouTube</string>
+    <string name="share_movie">Поделиться фильмом</string>
+    <string name="share_icon_description">Иконка поделиться</string>
+    <string name="play_trailer_icon_description">Иконка воспроизвести трейлер</string>
+    <string name="overview">Обзор</string>
+    <string name="status">Статус</string>
+    <string name="release_date">Дата выхода</string>
+    <string name="original_title">Ориг. название</string>
+    <string name="similar_movies">Похожие</string>
+    <string name="recommendations">Рекомендации</string>
+    <string name="movie_backdrop_description">Задний фон обложки фильма</string>
+    <string name="runtime">Длительность (мин)</string>
+</resources>

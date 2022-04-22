@@ -114,7 +114,7 @@ interface AppRepository {
 
     suspend fun getSimilarMovies(movieId: Int): Pair<ResultParams, List<Movie>?>
 
-    suspend fun getVideos(movieId: Int): Pair<ResultParams, List<Video>?>
+    suspend fun getVideos(movieId: Int): Pair<ResultParams, Video?>
 
     suspend fun rateMovie(
         rateValue: Double,

@@ -116,6 +116,11 @@ class HomeFragmentViewModel @Inject constructor(
         }
     }
 
+    fun resetError(){
+        _apiError.value = false
+        _error.value = false
+    }
+
     fun tryAgain() {
         getNowPlaying()
         getUpcoming()

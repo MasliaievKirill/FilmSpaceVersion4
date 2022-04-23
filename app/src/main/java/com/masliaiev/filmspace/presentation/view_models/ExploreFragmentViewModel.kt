@@ -49,6 +49,11 @@ class ExploreFragmentViewModel @Inject constructor(
         }
     }
 
+    fun resetError(){
+        _apiError.value = false
+        _error.value = false
+    }
+
     fun tryAgain(){
         getGenres()
     }

@@ -28,7 +28,7 @@
     <string name="add_to_watchlist_description">Add to watchlist</string>
     <string name="welcome_to_filmspace">Welcome to\nFilmSpace!</string>
     <string name="sign_in_sign_up_information">Sign in or create a TMDB account to use the full
-        functionality of the application.</string>
+        functionality of the application. The application does not store personal data.</string>
     <string name="continue_as_guest_information">You can continue to use the app in guest mode
         and sign in or create an account later.</string>
     <string name="powered_by">Powered by</string>
@@ -92,4 +92,7 @@
     <string name="recommendations">Recommendations</string>
     <string name="movie_backdrop_description">Movie backdrop</string>
     <string name="runtime">Runtime (min)</string>
+    <string name="search">Search</string>
+    <string name="search_query_hint">Enter the title of the movie</string>
+    <string name="toast_in_guest_mode">Feature not available in guest mode.</string>
 </resources>

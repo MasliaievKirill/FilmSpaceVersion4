@@ -161,13 +161,19 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.error.observe(viewLifecycleOwner) {
-            hideProgressbar()
-            showWarning()
+            if (it){
+                hideProgressbar()
+                showWarning()
+                viewModel.resetError()
+            }
         }
 
         viewModel.apiError.observe(viewLifecycleOwner) {
-            hideProgressbar()
-            showWarning()
+            if (it){
+                hideProgressbar()
+                showWarning()
+                viewModel.resetError()
+            }
         }
     }
 
@@ -180,7 +186,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupToolbar() {
-        binding.homeToolbar.setLogo(R.drawable.astronaut_logo)
         binding.homeToolbar.inflateMenu(R.menu.toolbar_menu)
         binding.homeToolbar.setOnMenuItemClickListener {
             when (it.itemId) {

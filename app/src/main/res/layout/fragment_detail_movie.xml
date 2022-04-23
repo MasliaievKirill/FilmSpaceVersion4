@@ -304,7 +304,7 @@
 
             <TextView
                 android:id="@+id/tv_play_trailer_description"
-                android:layout_width="160dp"
+                android:layout_width="200dp"
                 android:layout_height="36dp"
                 android:layout_marginTop="24dp"
                 android:gravity="fill_vertical"
@@ -329,7 +329,7 @@
 
             <TextView
                 android:id="@+id/tv_share_description"
-                android:layout_width="160dp"
+                android:layout_width="130dp"
                 android:layout_height="36dp"
                 android:layout_marginTop="24dp"
                 android:gravity="fill_vertical"
@@ -390,6 +390,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:clipToPadding="false"
                 android:orientation="horizontal"
                 android:overScrollMode="never"
                 android:paddingEnd="18dp"

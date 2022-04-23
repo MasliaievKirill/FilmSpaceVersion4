@@ -97,8 +97,6 @@ class SearchFragment : Fragment() {
                         }
                     }
                     viewModel.movies?.observe(viewLifecycleOwner) { movies ->
-                        binding.tvWelcomeSearch.visibility = View.INVISIBLE
-                        binding.tvWelcomeSearchExtension.visibility = View.INVISIBLE
                         adapter.submitData(viewLifecycleOwner.lifecycle, movies)
                     }
                 }
@@ -110,10 +108,14 @@ class SearchFragment : Fragment() {
                     binding.rvSearch.visibility = View.INVISIBLE
                     binding.tvWelcomeSearch.visibility = View.VISIBLE
                     binding.tvWelcomeSearchExtension.visibility = View.VISIBLE
+                } else {
+                    binding.tvWelcomeSearch.visibility = View.INVISIBLE
+                    binding.tvWelcomeSearchExtension.visibility = View.INVISIBLE
                 }
                 return true
             }
         })
+
         adapter.onMovieClickListener = object : OnMovieClickListener {
             override fun onMovieClick(movieId: Int) {
                 findTopNavController().navigate(

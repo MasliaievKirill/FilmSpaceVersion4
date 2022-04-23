@@ -181,12 +181,19 @@ class ExploreFragment : Fragment() {
             adapter.submitList(it)
         }
         viewModel.error.observe(viewLifecycleOwner) {
-            hideProgressbar()
-            showWarning()
+            if (it){
+                hideProgressbar()
+                showWarning()
+                viewModel.resetError()
+            }
+
         }
         viewModel.apiError.observe(viewLifecycleOwner) {
-            hideProgressbar()
-            showWarning()
+            if (it){
+                hideProgressbar()
+                showWarning()
+                viewModel.resetError()
+            }
         }
     }
 

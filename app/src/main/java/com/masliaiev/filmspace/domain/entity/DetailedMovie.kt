@@ -15,7 +15,7 @@ data class DetailedMovie(
     val posterPath: String?,
     val releaseDate: String,
     val revenue: Int,
-    val runtime: Int?,
+    val runtime: String?,
     val status: String,
     val tagline: String?,
     val title: String,

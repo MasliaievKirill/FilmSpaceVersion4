@@ -20,4 +20,6 @@
     <color name="surface_transparency">#F227292D</color>
 
     <color name="tmdb_colour">#0d253f</color>
+
+    <color name="gray_light">#9FA6B1</color>
 </resources>

@@ -90,7 +90,7 @@ class ModelsMapper @Inject constructor() {
             popularity = movieDto.popularity,
             posterPath = BASE_IMAGE_URL + IMAGE_SIZE_W500 + movieDto.posterPath,
             releaseDate = movieDto.releaseDate,
-            title = movieDto.originalTitle,
+            title = movieDto.title,
             video = movieDto.video,
             voteAverage = String.format("%.1f", movieDto.voteAverage),
             voteCount = movieDto.voteCount
@@ -150,7 +150,7 @@ class ModelsMapper @Inject constructor() {
             posterPath = BASE_IMAGE_URL + IMAGE_SIZE_W500 + detailedMovieDto.posterPath,
             releaseDate = detailedMovieDto.releaseDate,
             revenue = detailedMovieDto.revenue,
-            runtime = detailedMovieDto.runtime,
+            runtime = detailedMovieDto.runtime.toString(),
             status = detailedMovieDto.status,
             tagline = detailedMovieDto.tagline,
             title = detailedMovieDto.title,

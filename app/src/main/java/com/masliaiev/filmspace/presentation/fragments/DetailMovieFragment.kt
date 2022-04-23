@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -114,32 +115,42 @@ class DetailMovieFragment : Fragment() {
                 viewModel.getAccountState(args.movieId)
                 commonObserveViewModel()
                 accountObserveViewModel()
+                binding.ivWatchlist.setOnClickListener {
+                    if (watchlistMarker) {
+                        viewModel.addRemoveToWatchlist(args.movieId, false)
+                    } else {
+                        viewModel.addRemoveToWatchlist(args.movieId, true)
+                    }
+                    binding.ivWatchlist.isEnabled = false
+                }
+
+                binding.ivFavourite.setOnClickListener {
+                    if (favouriteMarker) {
+                        viewModel.markAsFavourite(args.movieId, false)
+                    } else {
+                        viewModel.markAsFavourite(args.movieId, true)
+                    }
+                    binding.ivFavourite.isEnabled = false
+                }
+
+                binding.ivRateStar.setOnClickListener {
+                    DialogRateFragment.show(parentFragmentManager, rateMarker)
+                }
+                setDialogRateFragmentListener()
             }
             AppConstants.GUEST_MODE -> {
                 commonObserveViewModel()
+                enabledActionButtons()
+                binding.ivWatchlist.setOnClickListener {
+                    showGuestToast()
+                }
+                binding.ivFavourite.setOnClickListener {
+                    showGuestToast()
+                }
+                binding.ivRateStar.setOnClickListener {
+                    showGuestToast()
+                }
             }
-        }
-
-        binding.ivWatchlist.setOnClickListener {
-            if (watchlistMarker) {
-                viewModel.addRemoveToWatchlist(args.movieId, false)
-            } else {
-                viewModel.addRemoveToWatchlist(args.movieId, true)
-            }
-            binding.ivWatchlist.isEnabled = false
-        }
-
-        binding.ivFavourite.setOnClickListener {
-            if (favouriteMarker) {
-                viewModel.markAsFavourite(args.movieId, false)
-            } else {
-                viewModel.markAsFavourite(args.movieId, true)
-            }
-            binding.ivFavourite.isEnabled = false
-        }
-
-        binding.ivRateStar.setOnClickListener {
-            DialogRateFragment.show(parentFragmentManager, rateMarker)
         }
 
         binding.tvShareDescription.setOnClickListener {
@@ -151,8 +162,6 @@ class DetailMovieFragment : Fragment() {
             val shareIntent = Intent.createChooser(sendIntent, null)
             startActivity(shareIntent)
         }
-
-        setDialogRateFragmentListener()
     }
 
     override fun onDestroyView() {
@@ -204,7 +213,7 @@ class DetailMovieFragment : Fragment() {
                 tvStatus.text = it.status
                 tvOverview.text = it.overview
                 tvReleaseDate.text = it.releaseDate
-                tvRuntime.text = it.runtime.toString()
+                tvRuntime.text = it.runtime
                 tvRating.text = it.voteAverage
                 tvGenresDetail.text = it.genres
             }
@@ -325,6 +334,10 @@ class DetailMovieFragment : Fragment() {
                 viewModel.deleteRating(args.movieId)
             }
         }
+    }
+
+    private fun showGuestToast() {
+        Toast.makeText(requireContext(), R.string.toast_in_guest_mode, Toast.LENGTH_SHORT).show()
     }
 
 

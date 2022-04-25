@@ -33,7 +33,7 @@ data class MovieDto(
     val posterPath: String?,
     @SerializedName("release_date")
     @Expose
-    val releaseDate: String,
+    val releaseDate: String?,
     @SerializedName("title")
     @Expose
     val title: String,

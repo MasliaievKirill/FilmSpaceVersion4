@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -15,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.masliaiev.filmspace.FilmSpaceApp
+import com.masliaiev.filmspace.R
 import com.masliaiev.filmspace.databinding.FragmentSearchBinding
 import com.masliaiev.filmspace.helpers.findTopNavController
 import com.masliaiev.filmspace.presentation.adapters.MoviePagerAdapter
@@ -75,10 +78,19 @@ class SearchFragment : Fragment() {
             with(binding) {
                 pbSearch.isVisible = refreshState is LoadState.Loading
                 rvSearch.isVisible = refreshState !is LoadState.Error
-                if (refreshState is LoadState.Error){
+                if (refreshState is LoadState.Error) {
                     DialogWarningFragment.showCommonErrorDialogFragment(parentFragmentManager)
                     binding.tvWelcomeSearch.visibility = View.VISIBLE
                     binding.tvWelcomeSearchExtension.visibility = View.VISIBLE
+                }
+            }
+            if (refreshState is LoadState.NotLoading) {
+                if (adapter.itemCount == 0){
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.nothing_found),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -96,6 +108,12 @@ class SearchFragment : Fragment() {
                             viewModel.movies?.removeObservers(viewLifecycleOwner)
                         }
                     }
+                    val inputMethodManager = requireContext()
+                        .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputMethodManager.hideSoftInputFromWindow(
+                        binding.searchView.windowToken,
+                        InputMethodManager.HIDE_NOT_ALWAYS
+                    )
                     viewModel.movies?.observe(viewLifecycleOwner) { movies ->
                         adapter.submitData(viewLifecycleOwner.lifecycle, movies)
                     }

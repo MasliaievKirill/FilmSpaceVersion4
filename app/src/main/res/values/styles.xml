@@ -8,7 +8,7 @@
 
     <style name="search_view" parent="ThemeOverlay.AppCompat.ActionBar">
         <item name="android:textColorPrimary">@color/white</item>
-        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:textColorSecondary">@android:color/darker_gray</item>
         <item name="android:textColorHint">@color/white</item>
     </style>
 

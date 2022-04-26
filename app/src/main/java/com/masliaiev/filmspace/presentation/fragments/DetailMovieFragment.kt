@@ -112,6 +112,7 @@ class DetailMovieFragment : Fragment() {
 
         when (viewModel.appMode) {
             AppConstants.SIGNED_IN_MODE -> {
+                showActionButtons()
                 viewModel.getAccountState(args.movieId)
                 commonObserveViewModel()
                 accountObserveViewModel()
@@ -140,16 +141,6 @@ class DetailMovieFragment : Fragment() {
             }
             AppConstants.GUEST_MODE -> {
                 commonObserveViewModel()
-                enabledActionButtons()
-                binding.ivWatchlist.setOnClickListener {
-                    showGuestToast()
-                }
-                binding.ivFavourite.setOnClickListener {
-                    showGuestToast()
-                }
-                binding.ivRateStar.setOnClickListener {
-                    showGuestToast()
-                }
             }
         }
 
@@ -213,9 +204,13 @@ class DetailMovieFragment : Fragment() {
                 tvStatus.text = it.status
                 tvOverview.text = it.overview
                 tvReleaseDate.text = it.releaseDate
-                tvRuntime.text = it.runtime
                 tvRating.text = it.voteAverage
                 tvGenresDetail.text = it.genres
+                if (it.runtime == "0"){
+                    tvRuntime.text = getString(R.string.no_data)
+                } else {
+                    tvRuntime.text = it.runtime
+                }
             }
         }
         viewModel.recommendations.observe(viewLifecycleOwner) {
@@ -336,10 +331,16 @@ class DetailMovieFragment : Fragment() {
         }
     }
 
-    private fun showGuestToast() {
-        Toast.makeText(requireContext(), R.string.toast_in_guest_mode, Toast.LENGTH_SHORT).show()
+    private fun showActionButtons(){
+        with(binding){
+            ivRateStar.visibility = View.VISIBLE
+            ivFavourite.visibility = View.VISIBLE
+            ivWatchlist.visibility = View.VISIBLE
+            tvRateDescription.visibility = View.VISIBLE
+            tvFavouriteDescription.visibility = View.VISIBLE
+            tvWatchlistDescription.visibility = View.VISIBLE
+        }
     }
-
 
     companion object {
         private const val EMPTY_RATING = 0.0

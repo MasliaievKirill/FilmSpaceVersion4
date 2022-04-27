@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -144,7 +143,7 @@ class DetailMovieFragment : Fragment() {
             }
         }
 
-        binding.tvShareDescription.setOnClickListener {
+        binding.ivShare.setOnClickListener {
             val sendIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_TEXT, "https://www.themoviedb.org/movie/${args.movieId}")
@@ -153,6 +152,8 @@ class DetailMovieFragment : Fragment() {
             val shareIntent = Intent.createChooser(sendIntent, null)
             startActivity(shareIntent)
         }
+
+        setDialogWarningListener()
     }
 
     override fun onDestroyView() {
@@ -200,6 +201,7 @@ class DetailMovieFragment : Fragment() {
 
             with(binding) {
                 detailMovieToolbar.title = it.title
+                tvTitle.text = it.title
                 tvOriginalTitle.text = it.originalTitle
                 tvStatus.text = it.status
                 tvOverview.text = it.overview
@@ -238,7 +240,11 @@ class DetailMovieFragment : Fragment() {
                 requireContext(),
                 R.drawable.ic_play_circle_active
             )
-            binding.tvPlayTrailerDescription.setOnClickListener {
+            binding.tvPlayTrailerDescription.setTextColor(ContextCompat.getColor(
+                requireContext(),
+                R.color.white
+            ))
+            binding.ivPlayTrailer.setOnClickListener {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(video.key)))
             }
         }
@@ -328,6 +334,12 @@ class DetailMovieFragment : Fragment() {
             setOnDeleteRatingListener(parentFragmentManager, viewLifecycleOwner) {
                 viewModel.deleteRating(args.movieId)
             }
+        }
+    }
+
+    private fun setDialogWarningListener(){
+        DialogWarningFragment.setOnOkListener(parentFragmentManager, viewLifecycleOwner){
+            findTopNavController().popBackStack()
         }
     }
 

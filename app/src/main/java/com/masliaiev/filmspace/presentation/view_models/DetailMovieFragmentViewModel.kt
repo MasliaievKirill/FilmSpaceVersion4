@@ -85,9 +85,9 @@ class DetailMovieFragmentViewModel @Inject constructor(
                         _accountState.value = it
                     }
                 }
-                ResultParams.ACCOUNT_ERROR -> _apiError.value = true
-                ResultParams.NO_CONNECTION -> _error.value = true
-                ResultParams.NOT_RESPONSE -> _error.value = true
+                ResultParams.ACCOUNT_ERROR -> setApiError()
+                ResultParams.NO_CONNECTION -> setError()
+                ResultParams.NOT_RESPONSE -> setError()
             }
         }
     }
@@ -101,9 +101,9 @@ class DetailMovieFragmentViewModel @Inject constructor(
                         _detailedMovie.value = it
                     }
                 }
-                ResultParams.ACCOUNT_ERROR -> _apiError.value = true
-                ResultParams.NO_CONNECTION -> _error.value = true
-                ResultParams.NOT_RESPONSE -> _error.value = true
+                ResultParams.ACCOUNT_ERROR -> setApiError()
+                ResultParams.NO_CONNECTION -> setError()
+                ResultParams.NOT_RESPONSE -> setError()
             }
         }
     }
@@ -118,9 +118,9 @@ class DetailMovieFragmentViewModel @Inject constructor(
                         _recommendations.value = it
                     }
                 }
-                ResultParams.ACCOUNT_ERROR -> _apiError.value = true
-                ResultParams.NO_CONNECTION -> _error.value = true
-                ResultParams.NOT_RESPONSE -> _error.value = true
+                ResultParams.ACCOUNT_ERROR -> setApiError()
+                ResultParams.NO_CONNECTION -> setError()
+                ResultParams.NOT_RESPONSE -> setError()
             }
         }
     }
@@ -134,9 +134,9 @@ class DetailMovieFragmentViewModel @Inject constructor(
                         _similarMovies.value = it
                     }
                 }
-                ResultParams.ACCOUNT_ERROR -> _apiError.value = true
-                ResultParams.NO_CONNECTION -> _error.value = true
-                ResultParams.NOT_RESPONSE -> _error.value = true
+                ResultParams.ACCOUNT_ERROR -> setApiError()
+                ResultParams.NO_CONNECTION -> setError()
+                ResultParams.NOT_RESPONSE -> setError()
             }
         }
     }
@@ -155,9 +155,9 @@ class DetailMovieFragmentViewModel @Inject constructor(
                         _markAsFavourite.value = it
                     }
                 }
-                ResultParams.ACCOUNT_ERROR -> _apiError.value = true
-                ResultParams.NO_CONNECTION -> _error.value = true
-                ResultParams.NOT_RESPONSE -> _error.value = true
+                ResultParams.ACCOUNT_ERROR -> setApiError()
+                ResultParams.NO_CONNECTION -> setError()
+                ResultParams.NOT_RESPONSE -> setError()
             }
         }
     }
@@ -176,9 +176,9 @@ class DetailMovieFragmentViewModel @Inject constructor(
                         _addToWatchlist.value = it
                     }
                 }
-                ResultParams.ACCOUNT_ERROR -> _apiError.value = true
-                ResultParams.NO_CONNECTION -> _error.value = true
-                ResultParams.NOT_RESPONSE -> _error.value = true
+                ResultParams.ACCOUNT_ERROR -> setApiError()
+                ResultParams.NO_CONNECTION -> setError()
+                ResultParams.NOT_RESPONSE -> setError()
             }
         }
     }
@@ -197,9 +197,9 @@ class DetailMovieFragmentViewModel @Inject constructor(
                         _rateMovie.value = it
                     }
                 }
-                ResultParams.ACCOUNT_ERROR -> _apiError.value = true
-                ResultParams.NO_CONNECTION -> _error.value = true
-                ResultParams.NOT_RESPONSE -> _error.value = true
+                ResultParams.ACCOUNT_ERROR -> setApiError()
+                ResultParams.NO_CONNECTION -> setError()
+                ResultParams.NOT_RESPONSE -> setError()
             }
         }
     }
@@ -216,9 +216,9 @@ class DetailMovieFragmentViewModel @Inject constructor(
                         _deleteRating.value = it
                     }
                 }
-                ResultParams.ACCOUNT_ERROR -> _apiError.value = true
-                ResultParams.NO_CONNECTION -> _error.value = true
-                ResultParams.NOT_RESPONSE -> _error.value = true
+                ResultParams.ACCOUNT_ERROR -> setApiError()
+                ResultParams.NO_CONNECTION -> setError()
+                ResultParams.NOT_RESPONSE -> setError()
             }
         }
     }
@@ -232,10 +232,22 @@ class DetailMovieFragmentViewModel @Inject constructor(
                         _video.value = it
                     }
                 }
-                ResultParams.ACCOUNT_ERROR -> _apiError.value = true
-                ResultParams.NO_CONNECTION -> _error.value = true
-                ResultParams.NOT_RESPONSE -> _error.value = true
+                ResultParams.ACCOUNT_ERROR -> setApiError()
+                ResultParams.NO_CONNECTION -> setError()
+                ResultParams.NOT_RESPONSE -> setError()
             }
+        }
+    }
+
+    private fun setApiError(){
+        if (_apiError.value != true){
+            _apiError.value = true
+        }
+    }
+
+    private fun setError(){
+        if (_error.value != true){
+            _error.value = true
         }
     }
 

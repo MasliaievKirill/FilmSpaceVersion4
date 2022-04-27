@@ -77,7 +77,7 @@ class SearchFragment : Fragment() {
             val refreshState = it.refresh
             with(binding) {
                 pbSearch.isVisible = refreshState is LoadState.Loading
-                rvSearch.isVisible = refreshState !is LoadState.Error
+                rvSearch.isVisible = refreshState is LoadState.NotLoading
                 if (refreshState is LoadState.Error) {
                     DialogWarningFragment.showCommonErrorDialogFragment(parentFragmentManager)
                     binding.tvWelcomeSearch.visibility = View.VISIBLE
@@ -85,6 +85,8 @@ class SearchFragment : Fragment() {
                 }
             }
             if (refreshState is LoadState.NotLoading) {
+                binding.tvWelcomeSearch.visibility = View.INVISIBLE
+                binding.tvWelcomeSearchExtension.visibility = View.INVISIBLE
                 if (adapter.itemCount == 0){
                     Toast.makeText(
                         requireContext(),
@@ -117,6 +119,7 @@ class SearchFragment : Fragment() {
                     viewModel.movies?.observe(viewLifecycleOwner) { movies ->
                         adapter.submitData(viewLifecycleOwner.lifecycle, movies)
                     }
+                    binding.searchView.clearFocus()
                 }
                 return true
             }
@@ -126,9 +129,6 @@ class SearchFragment : Fragment() {
                     binding.rvSearch.visibility = View.INVISIBLE
                     binding.tvWelcomeSearch.visibility = View.VISIBLE
                     binding.tvWelcomeSearchExtension.visibility = View.VISIBLE
-                } else {
-                    binding.tvWelcomeSearch.visibility = View.INVISIBLE
-                    binding.tvWelcomeSearchExtension.visibility = View.INVISIBLE
                 }
                 return true
             }

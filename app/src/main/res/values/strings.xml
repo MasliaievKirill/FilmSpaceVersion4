@@ -54,7 +54,7 @@
     <string name="rated_movies">Rated movies</string>
     <string name="favourite_movies">Favourite movies</string>
     <string name="logged_out_info">Sign in or create a TMDB account to use the full functionality
-        of the application. With account, you car add movies to watchlist, mark favourite movies,
+        of the application. With account, you can add movies to watchlist, mark favourite movies,
         rate movies.\nExit guest mode and sign in with your TMDB account.</string>
     <string name="button_account_settings">Account settings</string>
     <string name="authentication">Exit guest mode</string>
@@ -80,8 +80,8 @@
     <string name="remix_icon_name">REMIX ICON</string>
     <string name="tmdb_small_logo">TMDB small logo</string>
     <string name="remix_icon_logo">Remix icon logo</string>
-    <string name="play_trailer_on_youtube">Play trailer on YouTube</string>
-    <string name="share_movie">Share movie</string>
+    <string name="play_trailer_on_youtube">Play trailer</string>
+    <string name="share_movie">Share</string>
     <string name="share_icon_description">Share icon</string>
     <string name="play_trailer_icon_description">Play trailer icon</string>
     <string name="overview">Overview</string>
@@ -97,4 +97,6 @@
     <string name="toast_in_guest_mode">Feature not available in guest mode.</string>
     <string name="nothing_found">Nothing found</string>
     <string name="no_data">No data</string>
+    <string name="title">Title</string>
+    <string name="the_list_is_empty">The list is empty</string>
 </resources>

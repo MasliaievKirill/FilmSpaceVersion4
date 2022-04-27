@@ -74,7 +74,7 @@
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/tv_original_title_label"
+                    app:layout_constraintTop_toTopOf="@id/tv_title_label"
                     app:shapeAppearanceOverlay="@style/rounded_image_view"
                     tools:src="@drawable/poster_placeholder" />
 
@@ -92,13 +92,13 @@
                     tools:text="10.0" />
 
                 <TextView
-                    android:id="@+id/tv_original_title_label"
+                    android:id="@+id/tv_title_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:layout_marginTop="18dp"
                     android:layout_marginEnd="18dp"
-                    android:text="@string/original_title"
+                    android:text="@string/title"
                     android:textColor="@color/white"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -106,12 +106,34 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/darker_gray"
+                    app:layout_constraintEnd_toEndOf="@id/tv_title_label"
+                    app:layout_constraintStart_toStartOf="@id/tv_title_label"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title_label"
+                    tools:text="Title" />
+
+                <TextView
+                    android:id="@+id/tv_original_title_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/original_title"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/tv_title_label"
+                    app:layout_constraintStart_toStartOf="@id/tv_title_label"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+                <TextView
                     android:id="@+id/tv_original_title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="@id/tv_original_title_label"
-                    app:layout_constraintStart_toStartOf="@id/tv_original_title_label"
+                    android:textColor="@android:color/darker_gray"
+                    app:layout_constraintEnd_toEndOf="@id/tv_title_label"
+                    app:layout_constraintStart_toStartOf="@id/tv_title_label"
                     app:layout_constraintTop_toBottomOf="@id/tv_original_title_label"
                     tools:text="Title" />
 
@@ -123,16 +145,16 @@
                     android:text="@string/release_date"
                     android:textColor="@color/white"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@id/tv_original_title_label"
-                    app:layout_constraintStart_toStartOf="@id/tv_original_title_label"
+                    app:layout_constraintEnd_toEndOf="@id/tv_title_label"
+                    app:layout_constraintStart_toStartOf="@id/tv_title_label"
                     app:layout_constraintTop_toBottomOf="@id/tv_original_title" />
 
                 <TextView
                     android:id="@+id/tv_release_date"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="@id/tv_original_title_label"
+                    android:textColor="@android:color/darker_gray"
+                    app:layout_constraintEnd_toEndOf="@id/tv_title_label"
                     app:layout_constraintStart_toStartOf="@id/tv_release_date_label"
                     app:layout_constraintTop_toBottomOf="@id/tv_release_date_label"
                     tools:text="11/12/2013" />
@@ -145,16 +167,16 @@
                     android:text="@string/runtime"
                     android:textColor="@color/white"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@id/tv_original_title_label"
-                    app:layout_constraintStart_toStartOf="@id/tv_original_title_label"
+                    app:layout_constraintEnd_toEndOf="@id/tv_title_label"
+                    app:layout_constraintStart_toStartOf="@id/tv_title_label"
                     app:layout_constraintTop_toBottomOf="@id/tv_release_date" />
 
                 <TextView
                     android:id="@+id/tv_runtime"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="@id/tv_original_title_label"
+                    android:textColor="@android:color/darker_gray"
+                    app:layout_constraintEnd_toEndOf="@id/tv_title_label"
                     app:layout_constraintStart_toStartOf="@id/tv_runtime_label"
                     app:layout_constraintTop_toBottomOf="@id/tv_runtime_label"
                     tools:text="100" />
@@ -167,16 +189,16 @@
                     android:text="@string/status"
                     android:textColor="@color/white"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@id/tv_original_title_label"
-                    app:layout_constraintStart_toStartOf="@id/tv_original_title_label"
+                    app:layout_constraintEnd_toEndOf="@id/tv_title_label"
+                    app:layout_constraintStart_toStartOf="@id/tv_title_label"
                     app:layout_constraintTop_toBottomOf="@id/tv_runtime" />
 
                 <TextView
                     android:id="@+id/tv_status"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="@id/tv_original_title_label"
+                    android:textColor="@android:color/darker_gray"
+                    app:layout_constraintEnd_toEndOf="@id/tv_title_label"
                     app:layout_constraintStart_toStartOf="@id/tv_status_label"
                     app:layout_constraintTop_toBottomOf="@id/tv_status_label"
                     tools:text="Released" />
@@ -189,16 +211,16 @@
                     android:text="@string/genres"
                     android:textColor="@color/white"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@id/tv_original_title_label"
-                    app:layout_constraintStart_toStartOf="@id/tv_original_title_label"
+                    app:layout_constraintEnd_toEndOf="@id/tv_title_label"
+                    app:layout_constraintStart_toStartOf="@id/tv_title_label"
                     app:layout_constraintTop_toBottomOf="@id/tv_status" />
 
                 <TextView
                     android:id="@+id/tv_genres_detail"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="@id/tv_original_title_label"
+                    android:textColor="@android:color/darker_gray"
+                    app:layout_constraintEnd_toEndOf="@id/tv_title_label"
                     app:layout_constraintStart_toStartOf="@id/tv_genres_detail_label"
                     app:layout_constraintTop_toBottomOf="@id/tv_genres_detail_label"
                     tools:text="comedy, adventure" />
@@ -307,7 +329,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:textColor="@color/white"
+                android:textColor="@android:color/darker_gray"
                 app:layout_constraintEnd_toEndOf="@id/tv_overview_label"
                 app:layout_constraintStart_toStartOf="@id/tv_overview_label"
                 app:layout_constraintTop_toBottomOf="@id/tv_overview_label"
@@ -317,50 +339,50 @@
                 android:id="@+id/iv_play_trailer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
+                android:layout_marginTop="24dp"
                 android:background="@drawable/ic_play_circle_not_active"
                 android:contentDescription="@string/play_trailer_icon_description"
-                app:layout_constraintBottom_toBottomOf="@id/tv_play_trailer_description"
                 app:layout_constraintStart_toStartOf="@id/tv_play_trailer_description"
-                app:layout_constraintTop_toTopOf="@id/tv_play_trailer_description" />
+                app:layout_constraintEnd_toEndOf="@id/tv_play_trailer_description"
+                app:layout_constraintTop_toBottomOf="@id/tv_overview" />
 
             <TextView
                 android:id="@+id/tv_play_trailer_description"
-                android:layout_width="200dp"
+                android:layout_width="0dp"
                 android:layout_height="36dp"
-                android:layout_marginTop="24dp"
-                android:gravity="fill_vertical"
-                android:paddingStart="40dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="9dp"
+                android:gravity="center"
                 android:text="@string/play_trailer_on_youtube"
-                android:textColor="@color/white"
+                android:textColor="@android:color/darker_gray"
                 app:layout_constraintEnd_toStartOf="@id/tv_share_description"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_overview"
-                tools:ignore="RtlSymmetry" />
+                app:layout_constraintTop_toBottomOf="@id/iv_play_trailer" />
 
             <ImageButton
                 android:id="@+id/iv_share"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
                 android:background="@drawable/ic_share"
                 android:contentDescription="@string/share_icon_description"
-                app:layout_constraintBottom_toBottomOf="@id/tv_share_description"
+                app:layout_constraintBottom_toBottomOf="@id/iv_play_trailer"
                 app:layout_constraintStart_toStartOf="@id/tv_share_description"
-                app:layout_constraintTop_toTopOf="@id/tv_share_description" />
+                app:layout_constraintTop_toTopOf="@id/iv_play_trailer"
+                app:layout_constraintEnd_toEndOf="@id/tv_share_description"/>
 
             <TextView
                 android:id="@+id/tv_share_description"
-                android:layout_width="130dp"
+                android:layout_width="0dp"
                 android:layout_height="36dp"
-                android:layout_marginTop="24dp"
-                android:gravity="fill_vertical"
-                android:paddingStart="40dp"
+                android:layout_marginEnd="18dp"
+                android:layout_marginStart="9dp"
+                android:gravity="center"
                 android:text="@string/share_movie"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/tv_play_trailer_description"
-                app:layout_constraintTop_toBottomOf="@id/tv_overview"
+                app:layout_constraintTop_toTopOf="@id/tv_play_trailer_description"
+                app:layout_constraintBottom_toBottomOf="@id/tv_play_trailer_description"
                 tools:ignore="RtlSymmetry" />
 
             <TextView

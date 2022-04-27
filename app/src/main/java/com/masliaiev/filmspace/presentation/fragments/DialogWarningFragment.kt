@@ -3,8 +3,10 @@ package com.masliaiev.filmspace.presentation.fragments
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.LifecycleOwner
 import com.masliaiev.filmspace.R
 
 class DialogWarningFragment : DialogFragment() {
@@ -19,7 +21,14 @@ class DialogWarningFragment : DialogFragment() {
         return AlertDialog.Builder(requireActivity())
             .setTitle(dialogHeader)
             .setMessage(dialogMessage)
-            .setPositiveButton("OK", null)
+            .setPositiveButton("OK"){ _, which ->
+                parentFragmentManager.setFragmentResult(
+                    REQUEST_KEY,
+                    bundleOf(RESPONSE_KEY to true)
+                )
+                dismiss()
+
+            }
             .create()
     }
 
@@ -52,6 +61,9 @@ class DialogWarningFragment : DialogFragment() {
         private const val API_ERROR = "api_error"
         private const val COMMON_ERROR = "common_error"
 
+        private const val REQUEST_KEY = "request_key_dialog_warning"
+        private const val RESPONSE_KEY = "back"
+
         fun showApiErrorDialogFragment(fragmentManager: FragmentManager) {
             DialogWarningFragment().apply {
                 arguments = Bundle().apply {
@@ -66,6 +78,19 @@ class DialogWarningFragment : DialogFragment() {
                     putString(DIALOG_MODE, COMMON_ERROR)
                 }
             }.show(fragmentManager, TAG)
+        }
+
+        fun setOnOkListener(
+            fragmentManager: FragmentManager,
+            lifecycleOwner: LifecycleOwner,
+            listener: (Boolean) -> Unit
+        ) {
+            fragmentManager.setFragmentResultListener(
+                REQUEST_KEY,
+                lifecycleOwner
+            ) { _, result ->
+                listener.invoke(result.getBoolean(RESPONSE_KEY))
+            }
         }
 
     }

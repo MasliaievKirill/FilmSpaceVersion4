@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -16,6 +17,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.masliaiev.filmspace.FilmSpaceApp
+import com.masliaiev.filmspace.R
 import com.masliaiev.filmspace.databinding.FragmentMovieListBinding
 import com.masliaiev.filmspace.helpers.MovieListLaunchParams
 import com.masliaiev.filmspace.helpers.findTopNavController
@@ -97,6 +99,11 @@ class MovieListFragment : Fragment() {
                 tvWarningMovieList.isVisible = refreshState is LoadState.Error
                 buttonTryAgainMovieList.isVisible = refreshState is LoadState.Error
             }
+            if (refreshState is LoadState.NotLoading) {
+                if (adapter.itemCount == 0){
+                    binding.tvEmptyList.visibility = View.VISIBLE
+                }
+            }
         }
 
         binding.rvMovieList.adapter = adapter
@@ -119,6 +126,7 @@ class MovieListFragment : Fragment() {
                         initialDataLoading = false
                     }
                 } else {
+                    adapter.refresh()
                     observeViewModel()
                 }
 
@@ -131,6 +139,7 @@ class MovieListFragment : Fragment() {
                         initialDataLoading = false
                     }
                 } else {
+                    adapter.refresh()
                     observeViewModel()
                 }
 
@@ -143,6 +152,7 @@ class MovieListFragment : Fragment() {
                         initialDataLoading = false
                     }
                 } else {
+                    adapter.refresh()
                     observeViewModel()
                 }
 

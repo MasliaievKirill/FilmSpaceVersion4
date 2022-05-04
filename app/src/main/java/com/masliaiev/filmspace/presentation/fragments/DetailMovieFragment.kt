@@ -263,7 +263,8 @@ class DetailMovieFragment : Fragment() {
                 }
                 is ApiError -> {
                     showApiErrorToast()
-                    viewModel.setSavedWatchlistState()                }
+                    viewModel.setSavedWatchlistState()
+                }
                 is Progress -> {
                     binding.pbWatchlist.visibility = View.VISIBLE
                 }
@@ -342,11 +343,19 @@ class DetailMovieFragment : Fragment() {
     }
 
     private fun showErrorToast() {
-        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            requireContext(),
+            getString(R.string.dialog_common_error_description),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     private fun showApiErrorToast() {
-        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            requireContext(),
+            getString(R.string.dialog_api_error_description),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     private fun setDialogRateFragmentListener() {

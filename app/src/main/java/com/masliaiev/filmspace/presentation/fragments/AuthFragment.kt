@@ -60,16 +60,18 @@ class AuthFragment : Fragment() {
             DialogWarningFragment.showApiErrorDialogFragment(parentFragmentManager)
         }
         viewModel.requestTokenResponse.observe(viewLifecycleOwner) {
-            if (it.success) {
-                findNavController().navigate(
-                    AuthFragmentDirections.actionAuthenticationFragmentToWebAuthenticationFragment(
-                        it.requestToken
+            it?.let {
+                if (it.success) {
+                    findNavController().navigate(
+                        AuthFragmentDirections.actionAuthenticationFragmentToWebAuthenticationFragment(
+                            it.requestToken
+                        )
                     )
-                )
 
-            } else {
-                changeVisibilityIfError()
-                DialogWarningFragment.showApiErrorDialogFragment(parentFragmentManager)
+                } else {
+                    changeVisibilityIfError()
+                    DialogWarningFragment.showApiErrorDialogFragment(parentFragmentManager)
+                }
             }
         }
 
@@ -93,6 +95,7 @@ class AuthFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        viewModel.clearRequestToken()
     }
 
     private fun changeVisibility() {

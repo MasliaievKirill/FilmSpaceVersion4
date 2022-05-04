@@ -14,11 +14,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.masliaiev.filmspace.FilmSpaceApp
 import com.masliaiev.filmspace.R
 import com.masliaiev.filmspace.databinding.FragmentHomeBinding
+import com.masliaiev.filmspace.helpers.eventbus.HomeEvent
 import com.masliaiev.filmspace.helpers.findTopNavController
 import com.masliaiev.filmspace.presentation.adapters.HomeMovieAdapter
 import com.masliaiev.filmspace.presentation.adapters.OnMovieClickListener
 import com.masliaiev.filmspace.presentation.view_models.HomeFragmentViewModel
 import com.masliaiev.filmspace.presentation.view_models.ViewModelFactory
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import javax.inject.Inject
 
 class HomeFragment : Fragment() {
@@ -130,10 +134,20 @@ class HomeFragment : Fragment() {
         observeViewModel()
 
         binding.buttonTryAgain.setOnClickListener {
-            viewModel.tryAgain()
             hideWarning()
             showProgressbar()
+            viewModel.tryAgain()
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
     }
 
     override fun onDestroyView() {
@@ -141,7 +155,13 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onMessageEvent(event: HomeEvent){
+        binding.homeNestedScrollView.smoothScrollTo(0,0)
+    }
+
     private fun observeViewModel() {
+
         viewModel.nowPlayingMovies.observe(viewLifecycleOwner) {
             adapterNowPlaying.submitList(it)
             hideProgressbar()
@@ -162,17 +182,17 @@ class HomeFragment : Fragment() {
 
         viewModel.error.observe(viewLifecycleOwner) {
             if (it){
+                hideMainView()
                 hideProgressbar()
                 showWarning()
-                viewModel.resetError()
             }
         }
 
         viewModel.apiError.observe(viewLifecycleOwner) {
             if (it){
+                hideMainView()
                 hideProgressbar()
                 showWarning()
-                viewModel.resetError()
             }
         }
     }
@@ -213,14 +233,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun showWarning() {
-        hideMainView()
         binding.ivWarning.visibility = View.VISIBLE
         binding.tvWarningHome.visibility = View.VISIBLE
         binding.buttonTryAgain.visibility = View.VISIBLE
     }
 
     private fun hideWarning() {
-        showMainView()
         binding.ivWarning.visibility = View.INVISIBLE
         binding.tvWarningHome.visibility = View.INVISIBLE
         binding.buttonTryAgain.visibility = View.INVISIBLE

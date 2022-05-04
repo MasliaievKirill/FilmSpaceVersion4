@@ -13,6 +13,10 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.masliaiev.filmspace.R
 import com.masliaiev.filmspace.databinding.FragmentMainBinding
+import com.masliaiev.filmspace.helpers.eventbus.ExploreEvent
+import com.masliaiev.filmspace.helpers.eventbus.HomeEvent
+import com.masliaiev.filmspace.helpers.eventbus.MovieListEvent
+import org.greenrobot.eventbus.EventBus
 
 class MainFragment : Fragment() {
 
@@ -45,6 +49,18 @@ class MainFragment : Fragment() {
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.updatePadding(bottom = insets.bottom)
             WindowInsetsCompat.CONSUMED
+        }
+
+        binding.bottomNavigation.setOnItemReselectedListener {
+            when (it.itemId) {
+                R.id.home_navigation -> EventBus.getDefault().post(HomeEvent())
+                R.id.explore_navigation -> {
+                    EventBus.getDefault().apply {
+                        post(ExploreEvent())
+                        post(MovieListEvent())
+                    }
+                }
+            }
         }
     }
 

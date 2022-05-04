@@ -15,10 +15,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.masliaiev.filmspace.FilmSpaceApp
 import com.masliaiev.filmspace.databinding.FragmentExploreBinding
 import com.masliaiev.filmspace.helpers.MovieListLaunchParams
+import com.masliaiev.filmspace.helpers.eventbus.ExploreEvent
+import com.masliaiev.filmspace.helpers.eventbus.HomeEvent
 import com.masliaiev.filmspace.presentation.adapters.GenreAdapter
 import com.masliaiev.filmspace.presentation.adapters.OnGenreClickListener
 import com.masliaiev.filmspace.presentation.view_models.ExploreFragmentViewModel
 import com.masliaiev.filmspace.presentation.view_models.ViewModelFactory
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import javax.inject.Inject
 
 class ExploreFragment : Fragment() {
@@ -161,9 +166,24 @@ class ExploreFragment : Fragment() {
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onMessageEvent(event: ExploreEvent){
+        binding.nestedScrollExplore.smoothScrollTo(0,0)
     }
 
     private fun updateLayout() {
@@ -181,18 +201,18 @@ class ExploreFragment : Fragment() {
             adapter.submitList(it)
         }
         viewModel.error.observe(viewLifecycleOwner) {
-            if (it){
+            if (it) {
+                hideMainView()
                 hideProgressbar()
                 showWarning()
-                viewModel.resetError()
             }
 
         }
         viewModel.apiError.observe(viewLifecycleOwner) {
-            if (it){
+            if (it) {
+                hideMainView()
                 hideProgressbar()
                 showWarning()
-                viewModel.resetError()
             }
         }
     }
@@ -206,14 +226,12 @@ class ExploreFragment : Fragment() {
     }
 
     private fun showWarning() {
-        hideMainView()
         binding.ivWarningExplore.visibility = View.VISIBLE
         binding.tvWarningExplore.visibility = View.VISIBLE
         binding.buttonTryAgainExplore.visibility = View.VISIBLE
     }
 
     private fun hideWarning() {
-        showMainView()
         binding.ivWarningExplore.visibility = View.INVISIBLE
         binding.tvWarningExplore.visibility = View.INVISIBLE
         binding.buttonTryAgainExplore.visibility = View.INVISIBLE

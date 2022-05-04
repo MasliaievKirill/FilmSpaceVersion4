@@ -26,8 +26,8 @@ class AuthenticationFragmentViewModel @Inject constructor(
     val apiError: LiveData<Boolean>
         get() = _apiError
 
-    private var _requestToken = MutableLiveData<CreateRequestTokenResponse>()
-    val requestTokenResponse: LiveData<CreateRequestTokenResponse>
+    private var _requestToken = MutableLiveData<CreateRequestTokenResponse?>()
+    val requestTokenResponse: LiveData<CreateRequestTokenResponse?>
         get() = _requestToken
 
 
@@ -53,6 +53,10 @@ class AuthenticationFragmentViewModel @Inject constructor(
 
     fun setSessionId(sessionId: String){
         setSessionIdUseCase.setSessionId(sessionId)
+    }
+
+    fun clearRequestToken(){
+        _requestToken.value = null
     }
 
 

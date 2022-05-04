@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
@@ -19,6 +20,7 @@ import com.masliaiev.filmspace.AppConstants
 import com.masliaiev.filmspace.FilmSpaceApp
 import com.masliaiev.filmspace.databinding.FragmentWebAuthenticationBinding
 import com.masliaiev.filmspace.domain.entity.AuthParams
+import com.masliaiev.filmspace.helpers.findTopNavController
 import com.masliaiev.filmspace.presentation.view_models.ViewModelFactory
 import com.masliaiev.filmspace.presentation.view_models.WebAuthFragmentViewModel
 import javax.inject.Inject
@@ -129,6 +131,19 @@ class WebAuthFragment : Fragment() {
         binding.wvAuth.settings.javaScriptEnabled = true
         binding.wvAuth.settings.javaScriptCanOpenWindowsAutomatically = true
         binding.wvAuth.loadUrl(REQUEST_URL + args.requestToken)
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (binding.wvAuth.canGoBack()) {
+                        binding.wvAuth.goBack()
+                    } else {
+                        findTopNavController().popBackStack()
+                    }
+                }
+            }
+        )
     }
 
     override fun onDestroyView() {

@@ -9,6 +9,7 @@ import com.masliaiev.filmspace.domain.entity.Movie
 import com.masliaiev.filmspace.domain.usecases.GetGenresUseCase
 import com.masliaiev.filmspace.domain.usecases.LoadAccountUseCase
 import com.masliaiev.filmspace.helpers.ResultParams
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -42,20 +43,38 @@ class ExploreFragmentViewModel @Inject constructor(
                         _genres.value = it
                     }
                 }
-                ResultParams.ACCOUNT_ERROR -> _apiError.value = true
-                ResultParams.NO_CONNECTION -> _error.value = true
-                ResultParams.NOT_RESPONSE -> _error.value = true
+                ResultParams.ACCOUNT_ERROR -> setApiError()
+                ResultParams.NO_CONNECTION -> setError()
+                ResultParams.NOT_RESPONSE -> setError()
             }
         }
     }
 
-    fun resetError(){
-        _apiError.value = false
-        _error.value = false
+    private fun setApiError() {
+        if (_apiError.value != true) {
+            _apiError.value = true
+        }
+    }
+
+    private fun setError() {
+        if (_error.value != true) {
+            _error.value = true
+        }
+    }
+
+    private fun resetError() {
+        if (_error.value != false || _apiError.value != false) {
+            _apiError.value = false
+            _error.value = false
+        }
     }
 
     fun tryAgain(){
-        getGenres()
+        viewModelScope.launch {
+            resetError()
+            delay(1000)
+            getGenres()
+        }
     }
 
 }

@@ -45,8 +45,7 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@id/app_navigation"
-            app:popUpToInclusive="true" />
+            app:popUpTo="@id/authentication_fragment" />
         <action
             android:id="@+id/action_authentication_fragment_to_auth_info_fragment"
             app:destination="@id/auth_info_fragment"
@@ -74,7 +73,7 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@id/start_fragment"
+            app:popUpTo="@id/app_navigation"
             app:popUpToInclusive="true" />
     </fragment>
 
@@ -105,7 +104,7 @@
         <action
             android:id="@+id/action_start_fragment_to_authentication_fragment"
             app:destination="@id/authentication_fragment"
-            app:popUpTo="@id/start_fragment"
+            app:popUpTo="@id/app_navigation"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_start_fragment_to_main_fragment"

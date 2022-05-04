@@ -10,6 +10,7 @@ import com.masliaiev.filmspace.domain.usecases.GetTrendingDayUseCase
 import com.masliaiev.filmspace.domain.usecases.GetTrendingWeekUseCase
 import com.masliaiev.filmspace.domain.usecases.GetUpcomingMoviesUseCase
 import com.masliaiev.filmspace.helpers.ResultParams
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,10 +22,7 @@ class HomeFragmentViewModel @Inject constructor(
 ) : ViewModel() {
 
     init {
-        getNowPlaying()
-        getUpcoming()
-        getTrendingDay()
-        getTrendingWeek()
+        loadData()
     }
 
     private var _nowPlayingMovies = MutableLiveData<List<Movie>>()
@@ -51,6 +49,12 @@ class HomeFragmentViewModel @Inject constructor(
     val apiError: LiveData<Boolean>
         get() = _apiError
 
+    private fun loadData() {
+        getNowPlaying()
+        getUpcoming()
+        getTrendingDay()
+        getTrendingWeek()
+    }
 
     private fun getNowPlaying() {
         viewModelScope.launch {
@@ -61,9 +65,9 @@ class HomeFragmentViewModel @Inject constructor(
                         _nowPlayingMovies.value = it
                     }
                 }
-                ResultParams.ACCOUNT_ERROR -> _apiError.value = true
-                ResultParams.NO_CONNECTION -> _error.value = true
-                ResultParams.NOT_RESPONSE -> _error.value = true
+                ResultParams.ACCOUNT_ERROR -> setApiError()
+                ResultParams.NO_CONNECTION -> setError()
+                ResultParams.NOT_RESPONSE -> setError()
             }
         }
     }
@@ -77,9 +81,9 @@ class HomeFragmentViewModel @Inject constructor(
                         _upcomingMovies.value = it
                     }
                 }
-                ResultParams.ACCOUNT_ERROR -> _apiError.value = true
-                ResultParams.NO_CONNECTION -> _error.value = true
-                ResultParams.NOT_RESPONSE -> _error.value = true
+                ResultParams.ACCOUNT_ERROR -> setApiError()
+                ResultParams.NO_CONNECTION -> setError()
+                ResultParams.NOT_RESPONSE -> setError()
             }
         }
     }
@@ -93,9 +97,9 @@ class HomeFragmentViewModel @Inject constructor(
                         _trendingDay.value = it
                     }
                 }
-                ResultParams.ACCOUNT_ERROR -> _apiError.value = true
-                ResultParams.NO_CONNECTION -> _error.value = true
-                ResultParams.NOT_RESPONSE -> _error.value = true
+                ResultParams.ACCOUNT_ERROR -> setApiError()
+                ResultParams.NO_CONNECTION -> setError()
+                ResultParams.NOT_RESPONSE -> setError()
             }
         }
     }
@@ -109,23 +113,38 @@ class HomeFragmentViewModel @Inject constructor(
                         _trendingWeek.value = it
                     }
                 }
-                ResultParams.ACCOUNT_ERROR -> _apiError.value = true
-                ResultParams.NO_CONNECTION -> _error.value = true
-                ResultParams.NOT_RESPONSE -> _error.value = true
+                ResultParams.ACCOUNT_ERROR -> setApiError()
+                ResultParams.NO_CONNECTION -> setError()
+                ResultParams.NOT_RESPONSE -> setError()
             }
         }
     }
 
-    fun resetError(){
-        _apiError.value = false
-        _error.value = false
+    private fun setApiError() {
+        if (_apiError.value != true) {
+            _apiError.value = true
+        }
+    }
+
+    private fun setError() {
+        if (_error.value != true) {
+            _error.value = true
+        }
+    }
+
+    private fun resetError() {
+        if (_error.value != false || _apiError.value != false) {
+            _apiError.value = false
+            _error.value = false
+        }
     }
 
     fun tryAgain() {
-        getNowPlaying()
-        getUpcoming()
-        getTrendingDay()
-        getTrendingWeek()
+        viewModelScope.launch {
+            resetError()
+            delay(1000)
+            loadData()
+        }
     }
 
 }

@@ -44,16 +44,16 @@ class DetailMovieFragmentViewModel @Inject constructor(
     val detailedMovie: LiveData<DetailedMovie>
         get() = _detailedMovie
 
-    private var _favourite = MutableLiveData<State>()
-    val favourite: LiveData<State>
+    private var _favourite = MutableLiveData<DetailedButtonsState>()
+    val favourite: LiveData<DetailedButtonsState>
         get() = _favourite
 
-    private var _watchlist = MutableLiveData<State>()
-    val watchlist: LiveData<State>
+    private var _watchlist = MutableLiveData<DetailedButtonsState>()
+    val watchlist: LiveData<DetailedButtonsState>
         get() = _watchlist
 
-    private var _rateMovie = MutableLiveData<State>()
-    val rateMovie: LiveData<State>
+    private var _rateMovie = MutableLiveData<DetailedButtonsState>()
+    val rateMovie: LiveData<DetailedButtonsState>
         get() = _rateMovie
 
     private var _video = MutableLiveData<Video>()
@@ -72,9 +72,9 @@ class DetailMovieFragmentViewModel @Inject constructor(
     private var inFavourite = false
     private var isRated = false
 
-    private var buttonWatchlistSavedState: State = Result(false)
-    private var buttonFavouriteSavedState: State = Result(false)
-    private var buttonRateSavedState: State = Result(false)
+    private var buttonWatchlistSavedState: DetailedButtonsState = Result(false)
+    private var buttonFavouriteSavedState: DetailedButtonsState = Result(false)
+    private var buttonRateSavedState: DetailedButtonsState = Result(false)
 
     private var wasLoaded = false
 

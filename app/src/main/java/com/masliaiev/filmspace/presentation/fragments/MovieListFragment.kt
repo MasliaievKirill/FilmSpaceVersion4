@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -17,9 +16,9 @@ import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.masliaiev.filmspace.FilmSpaceApp
-import com.masliaiev.filmspace.R
 import com.masliaiev.filmspace.databinding.FragmentMovieListBinding
 import com.masliaiev.filmspace.helpers.MovieListLaunchParams
+import com.masliaiev.filmspace.helpers.eventbus.MovieListEvent
 import com.masliaiev.filmspace.helpers.findTopNavController
 import com.masliaiev.filmspace.presentation.adapters.MoviePagerAdapter
 import com.masliaiev.filmspace.presentation.adapters.OnMovieClickListener
@@ -29,6 +28,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import javax.inject.Inject
 
 class MovieListFragment : Fragment() {
@@ -100,7 +102,7 @@ class MovieListFragment : Fragment() {
                 buttonTryAgainMovieList.isVisible = refreshState is LoadState.Error
             }
             if (refreshState is LoadState.NotLoading) {
-                if (adapter.itemCount == 0){
+                if (adapter.itemCount == 0) {
                     binding.tvEmptyList.visibility = View.VISIBLE
                 }
             }
@@ -208,6 +210,16 @@ class MovieListFragment : Fragment() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -216,6 +228,11 @@ class MovieListFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         coroutineScope.cancel()
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onMessageEvent(event: MovieListEvent) {
+        binding.rvMovieList.smoothScrollToPosition(0)
     }
 
     private fun updateLayout() {

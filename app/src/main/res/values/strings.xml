@@ -80,7 +80,7 @@
     <string name="remix_icon_name">REMIX ICON</string>
     <string name="tmdb_small_logo">TMDB small logo</string>
     <string name="remix_icon_logo">Remix icon logo</string>
-    <string name="play_trailer_on_youtube">Play trailer</string>
+    <string name="play_trailer_on_youtube">Trailer</string>
     <string name="share_movie">Share</string>
     <string name="share_icon_description">Share icon</string>
     <string name="play_trailer_icon_description">Play trailer icon</string>
@@ -99,4 +99,5 @@
     <string name="no_data">No data</string>
     <string name="title">Title</string>
     <string name="the_list_is_empty">The list is empty</string>
+    <string name="no_trailer">No trailer</string>
 </resources>

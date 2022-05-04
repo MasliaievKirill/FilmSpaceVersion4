@@ -25,12 +25,11 @@
 
     <TextView
         android:id="@+id/tv_rating"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:background="@drawable/background_rating"
         android:gravity="center"
         android:textColor="@color/white"
-        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/iv_poster"
         app:layout_constraintEnd_toEndOf="@id/iv_poster"

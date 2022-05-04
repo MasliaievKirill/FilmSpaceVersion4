@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -15,11 +16,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.masliaiev.filmspace.AppConstants
 import com.masliaiev.filmspace.FilmSpaceApp
 import com.masliaiev.filmspace.R
 import com.masliaiev.filmspace.databinding.FragmentDetailMovieBinding
-import com.masliaiev.filmspace.helpers.findTopNavController
+import com.masliaiev.filmspace.helpers.*
 import com.masliaiev.filmspace.presentation.adapters.HomeMovieAdapter
 import com.masliaiev.filmspace.presentation.adapters.OnMovieClickListener
 import com.masliaiev.filmspace.presentation.view_models.DetailMovieFragmentViewModel
@@ -48,8 +48,6 @@ class DetailMovieFragment : Fragment() {
         HomeMovieAdapter()
     }
 
-    private var favouriteMarker = false
-    private var watchlistMarker = false
     private var rateMarker = EMPTY_RATING
 
     private var _binding: FragmentDetailMovieBinding? = null
@@ -107,40 +105,23 @@ class DetailMovieFragment : Fragment() {
         viewModel =
             ViewModelProvider(this, viewModelFactory)[DetailMovieFragmentViewModel::class.java]
 
-        loadData()
 
-        when (viewModel.appMode) {
-            AppConstants.SIGNED_IN_MODE -> {
-                showActionButtons()
-                viewModel.getAccountState(args.movieId)
-                commonObserveViewModel()
-                accountObserveViewModel()
-                binding.ivWatchlist.setOnClickListener {
-                    if (watchlistMarker) {
-                        viewModel.addRemoveToWatchlist(args.movieId, false)
-                    } else {
-                        viewModel.addRemoveToWatchlist(args.movieId, true)
-                    }
-                    binding.ivWatchlist.isEnabled = false
-                }
+        viewModel.loadData(args.movieId)
 
-                binding.ivFavourite.setOnClickListener {
-                    if (favouriteMarker) {
-                        viewModel.markAsFavourite(args.movieId, false)
-                    } else {
-                        viewModel.markAsFavourite(args.movieId, true)
-                    }
-                    binding.ivFavourite.isEnabled = false
-                }
+        observeViewModel()
 
-                binding.ivRateStar.setOnClickListener {
-                    DialogRateFragment.show(parentFragmentManager, rateMarker)
-                }
-                setDialogRateFragmentListener()
-            }
-            AppConstants.GUEST_MODE -> {
-                commonObserveViewModel()
-            }
+        binding.ivWatchlist.setOnClickListener {
+            viewModel.addRemoveToWatchlist(args.movieId)
+            binding.ivWatchlist.isEnabled = false
+        }
+
+        binding.ivFavourite.setOnClickListener {
+            viewModel.markAsFavourite(args.movieId)
+            binding.ivFavourite.isEnabled = false
+        }
+
+        binding.ivRateStar.setOnClickListener {
+            DialogRateFragment.show(parentFragmentManager, rateMarker)
         }
 
         binding.ivShare.setOnClickListener {
@@ -152,7 +133,7 @@ class DetailMovieFragment : Fragment() {
             val shareIntent = Intent.createChooser(sendIntent, null)
             startActivity(shareIntent)
         }
-
+        setDialogRateFragmentListener()
         setDialogWarningListener()
     }
 
@@ -161,23 +142,10 @@ class DetailMovieFragment : Fragment() {
         _binding = null
     }
 
-    private fun enabledActionButtons() {
-        binding.ivRateStar.isEnabled = true
-        binding.ivFavourite.isEnabled = true
-        binding.ivWatchlist.isEnabled = true
-    }
-
     private fun disableActionButtons() {
         binding.ivRateStar.isEnabled = false
         binding.ivFavourite.isEnabled = false
         binding.ivWatchlist.isEnabled = false
-    }
-
-    private fun loadData() {
-        viewModel.getDetailedMovie(args.movieId)
-        viewModel.getRecommendations(args.movieId)
-        viewModel.getSimilarMovies(args.movieId)
-        viewModel.getVideo(args.movieId)
     }
 
     private fun updateLayout() {
@@ -191,7 +159,12 @@ class DetailMovieFragment : Fragment() {
         }
     }
 
-    private fun commonObserveViewModel() {
+    private fun observeViewModel() {
+
+        viewModel.accountMode.observe(viewLifecycleOwner) {
+            showActionButtons()
+        }
+
         viewModel.detailedMovie.observe(viewLifecycleOwner) {
 
             Picasso.get().load(it.backdropPath).placeholder(R.drawable.backdrop_placeholder)
@@ -208,12 +181,14 @@ class DetailMovieFragment : Fragment() {
                 tvReleaseDate.text = it.releaseDate
                 tvRating.text = it.voteAverage
                 tvGenresDetail.text = it.genres
-                if (it.runtime == "0"){
+                if (it.runtime == "0") {
                     tvRuntime.text = getString(R.string.no_data)
                 } else {
                     tvRuntime.text = it.runtime
                 }
             }
+            hideProgressBar()
+            binding.detailedMovieMainLayout.visibility = View.VISIBLE
         }
         viewModel.recommendations.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
@@ -240,89 +215,138 @@ class DetailMovieFragment : Fragment() {
                 requireContext(),
                 R.drawable.ic_play_circle_active
             )
-            binding.tvPlayTrailerDescription.setTextColor(ContextCompat.getColor(
-                requireContext(),
-                R.color.white
-            ))
+            with(binding.tvPlayTrailerDescription) {
+                text = getString(R.string.play_trailer_on_youtube)
+                setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.white
+                    )
+                )
+            }
             binding.ivPlayTrailer.setOnClickListener {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(video.key)))
             }
         }
         viewModel.apiError.observe(viewLifecycleOwner) {
+            hideProgressBar()
             DialogWarningFragment.showApiErrorDialogFragment(parentFragmentManager)
         }
         viewModel.error.observe(viewLifecycleOwner) {
+            hideProgressBar()
             DialogWarningFragment.showCommonErrorDialogFragment(parentFragmentManager)
+        }
+        viewModel.watchlist.observe(viewLifecycleOwner) {
+            binding.pbWatchlist.visibility = View.INVISIBLE
+            binding.ivWatchlist.isEnabled = true
+            when (it) {
+                is Result -> {
+                    if (it.inList) {
+                        binding.tvWatchlistDescription.text =
+                            getString(R.string.in_watchlist_description)
+                        binding.ivWatchlist.background = ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.ic_bookmark_watchlist_active
+                        )
+                    } else {
+                        binding.tvWatchlistDescription.text =
+                            getString(R.string.add_to_watchlist_description)
+                        binding.ivWatchlist.background = ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.ic_bookmark_watchlist_not_active
+                        )
+                    }
+                }
+                is Error -> {
+                    showErrorToast()
+                    viewModel.setSavedWatchlistState()
+                }
+                is ApiError -> {
+                    showApiErrorToast()
+                    viewModel.setSavedWatchlistState()                }
+                is Progress -> {
+                    binding.pbWatchlist.visibility = View.VISIBLE
+                }
+            }
+        }
+        viewModel.favourite.observe(viewLifecycleOwner) {
+            binding.pbFavourite.visibility = View.INVISIBLE
+            binding.ivFavourite.isEnabled = true
+            when (it) {
+                is Result -> {
+                    if (it.inList) {
+                        binding.tvFavouriteDescription.text =
+                            getString(R.string.in_favourite_description)
+                        binding.ivFavourite.background = ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.ic_heart_favourite_active
+                        )
+                    } else {
+                        binding.tvFavouriteDescription.text =
+                            getString(R.string.add_to_favourite_description)
+                        binding.ivFavourite.background = ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.ic_heart_favourite_not_active
+                        )
+                    }
+                }
+                is Error -> {
+                    showErrorToast()
+                    viewModel.setSavedFavouriteState()
+                }
+                is ApiError -> {
+                    showApiErrorToast()
+                    viewModel.setSavedFavouriteState()
+                }
+                is Progress -> {
+                    binding.pbFavourite.visibility = View.VISIBLE
+                }
+            }
+        }
+        viewModel.rateMovie.observe(viewLifecycleOwner) {
+            binding.pbRate.visibility = View.INVISIBLE
+            binding.ivRateStar.isEnabled = true
+            when (it) {
+                is Result -> {
+                    if (it.inList) {
+                        binding.ivRateStar.background =
+                            ContextCompat.getDrawable(
+                                requireContext(),
+                                R.drawable.ic_star_rate_active
+                            )
+                        binding.tvRateDescription.text =
+                            String.format(getString(R.string.is_rated_action), it.description)
+                        rateMarker = it.description.toDouble()
+                    } else {
+                        binding.tvRateDescription.text = getString(R.string.rate_action)
+                        binding.ivRateStar.background =
+                            ContextCompat.getDrawable(
+                                requireContext(),
+                                R.drawable.ic_star_rate_not_active
+                            )
+                    }
+                }
+                is Error -> {
+                    showErrorToast()
+                    viewModel.setSavedRateState()
+                }
+                is ApiError -> {
+                    showApiErrorToast()
+                    viewModel.setSavedRateState()
+                }
+                is Progress -> {
+                    binding.pbRate.visibility = View.VISIBLE
+                }
+            }
         }
     }
 
-    private fun accountObserveViewModel() {
+    private fun showErrorToast() {
+        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+    }
 
-        viewModel.accountState.observe(viewLifecycleOwner) {
-            if (it.rated is Boolean) {
-                binding.tvRateDescription.text = getString(R.string.rate_action)
-                binding.ivRateStar.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_star_rate_not_active)
-                rateMarker = EMPTY_RATING
-            } else {
-                binding.ivRateStar.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_star_rate_active)
-                val userRating = it.rated.toString()
-                if (userRating[8].toString() == ".") {
-                    rateMarker = userRating.subSequence(7, 10).toString().toDouble()
-                } else {
-                    rateMarker = userRating.subSequence(7, 11).toString().toDouble()
-                }
-                binding.tvRateDescription.text =
-                    String.format(getString(R.string.is_rated_action), rateMarker)
-
-            }
-            if (it.favorite) {
-                binding.tvFavouriteDescription.text = getString(R.string.in_favourite_description)
-                binding.ivFavourite.background = ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.ic_heart_favourite_active
-                )
-            } else {
-                binding.tvFavouriteDescription.text =
-                    getString(R.string.add_to_favourite_description)
-                binding.ivFavourite.background = ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.ic_heart_favourite_not_active
-                )
-            }
-            if (it.watchlist) {
-                binding.tvWatchlistDescription.text = getString(R.string.in_watchlist_description)
-                binding.ivWatchlist.background = ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.ic_bookmark_watchlist_active
-                )
-            } else {
-                binding.tvWatchlistDescription.text =
-                    getString(R.string.add_to_watchlist_description)
-                binding.ivWatchlist.background = ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.ic_bookmark_watchlist_not_active
-                )
-            }
-            favouriteMarker = it.favorite
-            watchlistMarker = it.watchlist
-
-            enabledActionButtons()
-
-        }
-        viewModel.addToWatchlist.observe(viewLifecycleOwner) {
-            viewModel.getAccountState(args.movieId)
-        }
-        viewModel.markAsFavourite.observe(viewLifecycleOwner) {
-            viewModel.getAccountState(args.movieId)
-        }
-        viewModel.rateMovie.observe(viewLifecycleOwner) {
-            viewModel.getAccountState(args.movieId)
-        }
-        viewModel.deleteRating.observe(viewLifecycleOwner) {
-            viewModel.getAccountState(args.movieId)
-        }
+    private fun showApiErrorToast() {
+        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
     }
 
     private fun setDialogRateFragmentListener() {
@@ -337,14 +361,14 @@ class DetailMovieFragment : Fragment() {
         }
     }
 
-    private fun setDialogWarningListener(){
-        DialogWarningFragment.setOnOkListener(parentFragmentManager, viewLifecycleOwner){
+    private fun setDialogWarningListener() {
+        DialogWarningFragment.setOnOkListener(parentFragmentManager, viewLifecycleOwner) {
             findTopNavController().popBackStack()
         }
     }
 
-    private fun showActionButtons(){
-        with(binding){
+    private fun showActionButtons() {
+        with(binding) {
             ivRateStar.visibility = View.VISIBLE
             ivFavourite.visibility = View.VISIBLE
             ivWatchlist.visibility = View.VISIBLE
@@ -352,6 +376,10 @@ class DetailMovieFragment : Fragment() {
             tvFavouriteDescription.visibility = View.VISIBLE
             tvWatchlistDescription.visibility = View.VISIBLE
         }
+    }
+
+    private fun hideProgressBar() {
+        binding.pbDetailMovie.visibility = View.INVISIBLE
     }
 
     companion object {

@@ -79,7 +79,7 @@
     <string name="remix_icon_name">REMIX ICON</string>
     <string name="tmdb_small_logo">TMDB маленький логотип</string>
     <string name="remix_icon_logo">Логотип Remix icon</string>
-    <string name="play_trailer_on_youtube">Воспроизвести трейлер</string>
+    <string name="play_trailer_on_youtube">Трейлер</string>
     <string name="share_movie">Поделиться</string>
     <string name="share_icon_description">Иконка поделиться</string>
     <string name="play_trailer_icon_description">Иконка воспроизвести трейлер</string>
@@ -98,4 +98,5 @@
     <string name="no_data">Нет данных</string>
     <string name="title">Название</string>
     <string name="the_list_is_empty">Пустой список</string>
+    <string name="no_trailer">Нет трейлера</string>
 </resources>

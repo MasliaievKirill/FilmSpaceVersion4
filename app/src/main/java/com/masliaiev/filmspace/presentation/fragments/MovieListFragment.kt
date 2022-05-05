@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.masliaiev.filmspace.FilmSpaceApp
 import com.masliaiev.filmspace.databinding.FragmentMovieListBinding
 import com.masliaiev.filmspace.helpers.MovieListLaunchParams
@@ -232,7 +233,13 @@ class MovieListFragment : Fragment() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessageEvent(event: MovieListEvent) {
-        binding.rvMovieList.smoothScrollToPosition(0)
+        if ((binding.rvMovieList.layoutManager as LinearLayoutManager)
+                .findFirstVisibleItemPosition() != START_POSITION
+        ) {
+            binding.rvMovieList.smoothScrollToPosition(START_POSITION)
+        } else {
+            findNavController().popBackStack()
+        }
     }
 
     private fun updateLayout() {
@@ -258,5 +265,6 @@ class MovieListFragment : Fragment() {
 
     companion object {
         private const val SPAN_COUNT = 2
+        private const val START_POSITION = 0
     }
 }

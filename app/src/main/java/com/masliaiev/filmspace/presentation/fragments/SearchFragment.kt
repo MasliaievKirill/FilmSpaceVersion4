@@ -19,11 +19,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.masliaiev.filmspace.FilmSpaceApp
 import com.masliaiev.filmspace.R
 import com.masliaiev.filmspace.databinding.FragmentSearchBinding
+import com.masliaiev.filmspace.helpers.eventbus.SearchEvent
 import com.masliaiev.filmspace.helpers.findTopNavController
 import com.masliaiev.filmspace.presentation.adapters.MoviePagerAdapter
 import com.masliaiev.filmspace.presentation.adapters.OnMovieClickListener
 import com.masliaiev.filmspace.presentation.view_models.SearchFragmentViewModel
 import com.masliaiev.filmspace.presentation.view_models.ViewModelFactory
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import javax.inject.Inject
 
 class SearchFragment : Fragment() {
@@ -87,7 +91,7 @@ class SearchFragment : Fragment() {
             if (refreshState is LoadState.NotLoading) {
                 binding.tvWelcomeSearch.visibility = View.INVISIBLE
                 binding.tvWelcomeSearchExtension.visibility = View.INVISIBLE
-                if (adapter.itemCount == 0){
+                if (adapter.itemCount == 0) {
                     Toast.makeText(
                         requireContext(),
                         getString(R.string.nothing_found),
@@ -145,9 +149,24 @@ class SearchFragment : Fragment() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onMessageEvent(event: SearchEvent) {
+        binding.rvSearch.smoothScrollToPosition(0)
     }
 
     private fun updateLayout() {

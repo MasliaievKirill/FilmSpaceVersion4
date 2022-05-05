@@ -1,6 +1,5 @@
 package com.masliaiev.filmspace.domain.usecases
 
-import com.masliaiev.filmspace.domain.entity.responses.MarkAsFavouriteResponse
 import com.masliaiev.filmspace.domain.repository.AppRepository
 import com.masliaiev.filmspace.helpers.ResultParams
 import javax.inject.Inject

@@ -65,9 +65,11 @@ class AccountFragment : Fragment() {
             AppConstants.SIGNED_IN_MODE -> {
                 showAccountModeLayout()
                 viewModel.account.observe(viewLifecycleOwner) {
-                    Picasso.get().load(it.avatarPath).into(binding.ivAvatar)
                     binding.tvName.text = it.name
                     binding.tvLogin.text = it.username
+                    if (it.avatarPath != EMPTY_AVATAR_PATH) {
+                        Picasso.get().load(it.avatarPath).into(binding.ivAvatar)
+                    }
                 }
                 viewModel.deleteSessionSuccess.observe(viewLifecycleOwner) {
                     with(viewModel) {
@@ -141,5 +143,10 @@ class AccountFragment : Fragment() {
 
     private fun hideProgressbar() {
         binding.pbAccount.visibility = View.INVISIBLE
+    }
+
+    companion object {
+        private const val EMPTY_AVATAR_PATH =
+            "https://secure.gravatar.com/avatar/5a37619a4ab74125fde7619add58bdb9"
     }
 }

@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.masliaiev.filmspace.data.database.models.AccountDbModel
-import com.masliaiev.filmspace.data.database.models.GenreDbModel
 
 @Dao
 interface AppDao {
@@ -15,12 +14,5 @@ interface AppDao {
 
     @Query("SELECT * FROM account LIMIT 1")
     suspend fun getAccount(): AccountDbModel
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertPosts(genresList: List<GenreDbModel>)
-
-    @Query("SELECT * FROM genres WHERE id = :id LIMIT 1")
-    suspend fun getGenre(id: Int): GenreDbModel
-
 
 }

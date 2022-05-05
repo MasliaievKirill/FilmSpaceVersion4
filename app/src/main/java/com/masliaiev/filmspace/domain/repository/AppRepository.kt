@@ -3,9 +3,8 @@ package com.masliaiev.filmspace.domain.repository
 import androidx.lifecycle.LiveData
 import androidx.paging.PagingData
 import com.masliaiev.filmspace.domain.entity.*
-import com.masliaiev.filmspace.domain.entity.requests.DeleteSessionRequest
-import com.masliaiev.filmspace.domain.entity.requests.RateMovieRequest
-import com.masliaiev.filmspace.domain.entity.responses.*
+import com.masliaiev.filmspace.domain.entity.responses.CreateRequestTokenResponse
+import com.masliaiev.filmspace.domain.entity.responses.CreateSessionResponse
 import com.masliaiev.filmspace.helpers.ResultParams
 
 interface AppRepository {
@@ -82,7 +81,10 @@ interface AppRepository {
 
     suspend fun getDetailedMovie(movieId: Int): Pair<ResultParams, DetailedMovie?>
 
-    suspend fun getAccountStates(movieId: Int, sessionId: String): Pair<ResultParams, AccountStates?>
+    suspend fun getAccountStates(
+        movieId: Int,
+        sessionId: String
+    ): Pair<ResultParams, AccountStates?>
 
     suspend fun getPopularMovies(): Pair<ResultParams, List<Movie>?>
 

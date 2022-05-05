@@ -16,6 +16,7 @@ import com.masliaiev.filmspace.databinding.FragmentMainBinding
 import com.masliaiev.filmspace.helpers.eventbus.ExploreEvent
 import com.masliaiev.filmspace.helpers.eventbus.HomeEvent
 import com.masliaiev.filmspace.helpers.eventbus.MovieListEvent
+import com.masliaiev.filmspace.helpers.eventbus.SearchEvent
 import org.greenrobot.eventbus.EventBus
 
 class MainFragment : Fragment() {
@@ -58,8 +59,10 @@ class MainFragment : Fragment() {
                     EventBus.getDefault().apply {
                         post(ExploreEvent())
                         post(MovieListEvent())
+                        post(SearchEvent())
                     }
                 }
+                R.id.library_navigation -> EventBus.getDefault().post(MovieListEvent())
             }
         }
     }

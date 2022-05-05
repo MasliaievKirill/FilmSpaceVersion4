@@ -5,11 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.masliaiev.filmspace.data.database.models.AccountDbModel
-import com.masliaiev.filmspace.data.database.models.GenreDbModel
 
 @Database(
-    entities = [AccountDbModel::class, GenreDbModel::class],
-    version = 1,
+    entities = [AccountDbModel::class],
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

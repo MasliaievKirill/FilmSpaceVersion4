@@ -8,11 +8,11 @@ import com.masliaiev.filmspace.data.network.models.movies.MovieDto
 import com.masliaiev.filmspace.data.network.models.movies.account_states.AccountStatesDto
 import com.masliaiev.filmspace.data.network.models.movies.details.DetailedMovieDto
 import com.masliaiev.filmspace.data.network.models.movies.videos.VideoDto
-import com.masliaiev.filmspace.data.network.models.requests.DeleteSessionRequestDto
-import com.masliaiev.filmspace.data.network.models.responses.*
+import com.masliaiev.filmspace.data.network.models.responses.CreateRequestTokenResponseDto
+import com.masliaiev.filmspace.data.network.models.responses.CreateSessionResponseDto
 import com.masliaiev.filmspace.domain.entity.*
-import com.masliaiev.filmspace.domain.entity.requests.DeleteSessionRequest
-import com.masliaiev.filmspace.domain.entity.responses.*
+import com.masliaiev.filmspace.domain.entity.responses.CreateRequestTokenResponse
+import com.masliaiev.filmspace.domain.entity.responses.CreateSessionResponse
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -35,22 +35,6 @@ class ModelsMapper @Inject constructor() {
         return CreateSessionResponse(
             success = createSessionResponseDto.success,
             sessionId = createSessionResponseDto.sessionId
-        )
-    }
-
-    fun mapDeleteSessionRequestEntityToDeleteSessionRequestDto(
-        deleteSessionRequest: DeleteSessionRequest
-    ): DeleteSessionRequestDto {
-        return DeleteSessionRequestDto(
-            sessionId = deleteSessionRequest.sessionId
-        )
-    }
-
-    fun mapDeleteSessionResponseDtoToDeleteSessionResponseEntity(
-        deleteSessionResponseDto: DeleteSessionResponseDto
-    ): DeleteSessionResponse {
-        return DeleteSessionResponse(
-            success = deleteSessionResponseDto.success
         )
     }
 
@@ -97,26 +81,6 @@ class ModelsMapper @Inject constructor() {
         )
     }
 
-    fun markAsFavouriteResponseDtoToMarkAsFavouriteResponseEntity(
-        markAsFavouriteResponseDto: MarkAsFavouriteResponseDto
-    ): MarkAsFavouriteResponse {
-        return MarkAsFavouriteResponse(
-            success = markAsFavouriteResponseDto.success,
-            statusCode = markAsFavouriteResponseDto.statusCode,
-            statusMassage = markAsFavouriteResponseDto.statusMassage
-        )
-    }
-
-    fun addToWatchlistResponseDtoToAddToWatchlistResponseEntity(
-        addToWatchlistResponseDto: AddToWatchlistResponseDto
-    ): AddToWatchlistResponse {
-        return AddToWatchlistResponse(
-            success = addToWatchlistResponseDto.success,
-            statusCode = addToWatchlistResponseDto.statusCode,
-            statusMassage = addToWatchlistResponseDto.statusMassage
-        )
-    }
-
     fun mapGenreDtoToGenreEntity(genreDto: GenreDto): Genre {
         return Genre(
             id = genreDto.id,
@@ -134,7 +98,7 @@ class ModelsMapper @Inject constructor() {
         )
     }
 
-    fun mapDetailedMovieDtoToDetailedMovieEntity(detailedMovieDto: DetailedMovieDto): DetailedMovie{
+    fun mapDetailedMovieDtoToDetailedMovieEntity(detailedMovieDto: DetailedMovieDto): DetailedMovie {
         return DetailedMovie(
             adult = detailedMovieDto.adult,
             backdropPath = BASE_IMAGE_URL + IMAGE_SIZE_W780 + detailedMovieDto.backdropPath,
@@ -193,7 +157,7 @@ class ModelsMapper @Inject constructor() {
         var genresList = ""
         genres?.let {
             for (position in genres.indices) {
-                if (position == genres.size - 1){
+                if (position == genres.size - 1) {
                     genresList += genres[position].name
                 } else {
                     genresList += genres[position].name + ", "

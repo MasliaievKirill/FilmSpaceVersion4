@@ -33,14 +33,20 @@ class AllFavouriteMoviesPageSource(
                 language = language,
                 page = position
             )
-            val moviesList = response.body()?.results?.map {
-                mapper.mapMovieDtoToMovieEntity(it)
+            when (response.code()) {
+                200 -> {
+                    val moviesList = response.body()?.results?.map {
+                        mapper.mapMovieDtoToMovieEntity(it)
+                    }
+                    LoadResult.Page(
+                        data = moviesList!!,
+                        prevKey = if (position == 1) null else position - 1,
+                        nextKey = if (moviesList.isEmpty()) null else position + 1
+                    )
+                }
+                401 -> throw IOException()
+                else -> throw HttpException(response)
             }
-            LoadResult.Page(
-                data = moviesList!!,
-                prevKey = if (position == 1) null else position - 1,
-                nextKey = if (moviesList.isEmpty()) null else position + 1
-            )
 
         } catch (exception: IOException) {
             LoadResult.Error(exception)

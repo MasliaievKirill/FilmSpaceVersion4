@@ -9,12 +9,13 @@
 
     <application
         android:name=".FilmSpaceApp"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.FilmSpace">
+        android:theme="@style/Theme.FilmSpace"
+        tools:ignore="DataExtractionRules">
         <activity
             android:name=".presentation.activity.MainActivity"
             android:exported="true"

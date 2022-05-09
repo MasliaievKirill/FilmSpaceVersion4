@@ -25,10 +25,7 @@ import com.masliaiev.filmspace.presentation.adapters.MoviePagerAdapter
 import com.masliaiev.filmspace.presentation.adapters.OnMovieClickListener
 import com.masliaiev.filmspace.presentation.view_models.MovieListFragmentViewModel
 import com.masliaiev.filmspace.presentation.view_models.ViewModelFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -105,6 +102,7 @@ class MovieListFragment : Fragment() {
             if (refreshState is LoadState.NotLoading) {
                 if (adapter.itemCount == 0) {
                     binding.tvEmptyList.visibility = View.VISIBLE
+                    binding.rvMovieList.visibility = View.INVISIBLE
                 }
             }
         }
@@ -207,7 +205,16 @@ class MovieListFragment : Fragment() {
         }
 
         binding.buttonTryAgainMovieList.setOnClickListener {
-            adapter.refresh()
+            coroutineScope.launch {
+                with(binding){
+                    ivWarningMovieList.visibility = View.INVISIBLE
+                    tvWarningMovieList.visibility = View.INVISIBLE
+                    buttonTryAgainMovieList.visibility = View.INVISIBLE
+                    pbMovieList.visibility = View.VISIBLE
+                }
+                delay(500)
+                adapter.refresh()
+            }
         }
     }
 
@@ -233,7 +240,7 @@ class MovieListFragment : Fragment() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessageEvent(event: MovieListEvent) {
-        if ((binding.rvMovieList.layoutManager as LinearLayoutManager)
+        if (binding.rvMovieList.isVisible && (binding.rvMovieList.layoutManager as LinearLayoutManager)
                 .findFirstVisibleItemPosition() != START_POSITION
         ) {
             binding.rvMovieList.smoothScrollToPosition(START_POSITION)

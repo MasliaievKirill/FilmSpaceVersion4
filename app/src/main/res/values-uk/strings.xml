@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FilmSpace</string>
+    <string name="bottom_navigation_home">Головна</string>
+    <string name="bottom_navigation_explore">Навігатор</string>
+    <string name="bottom_navigation_library">Бібліотека</string>
+    <string name="auth_info_approved">Ви ввійшли, та можете користуватись всіма функціями додатку.</string>
+    <string name="auth_info_not_confirmed">"Ви не підтвердили аккуант. Додаток запуститься в режимі гостя.
+        Увійти в аккаунт можна в налаштуваннях профіля."</string>
+    <string name="auth_info_guest">Додаток запуститься в режимі гостя.
+        Увійти в аккаунт можна в налаштуваннях профіля.</string>
+    <string name="auth_info_excellent">Чудово!</string>
+    <string name="button_continue">Продовжити</string>
+    <string name="dialog_common_error_header">Щось не так.</string>
+    <string name="dialog_api_error_header">Помилка сервісу TMDB.</string>
+    <string name="dialog_common_error_description">Перевірте Інтернет з\'єднання.</string>
+    <string name="dialog_api_error_description">Помилка сервісу TMDB. Спробуйте пізніше.</string>
+    <string name="poster_of_the_movie">Постер фільму</string>
+    <string name="account_action">Профіль</string>
+    <string name="information_action">Інформація</string>
+    <string name="rate_action">Оцінити</string>
+    <string name="is_rated_action">Ваша оцінка: %1$s</string>
+    <string name="in_favourite_description">У обраному</string>
+    <string name="add_to_favourite_description">В обране</string>
+    <string name="in_watchlist_description">Збережено</string>
+    <string name="add_to_watchlist_description">Зберігти</string>
+    <string name="welcome_to_filmspace">Ласкаво просимо в\nFilmSpace!</string>
+    <string name="sign_in_sign_up_information">Ввійдіть або створіть аккаунт сервісу TMDB для
+        використання усіх функцій додатку. Додаток не зберігає приватні данні.</string>
+    <string name="continue_as_guest_information">Ви можете продовжити як гість, та увійти або
+        створити аккаунт пізніше.</string>
+    <string name="powered_by">Powered by</string>
+    <string name="tmdb_logo_description">Логотип TMDB</string>
+    <string name="button_sign_in_sign_up">Увійти/реєстрація</string>
+    <string name="button_continue_as_guest">Продовжити як гість</string>
+    <string name="now_playing">Дивляться зараз</string>
+    <string name="upcoming">Очікувані</string>
+    <string name="trending_today">У тренді.Сьогодні</string>
+    <string name="trending_this_week">У тренді.Тиждень</string>
+    <string name="warning_something_is_wrong">Щось не так.\nСпробуйте знову.</string>
+    <string name="content_description_warning_image">Зображення попередження</string>
+    <string name="button_try_again">Спробувати знову</string>
+    <string name="button_to_search">Кнопка пошуку</string>
+    <string name="explore">Навігатор</string>
+    <string name="genres">Жанри</string>
+    <string name="top_rated">Кращі</string>
+    <string name="item_icon">Зображення пункту</string>
+    <string name="enter_icon">Зображення вводу</string>
+    <string name="popular">Популярні</string>
+    <string name="library">Бібліотека</string>
+    <string name="watchlist">Збережені</string>
+    <string name="rated_movies">З оцінкою</string>
+    <string name="favourite_movies">Обрані</string>
+    <string name="logged_out_info">Увійдіть чи створіть обліковий запис TMDB для використання усіх
+        функцій додатку. З обліковим записом ви зможете додавати фільми у список перегляду,
+        помічати улюблені фільми, оцінювати фільми.\nВийдіть з режиму гостя та увійдіть
+        у свій обліковий запис TMDB.</string>
+    <string name="button_account_settings">Налаштування аккаунта</string>
+    <string name="authentication">Вийти</string>
+    <string name="logout">Вийти</string>
+    <string name="account">Аккаунт</string>
+    <string name="tmdb_account_details">*Ваш аккаунт сервісу TMDB</string>
+    <string name="tmdb_avatar">Аватар TMDB</string>
+    <string name="you_are_in_guest_mode">Ви у режимі гостя</string>
+    <string name="search_welcome">Тисячі фільмів у колекції TMDB.</string>
+    <string name="search_find_yours">Знайди свій.</string>
+    <string name="information">Інформація</string>
+    <string name="app_version">Версія додатку</string>
+    <string name="current_version">3.0.0</string>
+    <string name="privacy_policy">Політика конфіденційністі</string>
+    <string name="click_here_to_open">Натисніть, щоб відкрити</string>
+    <string name="api">API</string>
+    <string name="tmdb_api_info">Цей продукт використовує API TMDB, проте не схвалений та не
+        сертифікований сервісом TMDB.\nНатисніть, щоб відкрити www.themoviedb.org</string>
+    <string name="graphic_resources">Графічні ресурси</string>
+    <string name="remix_icon_information">Цей продукт використовує графічні ресурси
+        Remix Icon.\nНатисніть, щоб відкрити remixicon.com</string>
+    <string name="tmdb_name">TMDB</string>
+    <string name="remix_icon_name">REMIX ICON</string>
+    <string name="tmdb_small_logo">TMDB маленький логотип</string>
+    <string name="remix_icon_logo">Логотип Remix icon</string>
+    <string name="play_trailer_on_youtube">Трейлер</string>
+    <string name="share_movie">Поділитись</string>
+    <string name="share_icon_description">Іконка поділитись</string>
+    <string name="play_trailer_icon_description">Іконка запустити трейлер</string>
+    <string name="overview">Огляд</string>
+    <string name="status">Статус</string>
+    <string name="release_date">Дата виходу</string>
+    <string name="original_title">Ориг. назва</string>
+    <string name="similar_movies">Схожі</string>
+    <string name="recommendations">Рекомендації</string>
+    <string name="movie_backdrop_description">Задній фон обкладинки фільму</string>
+    <string name="runtime">Тривалість (хв)</string>
+    <string name="search">Пошук</string>
+    <string name="search_query_hint">Введіть назву фільму</string>
+    <string name="toast_in_guest_mode">Функція не доступна у режимі гостя.</string>
+    <string name="nothing_found">Нічого не знайдено</string>
+    <string name="no_data">Немає даних</string>
+    <string name="title">Назва</string>
+    <string name="the_list_is_empty">Порожній список</string>
+    <string name="no_trailer">Трейлер відсутній</string>
+</resources>

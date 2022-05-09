@@ -20,8 +20,8 @@
     <string name="poster_of_the_movie">Poster of the movie</string>
     <string name="account_action">Account action</string>
     <string name="information_action">Information action</string>
-    <string name="rate_action">Rate!</string>
-    <string name="is_rated_action">"You rated: %1$s"</string>
+    <string name="rate_action">Rate</string>
+    <string name="is_rated_action">You rated: %1$s</string>
     <string name="in_favourite_description">In favourite</string>
     <string name="add_to_favourite_description">Add to favourite</string>
     <string name="in_watchlist_description">In watchlist</string>
@@ -75,7 +75,7 @@
         by TMDB.\nClick here to open www.themoviedb.org</string>
     <string name="graphic_resources">Graphic resources</string>
     <string name="remix_icon_information">This product uses the Remix Icon graphic
-        resources.\nClick here to open https://remixicon.com/</string>
+        resources.\nClick here to open remixicon.com</string>
     <string name="tmdb_name">TMDB</string>
     <string name="remix_icon_name">REMIX ICON</string>
     <string name="tmdb_small_logo">TMDB small logo</string>

@@ -19,7 +19,7 @@ class DialogRateFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         parseParams()
-        return AlertDialog.Builder(requireActivity())
+        val dialog = AlertDialog.Builder(requireActivity())
             .setTitle("Select rating")
             .setSingleChoiceItems(ratingValues, currentRatingValuePosition) { _, which ->
                 val choseRatingValue = ratingValues[which].toDouble()
@@ -39,6 +39,8 @@ class DialogRateFragment : DialogFragment() {
             }
             .setNegativeButton("Cancel", null)
             .create()
+        dialog.setCanceledOnTouchOutside(false)
+        return dialog
     }
 
 

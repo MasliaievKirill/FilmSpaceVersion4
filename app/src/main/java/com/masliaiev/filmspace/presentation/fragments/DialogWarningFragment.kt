@@ -18,10 +18,10 @@ class DialogWarningFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         parseParams()
-        return AlertDialog.Builder(requireActivity())
+        val dialog = AlertDialog.Builder(requireActivity())
             .setTitle(dialogHeader)
             .setMessage(dialogMessage)
-            .setPositiveButton("OK"){ _, which ->
+            .setPositiveButton("OK") { _, which ->
                 parentFragmentManager.setFragmentResult(
                     REQUEST_KEY,
                     bundleOf(RESPONSE_KEY to true)
@@ -30,6 +30,8 @@ class DialogWarningFragment : DialogFragment() {
 
             }
             .create()
+        dialog.setCanceledOnTouchOutside(false)
+        return dialog
     }
 
     private fun parseParams() {
@@ -66,6 +68,7 @@ class DialogWarningFragment : DialogFragment() {
 
         fun showApiErrorDialogFragment(fragmentManager: FragmentManager) {
             DialogWarningFragment().apply {
+
                 arguments = Bundle().apply {
                     putString(DIALOG_MODE, API_ERROR)
                 }

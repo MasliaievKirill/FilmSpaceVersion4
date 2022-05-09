@@ -18,13 +18,13 @@
     <string name="poster_of_the_movie">Постер фильма</string>
     <string name="account_action">Профиль</string>
     <string name="information_action">Информация</string>
-    <string name="rate_action">Оценить!</string>
-    <string name="is_rated_action">"Ваша оценка: %1$s"</string>
+    <string name="rate_action">Оценить</string>
+    <string name="is_rated_action">Ваша оценка: %1$s</string>
     <string name="in_favourite_description">В избранном</string>
     <string name="add_to_favourite_description">В избранное</string>
     <string name="in_watchlist_description">Сохранено</string>
     <string name="add_to_watchlist_description">Сохранить</string>
-    <string name="welcome_to_filmspace">"Добро пожаловать в\nFilmSpace!"</string>
+    <string name="welcome_to_filmspace">Добро пожаловать в\nFilmSpace!</string>
     <string name="sign_in_sign_up_information">Войдите или создайте аккаунт сервиса TMDB для
         использования всех функций приложения. Приложение не хранит личные данные.</string>
     <string name="continue_as_guest_information">Вы можете продолжить как гость, и войти или
@@ -74,7 +74,7 @@
         сертифицирован сервисом TMDB.\nНажмите, чтобы открыть www.themoviedb.org</string>
     <string name="graphic_resources">Графические ресурсы</string>
     <string name="remix_icon_information">Этот продукт использует графические ресурсы
-        Remix Icon.\nНажмите, чтобы открыть https://remixicon.com/</string>
+        Remix Icon.\nНажмите, чтобы открыть remixicon.com</string>
     <string name="tmdb_name">TMDB</string>
     <string name="remix_icon_name">REMIX ICON</string>
     <string name="tmdb_small_logo">TMDB маленький логотип</string>

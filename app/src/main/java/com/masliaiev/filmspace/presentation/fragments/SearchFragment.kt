@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.masliaiev.filmspace.FilmSpaceApp
 import com.masliaiev.filmspace.R
 import com.masliaiev.filmspace.databinding.FragmentSearchBinding
@@ -166,7 +167,14 @@ class SearchFragment : Fragment() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessageEvent(event: SearchEvent) {
-        binding.rvSearch.smoothScrollToPosition(0)
+        val layoutManager = (binding.rvSearch.layoutManager as LinearLayoutManager)
+        if (layoutManager.findFirstVisibleItemPosition() != START_POSITION &&
+            layoutManager.findFirstVisibleItemPosition() != EMPTY_RV_POSITION
+        ) {
+            binding.rvSearch.smoothScrollToPosition(START_POSITION)
+        } else {
+            findNavController().popBackStack()
+        }
     }
 
     private fun updateLayout() {
@@ -179,7 +187,8 @@ class SearchFragment : Fragment() {
 
     companion object {
         private const val SPAN_COUNT = 2
+        private const val START_POSITION = 0
+        private const val EMPTY_RV_POSITION = -1
     }
-
 
 }

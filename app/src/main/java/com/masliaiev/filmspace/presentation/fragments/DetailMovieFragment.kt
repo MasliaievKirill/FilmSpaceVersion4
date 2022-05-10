@@ -177,11 +177,23 @@ class DetailMovieFragment : Fragment() {
                 tvTitle.text = it.title
                 tvOriginalTitle.text = it.originalTitle
                 tvStatus.text = it.status
-                tvOverview.text = it.overview
-                tvReleaseDate.text = it.releaseDate
+                if (it.overview == EMPTY_STRING) {
+                    tvOverview.text = getString(R.string.no_data)
+                } else {
+                    tvOverview.text = it.overview
+                }
+                if (it.releaseDate == EMPTY_STRING) {
+                    tvReleaseDate.text = getString(R.string.no_data)
+                } else {
+                    tvReleaseDate.text = it.releaseDate
+                }
+                if (it.genres == EMPTY_STRING) {
+                    tvGenresDetail.text = getString(R.string.no_data)
+                } else {
+                    tvGenresDetail.text = it.genres
+                }
                 tvRating.text = it.voteAverage
-                tvGenresDetail.text = it.genres
-                if (it.runtime == "0") {
+                if (it.runtime == EMPTY_RUNTIME) {
                     tvRuntime.text = getString(R.string.no_data)
                 } else {
                     tvRuntime.text = it.runtime
@@ -393,5 +405,7 @@ class DetailMovieFragment : Fragment() {
 
     companion object {
         private const val EMPTY_RATING = 0.0
+        private const val EMPTY_RUNTIME = "0"
+        private const val EMPTY_STRING = ""
     }
 }

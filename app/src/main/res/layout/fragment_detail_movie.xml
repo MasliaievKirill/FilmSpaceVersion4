@@ -81,6 +81,7 @@
                         android:scaleType="centerCrop"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@id/tv_title_label"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_genres_detail"
                         app:shapeAppearanceOverlay="@style/rounded_image_view"
                         tools:src="@drawable/poster_placeholder" />
 

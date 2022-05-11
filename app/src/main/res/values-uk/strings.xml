@@ -27,8 +27,8 @@
     <string name="welcome_to_filmspace">Ласкаво просимо в\nFilmSpace!</string>
     <string name="sign_in_sign_up_information">Ввійдіть або створіть аккаунт сервісу TMDB для
         використання усіх функцій додатку. Додаток не зберігає приватні данні.</string>
-    <string name="continue_as_guest_information">Ви можете продовжити як гість, та увійти або
-        створити аккаунт пізніше.</string>
+    <string name="continue_as_guest_information">Ви можете продовжити як гість, та увійти в
+        аккаунт пізніше.</string>
     <string name="powered_by">Powered by</string>
     <string name="tmdb_logo_description">Логотип TMDB</string>
     <string name="button_sign_in_sign_up">Увійти/реєстрація</string>
@@ -99,4 +99,7 @@
     <string name="title">Назва</string>
     <string name="the_list_is_empty">Порожній список</string>
     <string name="no_trailer">Трейлер відсутній</string>
+    <string name="select_rating">Оцінити</string>
+    <string name="delete_rating">Видалити</string>
+    <string name="cancel_button">Відмінити</string>
 </resources>

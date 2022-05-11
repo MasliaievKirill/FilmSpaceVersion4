@@ -30,7 +30,7 @@
     <string name="sign_in_sign_up_information">Sign in or create a TMDB account to use the full
         functionality of the application. The application does not store personal data.</string>
     <string name="continue_as_guest_information">You can continue to use the app in guest mode
-        and sign in or create an account later.</string>
+        and sign in later.</string>
     <string name="powered_by">Powered by</string>
     <string name="tmdb_logo_description">TMDB logo</string>
     <string name="button_sign_in_sign_up">Sign in / sign up</string>
@@ -100,4 +100,7 @@
     <string name="title">Title</string>
     <string name="the_list_is_empty">The list is empty</string>
     <string name="no_trailer">No trailer</string>
+    <string name="select_rating">Rate</string>
+    <string name="delete_rating">Delete</string>
+    <string name="cancel_button">Cancel</string>
 </resources>

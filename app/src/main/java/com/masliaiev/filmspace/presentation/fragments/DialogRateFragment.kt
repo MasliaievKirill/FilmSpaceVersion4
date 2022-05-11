@@ -20,7 +20,7 @@ class DialogRateFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         parseParams()
         val dialog = AlertDialog.Builder(requireActivity())
-            .setTitle("Select rating")
+            .setTitle(getString(R.string.select_rating))
             .setSingleChoiceItems(ratingValues, currentRatingValuePosition) { _, which ->
                 val choseRatingValue = ratingValues[which].toDouble()
                 parentFragmentManager.setFragmentResult(
@@ -29,7 +29,7 @@ class DialogRateFragment : DialogFragment() {
                 )
                 dismiss()
             }
-            .setNeutralButton("Delete rating") { dialog, which ->
+            .setNeutralButton(getString(R.string.delete_rating)) { _, _ ->
                 parentFragmentManager.setFragmentResult(
                     REQUEST_DELETE_RATING_KEY, bundleOf(
                         RESPONSE_DELETE_RATING_KEY to true
@@ -37,7 +37,7 @@ class DialogRateFragment : DialogFragment() {
                 )
                 dismiss()
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(getString(R.string.cancel_button), null)
             .create()
         dialog.setCanceledOnTouchOutside(false)
         return dialog

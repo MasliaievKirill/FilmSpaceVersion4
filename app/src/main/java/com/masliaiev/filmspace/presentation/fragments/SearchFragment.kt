@@ -78,28 +78,36 @@ class SearchFragment : Fragment() {
 
         binding.rvSearch.layoutManager = GridLayoutManager(requireContext(), SPAN_COUNT)
 
-        adapter.addLoadStateListener {
-            val refreshState = it.refresh
-            with(binding) {
-                pbSearch.isVisible = refreshState is LoadState.Loading
-                rvSearch.isVisible = refreshState is LoadState.NotLoading
-                if (refreshState is LoadState.Error) {
-                    DialogWarningFragment.showCommonErrorDialogFragment(parentFragmentManager)
-                    binding.tvWelcomeSearch.visibility = View.VISIBLE
-                    binding.tvWelcomeSearchExtension.visibility = View.VISIBLE
+        if (adapter.itemCount != 0) {
+            binding.tvWelcomeSearch.visibility = View.INVISIBLE
+            binding.tvWelcomeSearchExtension.visibility = View.INVISIBLE
+        }
+
+        if (!viewModel.loadStateListenerFlag) {
+            adapter.addLoadStateListener {
+                val refreshState = it.refresh
+                with(binding) {
+                    pbSearch.isVisible = refreshState is LoadState.Loading
+                    rvSearch.isVisible = refreshState is LoadState.NotLoading
+                    if (refreshState is LoadState.Error) {
+                        DialogWarningFragment.showCommonErrorDialogFragment(parentFragmentManager)
+                        binding.tvWelcomeSearch.visibility = View.VISIBLE
+                        binding.tvWelcomeSearchExtension.visibility = View.VISIBLE
+                    }
+                }
+                if (refreshState is LoadState.NotLoading) {
+                    binding.tvWelcomeSearch.visibility = View.INVISIBLE
+                    binding.tvWelcomeSearchExtension.visibility = View.INVISIBLE
+                    if (adapter.itemCount == 0) {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.nothing_found),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
-            if (refreshState is LoadState.NotLoading) {
-                binding.tvWelcomeSearch.visibility = View.INVISIBLE
-                binding.tvWelcomeSearchExtension.visibility = View.INVISIBLE
-                if (adapter.itemCount == 0) {
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.nothing_found),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
+            viewModel.loadStateListenerFlag = true
         }
 
         binding.rvSearch.adapter = adapter
@@ -171,7 +179,11 @@ class SearchFragment : Fragment() {
         if (layoutManager.findFirstVisibleItemPosition() != START_POSITION &&
             layoutManager.findFirstVisibleItemPosition() != EMPTY_RV_POSITION
         ) {
-            binding.rvSearch.smoothScrollToPosition(START_POSITION)
+            if (layoutManager.findFirstVisibleItemPosition() <= MAX_COUNT_FOR_SMOOTH_SCROLL) {
+                binding.rvSearch.smoothScrollToPosition(START_POSITION)
+            } else {
+                binding.rvSearch.scrollToPosition(START_POSITION)
+            }
         } else {
             findNavController().popBackStack()
         }
@@ -189,6 +201,7 @@ class SearchFragment : Fragment() {
         private const val SPAN_COUNT = 2
         private const val START_POSITION = 0
         private const val EMPTY_RV_POSITION = -1
+        private const val MAX_COUNT_FOR_SMOOTH_SCROLL = 20
     }
 
 }

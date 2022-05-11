@@ -2,7 +2,6 @@ package com.masliaiev.filmspace.presentation.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -207,7 +206,7 @@ class MovieListFragment : Fragment() {
 
         binding.buttonTryAgainMovieList.setOnClickListener {
             coroutineScope.launch {
-                with(binding){
+                with(binding) {
                     ivWarningMovieList.visibility = View.INVISIBLE
                     tvWarningMovieList.visibility = View.INVISIBLE
                     buttonTryAgainMovieList.visibility = View.INVISIBLE
@@ -241,10 +240,15 @@ class MovieListFragment : Fragment() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessageEvent(event: MovieListEvent) {
-        if (binding.rvMovieList.isVisible && (binding.rvMovieList.layoutManager as LinearLayoutManager)
+        val layoutManager = (binding.rvMovieList.layoutManager as LinearLayoutManager)
+        if (binding.rvMovieList.isVisible && layoutManager
                 .findFirstVisibleItemPosition() != START_POSITION
         ) {
-            binding.rvMovieList.smoothScrollToPosition(START_POSITION)
+            if (layoutManager.findFirstVisibleItemPosition() <= MAX_COUNT_FOR_SMOOTH_SCROLL) {
+                binding.rvMovieList.smoothScrollToPosition(START_POSITION)
+            } else {
+                binding.rvMovieList.scrollToPosition(START_POSITION)
+            }
         } else {
             findNavController().popBackStack()
         }
@@ -274,5 +278,6 @@ class MovieListFragment : Fragment() {
     companion object {
         private const val SPAN_COUNT = 2
         private const val START_POSITION = 0
+        private const val MAX_COUNT_FOR_SMOOTH_SCROLL = 20
     }
 }

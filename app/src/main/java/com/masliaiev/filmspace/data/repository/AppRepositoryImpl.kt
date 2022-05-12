@@ -737,7 +737,7 @@ class AppRepositoryImpl @Inject constructor(
         private const val TIME_WINDOW_DAY = "day"
         private const val TIME_WINDOW_WEEK = "week"
 
-        private const val MAX_NUMBER_OF_ITEMS_LOADED_AT_ONCE = 20
+        private const val MAX_NUMBER_OF_ITEMS_LOADED_AT_ONCE = 30
         private const val MAX_NUMBER_OF_ITEMS = 300
     }
 }

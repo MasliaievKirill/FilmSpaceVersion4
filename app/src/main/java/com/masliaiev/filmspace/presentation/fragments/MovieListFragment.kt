@@ -27,6 +27,7 @@ import com.masliaiev.filmspace.presentation.adapters.OnMovieClickListener
 import com.masliaiev.filmspace.presentation.view_models.MovieListFragmentViewModel
 import com.masliaiev.filmspace.presentation.view_models.ViewModelFactory
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collectLatest
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -50,6 +51,7 @@ class MovieListFragment : Fragment() {
     private var initialDataLoading = true
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main.immediate)
+    private val loadStateCoroutineScope = CoroutineScope(Dispatchers.Main.immediate)
 
     private var _binding: FragmentMovieListBinding? = null
     private val binding: FragmentMovieListBinding
@@ -80,7 +82,7 @@ class MovieListFragment : Fragment() {
         viewModel =
             ViewModelProvider(this, viewModelFactory)[MovieListFragmentViewModel::class.java]
 
-        binding.rvMovieList.layoutManager = GridLayoutManager(requireContext(), SPAN_COUNT)
+        binding.rvMovieList.layoutManager = GridLayoutManager(requireContext(), getColumnCount())
 
         adapter.onMovieClickListener = object : OnMovieClickListener {
             override fun onMovieClick(movieId: Int) {
@@ -91,19 +93,21 @@ class MovieListFragment : Fragment() {
                 )
             }
         }
-        adapter.addLoadStateListener {
-            val refreshState = it.refresh
-            with(binding) {
-                pbMovieList.isVisible = refreshState is LoadState.Loading
-                rvMovieList.isVisible = refreshState !is LoadState.Error
-                ivWarningMovieList.isVisible = refreshState is LoadState.Error
-                tvWarningMovieList.isVisible = refreshState is LoadState.Error
-                buttonTryAgainMovieList.isVisible = refreshState is LoadState.Error
-            }
-            if (refreshState is LoadState.NotLoading) {
-                if (adapter.itemCount == 0) {
-                    binding.tvEmptyList.visibility = View.VISIBLE
-                    binding.rvMovieList.visibility = View.INVISIBLE
+        loadStateCoroutineScope.launch {
+            adapter.loadStateFlow.collectLatest {
+                val refreshState = it.refresh
+                with(binding) {
+                    pbMovieList.isVisible = refreshState is LoadState.Loading
+                    rvMovieList.isVisible = refreshState !is LoadState.Error
+                    ivWarningMovieList.isVisible = refreshState is LoadState.Error
+                    tvWarningMovieList.isVisible = refreshState is LoadState.Error
+                    buttonTryAgainMovieList.isVisible = refreshState is LoadState.Error
+                }
+                if (refreshState is LoadState.NotLoading) {
+                    if (adapter.itemCount == 0) {
+                        binding.tvEmptyList.visibility = View.VISIBLE
+                        binding.rvMovieList.visibility = View.INVISIBLE
+                    }
                 }
             }
         }
@@ -115,9 +119,9 @@ class MovieListFragment : Fragment() {
                 args.genre?.let {
                     if (initialDataLoading) {
                         viewModel.getMoviesByGenre(args.genre.toString())
+                        observeViewModel()
                         initialDataLoading = false
                     }
-                    observeViewModel()
                 }
             }
             MovieListLaunchParams.FAVOURITE -> {
@@ -129,7 +133,6 @@ class MovieListFragment : Fragment() {
                     }
                 } else {
                     adapter.refresh()
-                    observeViewModel()
                 }
 
             }
@@ -142,7 +145,6 @@ class MovieListFragment : Fragment() {
                     }
                 } else {
                     adapter.refresh()
-                    observeViewModel()
                 }
 
             }
@@ -171,7 +173,6 @@ class MovieListFragment : Fragment() {
                     viewModel.getAllPopularMovies()
                     initialDataLoading = false
                 }
-
                 observeViewModel()
             }
             MovieListLaunchParams.UPCOMING -> {
@@ -193,7 +194,6 @@ class MovieListFragment : Fragment() {
                     viewModel.getTrendingDayMovies()
                     initialDataLoading = false
                 }
-
                 observeViewModel()
             }
             MovieListLaunchParams.TRENDING_WEEK -> {
@@ -232,11 +232,13 @@ class MovieListFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        loadStateCoroutineScope.coroutineContext.cancelChildren()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         coroutineScope.cancel()
+        loadStateCoroutineScope.cancel()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -264,6 +266,16 @@ class MovieListFragment : Fragment() {
             findNavController().popBackStack()
         }
         binding.movieListToolbar.title = args.title
+    }
+
+    private fun getColumnCount(): Int {
+        val displayMetrics = requireActivity().resources.displayMetrics
+        val width = (displayMetrics.widthPixels / displayMetrics.density).toInt()
+        return if (width / 185 > 2) {
+            width / 185
+        } else {
+            SPAN_COUNT
+        }
     }
 
     private fun observeViewModel() {

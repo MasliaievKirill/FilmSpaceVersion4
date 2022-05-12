@@ -25,9 +25,7 @@ class MovieListFragmentViewModel @Inject constructor(
     private val getAccountDetailsUseCase: GetAccountDetailsUseCase
 ) : ViewModel() {
 
-
     var movies: LiveData<PagingData<Movie>>? = null
-
 
     private var _error = MutableLiveData<Boolean>()
     val error: LiveData<Boolean>
@@ -39,43 +37,31 @@ class MovieListFragmentViewModel @Inject constructor(
 
 
     fun getAllTopRatedMovies() {
-        val moviesResult =
-            getAllTopRatedMoviesUseCase.getAllTopRatedMovies().cachedIn(viewModelScope)
-        movies = moviesResult
+        movies = getAllTopRatedMoviesUseCase.getAllTopRatedMovies().cachedIn(viewModelScope)
     }
 
     fun getAllNowPlayingMovies() {
-        val moviesResult =
-            getAllNowPlayingMoviesUseCase.getAllNowPlayingMovies().cachedIn(viewModelScope)
-        movies = moviesResult
+        movies = getAllNowPlayingMoviesUseCase.getAllNowPlayingMovies().cachedIn(viewModelScope)
     }
 
     fun getAllPopularMovies() {
-        val moviesResult = getAllPopularMoviesUseCase.getAllPopularMovies().cachedIn(viewModelScope)
-        movies = moviesResult
+        movies = getAllPopularMoviesUseCase.getAllPopularMovies().cachedIn(viewModelScope)
     }
 
     fun getAllUpcomingMovies() {
-        val moviesResult =
-            getAllUpcomingMoviesUseCase.getAllUpcomingMovies().cachedIn(viewModelScope)
-        movies = moviesResult
+        movies = getAllUpcomingMoviesUseCase.getAllUpcomingMovies().cachedIn(viewModelScope)
     }
 
     fun getMoviesByGenre(genre: String) {
-        val moviesResult = getMoviesByGenreUseCase.getMoviesByGenre(genre).cachedIn(viewModelScope)
-        movies = moviesResult
+        movies = getMoviesByGenreUseCase.getMoviesByGenre(genre).cachedIn(viewModelScope)
     }
 
     fun getTrendingDayMovies() {
-        val moviesResult =
-            getAllTrendingDayUseCase.getAllTrendingDayMovies().cachedIn(viewModelScope)
-        movies = moviesResult
+        movies = getAllTrendingDayUseCase.getAllTrendingDayMovies().cachedIn(viewModelScope)
     }
 
     fun getTrendingWeekMovies() {
-        val moviesResult =
-            getAllTrendingWeekUseCase.getAllTrendingWeekMovies().cachedIn(viewModelScope)
-        movies = moviesResult
+        movies = getAllTrendingWeekUseCase.getAllTrendingWeekMovies().cachedIn(viewModelScope)
     }
 
     suspend fun getAllFavouriteMovies() {

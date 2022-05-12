@@ -55,7 +55,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="18dp"
                 android:text="@string/tmdb_account_details"
-                android:textColor="@color/white"
+                android:textColor="@android:color/darker_gray"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

@@ -20,6 +20,7 @@ import com.masliaiev.filmspace.FilmSpaceApp
 import com.masliaiev.filmspace.databinding.FragmentMovieListBinding
 import com.masliaiev.filmspace.helpers.MovieListLaunchParams
 import com.masliaiev.filmspace.helpers.eventbus.MovieListEvent
+import com.masliaiev.filmspace.helpers.fastSmoothScrollToPosition
 import com.masliaiev.filmspace.helpers.findTopNavController
 import com.masliaiev.filmspace.presentation.adapters.MoviePagerAdapter
 import com.masliaiev.filmspace.presentation.adapters.OnMovieClickListener
@@ -244,11 +245,7 @@ class MovieListFragment : Fragment() {
         if (binding.rvMovieList.isVisible && layoutManager
                 .findFirstVisibleItemPosition() != START_POSITION
         ) {
-            if (layoutManager.findFirstVisibleItemPosition() <= MAX_COUNT_FOR_SMOOTH_SCROLL) {
-                binding.rvMovieList.smoothScrollToPosition(START_POSITION)
-            } else {
-                binding.rvMovieList.scrollToPosition(START_POSITION)
-            }
+            binding.rvMovieList.fastSmoothScrollToPosition(START_POSITION)
         } else {
             findNavController().popBackStack()
         }
@@ -278,6 +275,5 @@ class MovieListFragment : Fragment() {
     companion object {
         private const val SPAN_COUNT = 2
         private const val START_POSITION = 0
-        private const val MAX_COUNT_FOR_SMOOTH_SCROLL = 20
     }
 }

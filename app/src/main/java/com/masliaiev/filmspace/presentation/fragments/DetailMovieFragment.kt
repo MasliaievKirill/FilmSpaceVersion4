@@ -48,8 +48,6 @@ class DetailMovieFragment : Fragment() {
         HomeMovieAdapter()
     }
 
-    private var rateMarker = EMPTY_RATING
-
     private var _binding: FragmentDetailMovieBinding? = null
     private val binding: FragmentDetailMovieBinding
         get() = _binding ?: throw RuntimeException("FragmentDetailMovieBinding is null")
@@ -121,7 +119,7 @@ class DetailMovieFragment : Fragment() {
         }
 
         binding.ivRateStar.setOnClickListener {
-            DialogRateFragment.show(parentFragmentManager, rateMarker)
+            DialogRateFragment.show(parentFragmentManager, viewModel.rateMarker)
         }
 
         binding.ivShare.setOnClickListener {
@@ -329,7 +327,7 @@ class DetailMovieFragment : Fragment() {
                             )
                         binding.tvRateDescription.text =
                             String.format(getString(R.string.is_rated_action), it.description)
-                        rateMarker = it.description.toDouble()
+                        viewModel.rateMarker = it.description.toDouble()
                     } else {
                         binding.tvRateDescription.text = getString(R.string.rate_action)
                         binding.ivRateStar.background =
@@ -337,6 +335,7 @@ class DetailMovieFragment : Fragment() {
                                 requireContext(),
                                 R.drawable.ic_star_rate_not_active
                             )
+                        viewModel.rateMarker = EMPTY_RATING
                     }
                 }
                 is Error -> {

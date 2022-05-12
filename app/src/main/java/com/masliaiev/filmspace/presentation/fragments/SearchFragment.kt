@@ -21,11 +21,14 @@ import com.masliaiev.filmspace.FilmSpaceApp
 import com.masliaiev.filmspace.R
 import com.masliaiev.filmspace.databinding.FragmentSearchBinding
 import com.masliaiev.filmspace.helpers.eventbus.SearchEvent
+import com.masliaiev.filmspace.helpers.fastSmoothScrollToPosition
 import com.masliaiev.filmspace.helpers.findTopNavController
 import com.masliaiev.filmspace.presentation.adapters.MoviePagerAdapter
 import com.masliaiev.filmspace.presentation.adapters.OnMovieClickListener
 import com.masliaiev.filmspace.presentation.view_models.SearchFragmentViewModel
 import com.masliaiev.filmspace.presentation.view_models.ViewModelFactory
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collectLatest
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -45,6 +48,8 @@ class SearchFragment : Fragment() {
     private val adapter by lazy {
         MoviePagerAdapter()
     }
+
+    private val coroutineScope = CoroutineScope(Dispatchers.Main.immediate)
 
     private var _binding: FragmentSearchBinding? = null
     private val binding: FragmentSearchBinding
@@ -78,24 +83,22 @@ class SearchFragment : Fragment() {
 
         binding.rvSearch.layoutManager = GridLayoutManager(requireContext(), SPAN_COUNT)
 
-        if (adapter.itemCount != 0) {
-            binding.tvWelcomeSearch.visibility = View.INVISIBLE
-            binding.tvWelcomeSearchExtension.visibility = View.INVISIBLE
-        }
 
-        if (!viewModel.loadStateListenerFlag) {
-            adapter.addLoadStateListener {
+
+        coroutineScope.launch {
+            adapter.loadStateFlow.collectLatest {
                 val refreshState = it.refresh
                 with(binding) {
                     pbSearch.isVisible = refreshState is LoadState.Loading
-                    rvSearch.isVisible = refreshState is LoadState.NotLoading
                     if (refreshState is LoadState.Error) {
                         DialogWarningFragment.showCommonErrorDialogFragment(parentFragmentManager)
+                        binding.rvSearch.visibility = View.INVISIBLE
                         binding.tvWelcomeSearch.visibility = View.VISIBLE
                         binding.tvWelcomeSearchExtension.visibility = View.VISIBLE
                     }
                 }
                 if (refreshState is LoadState.NotLoading) {
+                    binding.rvSearch.visibility = View.VISIBLE
                     binding.tvWelcomeSearch.visibility = View.INVISIBLE
                     binding.tvWelcomeSearchExtension.visibility = View.INVISIBLE
                     if (adapter.itemCount == 0) {
@@ -107,10 +110,11 @@ class SearchFragment : Fragment() {
                     }
                 }
             }
-            viewModel.loadStateListenerFlag = true
         }
 
         binding.rvSearch.adapter = adapter
+
+        observeViewModel()
 
         binding.searchView.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
@@ -139,6 +143,8 @@ class SearchFragment : Fragment() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText?.length == 0) {
+                    viewModel.movies = null
+                    binding.rvSearch.scrollToPosition(START_POSITION)
                     binding.rvSearch.visibility = View.INVISIBLE
                     binding.tvWelcomeSearch.visibility = View.VISIBLE
                     binding.tvWelcomeSearchExtension.visibility = View.VISIBLE
@@ -171,6 +177,12 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        coroutineScope.coroutineContext.cancelChildren()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        coroutineScope.cancel()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -179,13 +191,15 @@ class SearchFragment : Fragment() {
         if (layoutManager.findFirstVisibleItemPosition() != START_POSITION &&
             layoutManager.findFirstVisibleItemPosition() != EMPTY_RV_POSITION
         ) {
-            if (layoutManager.findFirstVisibleItemPosition() <= MAX_COUNT_FOR_SMOOTH_SCROLL) {
-                binding.rvSearch.smoothScrollToPosition(START_POSITION)
-            } else {
-                binding.rvSearch.scrollToPosition(START_POSITION)
-            }
+            binding.rvSearch.fastSmoothScrollToPosition(START_POSITION)
         } else {
             findNavController().popBackStack()
+        }
+    }
+
+    private fun observeViewModel() {
+        viewModel.movies?.observe(viewLifecycleOwner) { movies ->
+            adapter.submitData(viewLifecycleOwner.lifecycle, movies)
         }
     }
 
@@ -201,7 +215,6 @@ class SearchFragment : Fragment() {
         private const val SPAN_COUNT = 2
         private const val START_POSITION = 0
         private const val EMPTY_RV_POSITION = -1
-        private const val MAX_COUNT_FOR_SMOOTH_SCROLL = 20
     }
 
 }

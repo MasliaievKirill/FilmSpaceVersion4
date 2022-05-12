@@ -16,8 +16,6 @@ class SearchFragmentViewModel @Inject constructor(
 
     var movies: LiveData<PagingData<Movie>>? = null
 
-    var loadStateListenerFlag = false
-
     fun searchMovies(query: String) {
         val moviesResult = searchMoviesUseCase.searchMovies(query).cachedIn(viewModelScope)
         movies = moviesResult

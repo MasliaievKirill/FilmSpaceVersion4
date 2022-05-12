@@ -77,6 +77,7 @@ class DetailMovieFragmentViewModel @Inject constructor(
     private var buttonRateSavedState: DetailedButtonsState = Result(false)
 
     private var wasLoaded = false
+    var rateMarker = EMPTY_RATING
 
     fun loadData(movieId: Int) {
         if (!wasLoaded) {
@@ -238,14 +239,15 @@ class DetailMovieFragmentViewModel @Inject constructor(
         }
     }
 
-    fun setSavedWatchlistState(){
+    fun setSavedWatchlistState() {
         _watchlist.value = buttonWatchlistSavedState
     }
 
-    fun setSavedFavouriteState(){
+    fun setSavedFavouriteState() {
         _favourite.value = buttonFavouriteSavedState
     }
-    fun setSavedRateState(){
+
+    fun setSavedRateState() {
         _rateMovie.value = buttonRateSavedState
     }
 
@@ -370,5 +372,9 @@ class DetailMovieFragmentViewModel @Inject constructor(
         if (_error.value != true) {
             _error.value = true
         }
+    }
+
+    companion object {
+        private const val EMPTY_RATING = 0.0
     }
 }

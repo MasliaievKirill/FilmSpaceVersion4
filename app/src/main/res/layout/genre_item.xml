@@ -4,17 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="150dp"
     android:layout_height="55dp"
+    android:layout_marginStart="18dp"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
-    android:layout_marginStart="18dp"
-    android:backgroundTint="@color/overlay_light"
+    android:backgroundTint="@color/surface"
     android:elevation="4dp"
     app:cardCornerRadius="7dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_genre"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="?android:attr/selectableItemBackground"
+        android:theme="@style/selectable_genre_item_theme">
 
         <TextView
             android:id="@+id/tv_genre_name"

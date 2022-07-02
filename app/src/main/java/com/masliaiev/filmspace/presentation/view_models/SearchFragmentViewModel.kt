@@ -1,6 +1,7 @@
 package com.masliaiev.filmspace.presentation.view_models
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -13,6 +14,9 @@ class SearchFragmentViewModel @Inject constructor(
     private val searchMoviesUseCase: SearchMoviesUseCase
 ) : ViewModel() {
 
+    private var _error = MutableLiveData<Boolean>()
+    val error: LiveData<Boolean>
+        get() = _error
 
     var movies: LiveData<PagingData<Movie>>? = null
 
@@ -21,5 +25,11 @@ class SearchFragmentViewModel @Inject constructor(
         movies = moviesResult
     }
 
+    fun setError() {
+        _error.value = true
+    }
 
+    fun clearError() {
+        _error.value = false
+    }
 }

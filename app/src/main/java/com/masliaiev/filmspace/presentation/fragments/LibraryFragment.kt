@@ -60,7 +60,7 @@ class LibraryFragment : Fragment() {
         when (viewModel.appMode) {
             AppConstants.SIGNED_IN_MODE -> {
 
-                binding.tvWatchlist.setOnClickListener {
+                binding.clWatchlist.setOnClickListener {
                     findNavController().navigate(
                         LibraryFragmentDirections.actionLibraryFragmentToMovieListFragment(
                             null,
@@ -70,7 +70,7 @@ class LibraryFragment : Fragment() {
                     )
                 }
 
-                binding.tvFavouriteMovies.setOnClickListener {
+                binding.clFavouriteMovies.setOnClickListener {
                     findNavController().navigate(
                         LibraryFragmentDirections.actionLibraryFragmentToMovieListFragment(
                             null,
@@ -80,7 +80,7 @@ class LibraryFragment : Fragment() {
                     )
                 }
 
-                binding.tvRatedMovies.setOnClickListener {
+                binding.clRatedMovies.setOnClickListener {
                     findNavController().navigate(
                         LibraryFragmentDirections.actionLibraryFragmentToMovieListFragment(
                             null,

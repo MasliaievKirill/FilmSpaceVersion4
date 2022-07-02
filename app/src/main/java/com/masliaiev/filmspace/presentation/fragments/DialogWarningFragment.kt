@@ -3,6 +3,7 @@ package com.masliaiev.filmspace.presentation.fragments
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
@@ -31,6 +32,17 @@ class DialogWarningFragment : DialogFragment() {
             }
             .create()
         dialog.setCanceledOnTouchOutside(false)
+        dialog.setOnKeyListener { _, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP){
+                parentFragmentManager.setFragmentResult(
+                    REQUEST_KEY,
+                    bundleOf(RESPONSE_KEY to true)
+                )
+                dismiss()
+                return@setOnKeyListener true
+            }
+            return@setOnKeyListener false
+        }
         return dialog
     }
 

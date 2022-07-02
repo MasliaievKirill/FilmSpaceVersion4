@@ -221,9 +221,11 @@ class DetailMovieFragment : Fragment() {
             }
         }
         viewModel.video.observe(viewLifecycleOwner) { video ->
-            binding.ivPlayTrailer.background = ContextCompat.getDrawable(
-                requireContext(),
-                R.drawable.ic_play_circle_active
+            binding.ivPlayTrailer.setImageDrawable(
+                ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.ic_play_circle_active
+                )
             )
             with(binding.tvPlayTrailerDescription) {
                 text = getString(R.string.play_trailer_on_youtube)

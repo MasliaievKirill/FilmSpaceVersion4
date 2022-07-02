@@ -41,5 +41,12 @@
         <item name="cornerSize">4dp</item>
     </style>
 
+    <style name="selectable_item_theme">
+        <item name="colorControlHighlight">@color/overlay_light</item>
+    </style>
+
+    <style name="selectable_genre_item_theme">
+        <item name="colorControlHighlight">@color/white</item>
+    </style>
 
 </resources>

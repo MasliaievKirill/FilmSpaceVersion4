@@ -29,6 +29,8 @@ import com.masliaiev.filmspace.presentation.view_models.SearchFragmentViewModel
 import com.masliaiev.filmspace.presentation.view_models.ViewModelFactory
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.first
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -91,10 +93,7 @@ class SearchFragment : Fragment() {
                 with(binding) {
                     pbSearch.isVisible = refreshState is LoadState.Loading
                     if (refreshState is LoadState.Error) {
-                        DialogWarningFragment.showCommonErrorDialogFragment(parentFragmentManager)
-                        binding.rvSearch.visibility = View.INVISIBLE
-                        binding.tvWelcomeSearch.visibility = View.VISIBLE
-                        binding.tvWelcomeSearchExtension.visibility = View.VISIBLE
+                        viewModel.setError()
                     }
                 }
                 if (refreshState is LoadState.NotLoading) {
@@ -200,6 +199,16 @@ class SearchFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.movies?.observe(viewLifecycleOwner) { movies ->
             adapter.submitData(viewLifecycleOwner.lifecycle, movies)
+        }
+
+        viewModel.error.observe(viewLifecycleOwner) {
+            if (it) {
+                DialogWarningFragment.showCommonErrorDialogFragment(parentFragmentManager)
+                binding.rvSearch.visibility = View.INVISIBLE
+                binding.tvWelcomeSearch.visibility = View.VISIBLE
+                binding.tvWelcomeSearchExtension.visibility = View.VISIBLE
+                viewModel.clearError()
+            }
         }
     }
 

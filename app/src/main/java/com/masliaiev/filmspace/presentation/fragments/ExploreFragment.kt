@@ -78,7 +78,7 @@ class ExploreFragment : Fragment() {
                 false
             )
 
-        binding.tvTopRated.setOnClickListener {
+        binding.clTopRated.setOnClickListener {
             findNavController().navigate(
                 ExploreFragmentDirections.actionExploreFragmentToMovieListFragmentExplore(
                     null,
@@ -88,7 +88,7 @@ class ExploreFragment : Fragment() {
             )
         }
 
-        binding.tvPopular.setOnClickListener {
+        binding.clPopular.setOnClickListener {
             findNavController().navigate(
                 ExploreFragmentDirections.actionExploreFragmentToMovieListFragmentExplore(
                     null,
@@ -98,7 +98,7 @@ class ExploreFragment : Fragment() {
             )
         }
 
-        binding.tvNowPlaying.setOnClickListener {
+        binding.clNowPlaying.setOnClickListener {
             findNavController().navigate(
                 ExploreFragmentDirections.actionExploreFragmentToMovieListFragmentExplore(
                     null,
@@ -108,7 +108,7 @@ class ExploreFragment : Fragment() {
             )
         }
 
-        binding.tvUpcoming.setOnClickListener {
+        binding.clUpcoming.setOnClickListener {
             findNavController().navigate(
                 ExploreFragmentDirections.actionExploreFragmentToMovieListFragmentExplore(
                     null,
@@ -118,7 +118,7 @@ class ExploreFragment : Fragment() {
             )
         }
 
-        binding.tvTrendingToday.setOnClickListener {
+        binding.clTrendingToday.setOnClickListener {
             findNavController().navigate(
                 ExploreFragmentDirections.actionExploreFragmentToMovieListFragmentExplore(
                     null,
@@ -128,7 +128,7 @@ class ExploreFragment : Fragment() {
             )
         }
 
-        binding.tvTrendingWeek.setOnClickListener {
+        binding.clTrendingWeek.setOnClickListener {
             findNavController().navigate(
                 ExploreFragmentDirections.actionExploreFragmentToMovieListFragmentExplore(
                     null,

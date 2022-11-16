@@ -2,6 +2,7 @@ package com.masliaiev.filmspace.presentation.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.play.core.review.ReviewManagerFactory
 import com.masliaiev.filmspace.FilmSpaceApp
 import com.masliaiev.filmspace.R
 import com.masliaiev.filmspace.databinding.FragmentHomeBinding
@@ -195,6 +197,14 @@ class HomeFragment : Fragment() {
                 showWarning()
             }
         }
+
+        viewModel.launchGoogleReview.observe(viewLifecycleOwner) {
+            if (it) {
+                showRateUs()
+                viewModel.resetGoogleReview()
+            }
+
+        }
     }
 
     private fun updateLayout() {
@@ -250,5 +260,22 @@ class HomeFragment : Fragment() {
 
     private fun hideMainView() {
         binding.homeNestedScrollView.visibility = View.INVISIBLE
+    }
+
+    private fun showRateUs() {
+        val manager = ReviewManagerFactory.create(requireActivity())
+        val request = manager.requestReviewFlow()
+        request.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val reviewInfo = task.result
+                val flow = manager.launchReviewFlow(requireActivity(), reviewInfo)
+                flow.addOnCompleteListener {
+                    Log.d("GoogleApiReview", "Success. Goggle review has been completed")
+                }
+            } else {
+                val reviewError = task.exception?.localizedMessage
+                Log.d("GoogleApiReview", reviewError ?: "Some issue occurred")
+            }
+        }
     }
 }

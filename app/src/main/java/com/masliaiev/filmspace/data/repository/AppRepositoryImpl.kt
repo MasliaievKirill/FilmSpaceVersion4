@@ -113,6 +113,23 @@ class AppRepositoryImpl @Inject constructor(
         sharedPreferences.edit().putString(AppConstants.KEY_SESSION_ID, sessionId).apply()
     }
 
+    override fun checkShowGoogleReview(): Boolean {
+        val previousShowTime = sharedPreferences.getLong(
+            AppConstants.KEY_PREVIOUS_SHOW_TIME,
+            AppConstants.EMPTY_PREVIOUS_SHOW_TIME
+        )
+        // 32 days = 2764800000L millis
+        return when {
+            previousShowTime == 0L || (System.currentTimeMillis() - previousShowTime) > 30000L -> {
+                sharedPreferences.edit()
+                    .putLong(AppConstants.KEY_PREVIOUS_SHOW_TIME, System.currentTimeMillis())
+                    .apply()
+                true
+            }
+            else -> false
+        }
+    }
+
     override suspend fun loadAccountDetails(sessionId: String): ResultParams {
         return try {
             val accountResponse = apiService.getAccountDetails(sessionId = sessionId)

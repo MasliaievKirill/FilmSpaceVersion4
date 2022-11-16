@@ -5,10 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.masliaiev.filmspace.domain.entity.Movie
-import com.masliaiev.filmspace.domain.usecases.GetNowPlayingMoviesUseCase
-import com.masliaiev.filmspace.domain.usecases.GetTrendingDayUseCase
-import com.masliaiev.filmspace.domain.usecases.GetTrendingWeekUseCase
-import com.masliaiev.filmspace.domain.usecases.GetUpcomingMoviesUseCase
+import com.masliaiev.filmspace.domain.usecases.*
 import com.masliaiev.filmspace.helpers.ResultParams
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -18,12 +15,9 @@ class HomeFragmentViewModel @Inject constructor(
     private val getNowPlayingMoviesUseCase: GetNowPlayingMoviesUseCase,
     private val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase,
     private val getTrendingDayUseCase: GetTrendingDayUseCase,
-    private val getTrendingWeekUseCase: GetTrendingWeekUseCase
+    private val getTrendingWeekUseCase: GetTrendingWeekUseCase,
+    private val checkShowGoogleReviewUseCase: CheckShowGoogleReviewUseCase
 ) : ViewModel() {
-
-    init {
-        loadData()
-    }
 
     private var _nowPlayingMovies = MutableLiveData<List<Movie>>()
     val nowPlayingMovies: LiveData<List<Movie>>
@@ -49,11 +43,20 @@ class HomeFragmentViewModel @Inject constructor(
     val apiError: LiveData<Boolean>
         get() = _apiError
 
+    private var _launchGoogleReview = MutableLiveData<Boolean>()
+    val launchGoogleReview: LiveData<Boolean>
+        get() = _launchGoogleReview
+
+    init {
+        loadData()
+    }
+
     private fun loadData() {
         getNowPlaying()
         getUpcoming()
         getTrendingDay()
         getTrendingWeek()
+        checkGoogleReview()
     }
 
     private fun getNowPlaying() {
@@ -139,12 +142,20 @@ class HomeFragmentViewModel @Inject constructor(
         }
     }
 
+    private fun checkGoogleReview() {
+        _launchGoogleReview.value = checkShowGoogleReviewUseCase.checkShowGoogleReview()
+    }
+
     fun tryAgain() {
         viewModelScope.launch {
             resetError()
             delay(1000)
             loadData()
         }
+    }
+
+    fun resetGoogleReview() {
+        _launchGoogleReview.value = false
     }
 
 }

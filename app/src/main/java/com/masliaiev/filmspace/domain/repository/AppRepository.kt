@@ -28,6 +28,8 @@ interface AppRepository {
 
     fun setSessionId(sessionId: String)
 
+    fun checkShowGoogleReview(): Boolean
+
     suspend fun loadAccountDetails(sessionId: String): ResultParams
 
     suspend fun getAccountDetails(): Account

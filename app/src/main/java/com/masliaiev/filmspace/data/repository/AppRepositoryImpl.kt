@@ -118,13 +118,14 @@ class AppRepositoryImpl @Inject constructor(
             AppConstants.KEY_PREVIOUS_SHOW_TIME,
             AppConstants.EMPTY_PREVIOUS_SHOW_TIME
         )
-        // 32 days = 2764800000L millis
         return when {
-            previousShowTime == 0L || (System.currentTimeMillis() - previousShowTime) > 30000L -> {
-                sharedPreferences.edit()
-                    .putLong(AppConstants.KEY_PREVIOUS_SHOW_TIME, System.currentTimeMillis())
-                    .apply()
+            previousShowTime != 0L && (System.currentTimeMillis() - previousShowTime) > RATE_APP_PERIOD -> {
+                updateAppRateLastShowPeriod()
                 true
+            }
+            previousShowTime == 0L -> {
+                updateAppRateLastShowPeriod()
+                false
             }
             else -> false
         }
@@ -748,6 +749,12 @@ class AppRepositoryImpl @Inject constructor(
         return Locale.getDefault().language
     }
 
+    private fun updateAppRateLastShowPeriod() {
+        sharedPreferences.edit()
+            .putLong(AppConstants.KEY_PREVIOUS_SHOW_TIME, System.currentTimeMillis())
+            .apply()
+    }
+
     companion object {
         private const val MEDIA_TYPE_MOVIE = "movie"
         private const val MEDIA_TYPE_PERSON = "person"
@@ -756,5 +763,7 @@ class AppRepositoryImpl @Inject constructor(
 
         private const val MAX_NUMBER_OF_ITEMS_LOADED_AT_ONCE = 20
         private const val MAX_NUMBER_OF_ITEMS = 300
+
+        private const val RATE_APP_PERIOD = 2_764_800_000L //32 days
     }
 }

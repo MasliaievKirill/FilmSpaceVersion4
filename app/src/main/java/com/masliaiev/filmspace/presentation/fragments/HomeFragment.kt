@@ -2,7 +2,6 @@ package com.masliaiev.filmspace.presentation.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -158,8 +157,8 @@ class HomeFragment : Fragment() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onMessageEvent(event: HomeEvent){
-        binding.homeNestedScrollView.smoothScrollTo(0,0)
+    fun onMessageEvent(event: HomeEvent) {
+        binding.homeNestedScrollView.smoothScrollTo(0, 0)
     }
 
     private fun observeViewModel() {
@@ -183,7 +182,7 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.error.observe(viewLifecycleOwner) {
-            if (it){
+            if (it) {
                 hideMainView()
                 hideProgressbar()
                 showWarning()
@@ -191,7 +190,7 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.apiError.observe(viewLifecycleOwner) {
-            if (it){
+            if (it) {
                 hideMainView()
                 hideProgressbar()
                 showWarning()
@@ -203,7 +202,6 @@ class HomeFragment : Fragment() {
                 showRateUs()
                 viewModel.resetGoogleReview()
             }
-
         }
     }
 
@@ -268,13 +266,9 @@ class HomeFragment : Fragment() {
         request.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val reviewInfo = task.result
-                val flow = manager.launchReviewFlow(requireActivity(), reviewInfo)
-                flow.addOnCompleteListener {
-                    Log.d("GoogleApiReview", "Success. Goggle review has been completed")
-                }
+                manager.launchReviewFlow(requireActivity(), reviewInfo)
             } else {
-                val reviewError = task.exception?.localizedMessage
-                Log.d("GoogleApiReview", reviewError ?: "Some issue occurred")
+                task.exception?.printStackTrace()
             }
         }
     }

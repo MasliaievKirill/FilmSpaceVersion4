@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -19,6 +17,7 @@ import com.masliaiev.filmspace.helpers.eventbus.HomeEvent
 import com.masliaiev.filmspace.helpers.findTopNavController
 import com.masliaiev.filmspace.presentation.adapters.HomeMovieAdapter
 import com.masliaiev.filmspace.presentation.adapters.OnMovieClickListener
+import com.masliaiev.filmspace.presentation.extensions.updateLayoutWithInsets
 import com.masliaiev.filmspace.presentation.view_models.HomeFragmentViewModel
 import com.masliaiev.filmspace.presentation.view_models.ViewModelFactory
 import org.greenrobot.eventbus.EventBus
@@ -206,10 +205,15 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateLayout() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.homeToolbar) { v, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.updatePadding(top = insets.top)
-            WindowInsetsCompat.CONSUMED
+        updateLayoutWithInsets(binding.root) { insets ->
+            with(binding){
+                homeToolbar.apply {
+                    updatePadding(top = insets.top)
+                    post {
+                        homeNestedScrollView.updatePadding(top = this.measuredHeight)
+                    }
+                }
+            }
         }
     }
 

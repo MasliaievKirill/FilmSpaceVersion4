@@ -24,6 +24,7 @@ import com.masliaiev.filmspace.helpers.fastSmoothScrollToPosition
 import com.masliaiev.filmspace.helpers.findTopNavController
 import com.masliaiev.filmspace.presentation.adapters.MoviePagerAdapter
 import com.masliaiev.filmspace.presentation.adapters.OnMovieClickListener
+import com.masliaiev.filmspace.presentation.extensions.updateLayoutWithInsets
 import com.masliaiev.filmspace.presentation.view_models.MovieListFragmentViewModel
 import com.masliaiev.filmspace.presentation.view_models.ViewModelFactory
 import kotlinx.coroutines.*
@@ -254,10 +255,15 @@ class MovieListFragment : Fragment() {
     }
 
     private fun updateLayout() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.movieListToolbar) { v, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.updatePadding(top = insets.top)
-            WindowInsetsCompat.CONSUMED
+        updateLayoutWithInsets(binding.root) { insets ->
+            with(binding){
+                movieListToolbar.apply {
+                    updatePadding(top = insets.top)
+                    post {
+                        rvMovieList.updatePadding(top = this.measuredHeight)
+                    }
+                }
+            }
         }
     }
 

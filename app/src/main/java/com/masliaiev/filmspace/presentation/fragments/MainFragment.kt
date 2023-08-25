@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -17,6 +15,7 @@ import com.masliaiev.filmspace.helpers.eventbus.ExploreEvent
 import com.masliaiev.filmspace.helpers.eventbus.HomeEvent
 import com.masliaiev.filmspace.helpers.eventbus.MovieListEvent
 import com.masliaiev.filmspace.helpers.eventbus.SearchEvent
+import com.masliaiev.filmspace.presentation.extensions.updateLayoutWithInsets
 import org.greenrobot.eventbus.EventBus
 
 class MainFragment : Fragment() {
@@ -46,10 +45,8 @@ class MainFragment : Fragment() {
         navController = navHostFragment.navController
         binding.bottomNavigation.setupWithNavController(navController)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.bottomNavigation) { v, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.updatePadding(bottom = insets.bottom)
-            WindowInsetsCompat.CONSUMED
+        updateLayoutWithInsets(binding.root) { insets ->
+            binding.bottomNavigation.updatePadding(bottom = insets.bottom)
         }
 
         binding.bottomNavigation.setOnItemReselectedListener {
